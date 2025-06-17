@@ -1,0 +1,10 @@
+.hoverScale {
+  display: inline-block;
+  transition: transform var(--duration) ease-in-out;
+  transform-origin: center;
+  will-change: transform;
+
+  &:hover {
+    transform: scale(var(--scale));
+  }
+}

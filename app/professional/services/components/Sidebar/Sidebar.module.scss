@@ -1,0 +1,80 @@
+.sidebar {
+  width: 300px;
+  padding: 1rem;
+}
+
+.sidebarSection {
+  margin-bottom: 2rem;
+}
+
+.sidebarTitle {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.categoryBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: white;
+  transition: all 0.2s;
+  color: #2c3e50;
+
+  &:hover {
+    background: #f8f9fa;
+  }
+
+  &.active {
+    background: #e2e8f0;
+    border-color: #cbd5e0;
+  }
+}
+
+.categoryName {
+  font-weight: 500;
+}
+
+.categoryCount {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.helpCard,
+.quoteCard {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e2e8f0;
+}
+
+.helpIcon,
+.quoteIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.helpButton,
+.quoteButton {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #0056b3;
+  }
+}

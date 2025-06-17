@@ -1,0 +1,28 @@
+.fadeIn {
+  opacity: 0;
+  transition: opacity var(--duration, 0.5s) ease-out,
+    transform var(--duration, 0.5s) ease-out;
+  transition-delay: var(--delay, 0s);
+  will-change: opacity, transform;
+}
+
+.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.up {
+  transform: translateY(20px);
+}
+
+.down {
+  transform: translateY(-20px);
+}
+
+.left {
+  transform: translateX(20px);
+}
+
+.right {
+  transform: translateX(-20px);
+}

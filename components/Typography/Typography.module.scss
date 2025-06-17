@@ -1,0 +1,127 @@
+// Title styles
+.title1 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.title2 {
+  font-size: 2.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.title3 {
+  font-size: 2rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.title4 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.title5 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.title6 {
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+// Text styles
+.text {
+  margin: 0;
+  color: inherit;
+}
+
+.textxs {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.textsm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.textmd {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.textlg {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.textxl {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+// Font weights
+.weightnormal {
+  font-weight: 400;
+}
+
+.weightmedium {
+  font-weight: 500;
+}
+
+.weightsemibold {
+  font-weight: 600;
+}
+
+.weightbold {
+  font-weight: 700;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .title1 {
+    font-size: 2.5rem;
+  }
+
+  .title2 {
+    font-size: 2rem;
+  }
+
+  .title3 {
+    font-size: 1.75rem;
+  }
+
+  .title4 {
+    font-size: 1.25rem;
+  }
+
+  .title5 {
+    font-size: 1.125rem;
+  }
+
+  .title6 {
+    font-size: 1rem;
+  }
+
+  .textxl {
+    font-size: 1.125rem;
+  }
+
+  .textlg {
+    font-size: 1rem;
+  }
+}

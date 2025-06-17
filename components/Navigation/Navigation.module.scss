@@ -1,0 +1,82 @@
+.navigation {
+  width: 100%;
+  padding: 1rem 0;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+
+  &.scrolled {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: black;
+}
+
+.nav {
+  flex: 1;
+  margin: auto 2rem;
+}
+
+.navList {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  color: black;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.artisticText {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.professionalLabel,
+.artisticLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.professionalText {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.defaultText {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.languageSwitcher {
+  align-items: end;
+
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+}

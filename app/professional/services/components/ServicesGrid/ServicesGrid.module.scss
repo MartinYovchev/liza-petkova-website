@@ -1,0 +1,193 @@
+.servicesMain {
+  flex: 1;
+  padding: 2rem;
+}
+
+.servicesHeader {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.servicesTitle {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.servicesCount {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+.serviceCard {
+  position: relative;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.popularBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+}
+
+.serviceImage {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+}
+
+.serviceCard:hover .serviceImage img {
+  transform: scale(1.05);
+}
+
+.serviceContent {
+  padding: 2rem;
+}
+
+.serviceTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.serviceDescription {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.serviceFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.serviceFeature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+.featureCheck {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.serviceDetails {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+}
+
+.serviceDuration {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.serviceActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.serviceButton,
+.learnMoreBtn {
+  flex: 1;
+  padding: 0.875rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.serviceButton {
+  background: #007bff;
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+
+  &:hover {
+    background: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);
+  }
+}
+
+.learnMoreBtn {
+  border: 2px solid #007bff;
+  color: #007bff;
+
+  &:hover {
+    background: #007bff;
+    color: white;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .servicesMain {
+    padding: 1rem;
+  }
+
+  .servicesTitle {
+    font-size: 2rem;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .serviceContent {
+    padding: 1.5rem;
+  }
+
+  .serviceActions {
+    flex-direction: column;
+  }
+}
