@@ -18,6 +18,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:format": "prisma format",
     "db:validate": "prisma validate",
+    "db:setup": "prisma generate && prisma db push && pnpm db:seed",
     "vercel-build": "prisma generate && next build"
   },
   "dependencies": {
