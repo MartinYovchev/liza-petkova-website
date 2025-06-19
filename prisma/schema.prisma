@@ -1,33 +1,116 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  published Boolean  @default(false)
-  images    Image[]
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
 
+/// Blog post model with comprehensive fields and relationships
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String?
+  category    Category
+  status      Status   @default(DRAFT)
+  featured    Boolean  @default(false)
+  viewCount   Int      @default(0)
+  readTime    Int?     // in minutes
+  seoTitle    String?
+  seoDescription String?
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  images      Image[]
+  tags        PostTag[]
+  
+  // Indexes for performance
+  @@index([category])
+  @@index([status])
+  @@index([featured])
+  @@index([publishedAt])
+  @@index([createdAt])
   @@map("posts")
 }
 
+/// Image model with enhanced metadata and optimization flags
 model Image {
-  id         Int    @id @default(autoincrement())
-  url        String
-  isFeatured Boolean @default(false)
-  post       Post   @relation(fields: [postId], references: [id])
-  postId     Int
+  id          Int     @id @default(autoincrement())
+  url         String
+  alt         String?
+  caption     String?
+  width       Int?
+  height      Int?
+  fileSize    Int?    // in bytes
+  mimeType    String?
+  isFeatured  Boolean @default(false)
+  isOptimized Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  post        Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      Int
+  
+  // Indexes
+  @@index([postId])
+  @@index([isFeatured])
+  @@map("images")
+}
+
+/// Tag model for better content organization
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String?   // hex color
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  posts       PostTag[]
+  
+  @@map("tags")
+}
+
+/// Junction table for many-to-many relationship between posts and tags
+model PostTag {
+  post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  tag       Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     Int
+  createdAt DateTime @default(now())
+  
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+/// Post categories enum
+enum Category {
+  PROFESSIONAL
+  ARTISTIC
+  PERSONAL
+  TUTORIAL
+  NEWS
+  
+  @@map("category")
+}
+
+/// Post status enum for better workflow management
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  SCHEDULED
+  
+  @@map("status")
 }

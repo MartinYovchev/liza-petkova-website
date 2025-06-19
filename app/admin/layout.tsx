@@ -29,8 +29,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: MdDashboard },
     { href: "/admin/posts", label: "Blog Posts", icon: MdArticle },
-    { href: "/admin/services", label: "Services", icon: MdBusinessCenter },
-    { href: "/admin/settings", label: "Settings", icon: MdSettings },
   ];
 
   const isActiveLink = (href: string) => {

@@ -15,6 +15,7 @@ const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPost();
@@ -22,17 +23,18 @@ const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
 
   const fetchPost = async () => {
     try {
+      setError(null);
       const response = await fetch(`/api/posts/${params.id}`);
       if (response.ok) {
         const data = await response.json();
         setPost(data.post);
       } else {
-        throw new Error("Post not found");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Post not found");
       }
     } catch (error) {
       console.error("Error fetching post:", error);
-      alert("Post not found");
-      router.push("/admin/posts");
+      setError(error instanceof Error ? error.message : "Failed to load post");
     } finally {
       setIsFetching(false);
     }
@@ -51,12 +53,18 @@ const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
 
       if (response.ok) {
         router.push("/admin/posts");
+        router.refresh(); // Refresh to show updated data
       } else {
-        throw new Error("Failed to update post");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update post");
       }
     } catch (error) {
       console.error("Error updating post:", error);
-      alert("Failed to update post");
+      alert(
+        `Failed to update post: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -66,23 +74,74 @@ const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
     return (
       <AdminLayout title="Edit Post">
         <div style={{ textAlign: "center", padding: "2rem" }}>
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              border: "3px solid #e5e7eb",
+              borderTop: "3px solid #3b82f6",
+              borderRadius: "50%",
+              margin: "0 auto 1rem",
+              animation: "spin 1s linear infinite",
+            }}
+          ></div>
           Loading post...
         </div>
       </AdminLayout>
     );
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
       <AdminLayout title="Edit Post">
         <div style={{ textAlign: "center", padding: "2rem" }}>
-          Post not found
+          <h3>Error</h3>
+          <p>{error || "Post not found"}</p>
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "center",
+            }}
+          >
+            <button
+              onClick={() => router.push("/admin/posts")}
+              style={{
+                padding: "0.5rem 1rem",
+                background: "#6b7280",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Back to Posts
+            </button>
+            <button
+              onClick={fetchPost}
+              style={{
+                padding: "0.5rem 1rem",
+                background: "#3b82f6",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
         </div>
       </AdminLayout>
     );
   }
 
-  return <PostForm post={post} onSubmit={handleSubmit} isLoading={isLoading} />;
+  return (
+    <AdminLayout title={`Edit: ${post.title}`}>
+      <PostForm post={post} onSubmit={handleSubmit} isLoading={isLoading} />
+    </AdminLayout>
+  );
 };
 
 export default EditPostPage;

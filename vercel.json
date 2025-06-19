@@ -1,6 +1,11 @@
 {
-  "buildCommand": "prisma generate && prisma db push && next build",
+  "functions": {
+    "app/api/**/*": {
+      "maxDuration": 30
+    }
+  },
   "env": {
-    "PRISMA_GENERATE_DATAPROXY": "true"
+    "PRISMA_QUERY_ENGINE_LIBRARY": "/var/runtime/libquery_engine-rhel-openssl-1.0.x.so.node",
+    "PRISMA_QUERY_ENGINE_BINARY": "/var/runtime/query-engine-rhel-openssl-1.0.x"
   }
 }

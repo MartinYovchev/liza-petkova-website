@@ -24,12 +24,18 @@ const NewPostPage: React.FC = () => {
 
       if (response.ok) {
         router.push("/admin/posts");
+        router.refresh(); // Refresh to show updated data
       } else {
-        throw new Error("Failed to create post");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create post");
       }
     } catch (error) {
       console.error("Error creating post:", error);
-      alert("Failed to create post");
+      alert(
+        `Failed to create post: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setIsLoading(false);
     }
