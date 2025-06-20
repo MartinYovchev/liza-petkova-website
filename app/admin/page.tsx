@@ -1,201 +1,175 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-  MdAdd,
-  MdArticle,
-  MdVisibility,
-  MdEdit,
-  MdBusinessCenter,
-} from "react-icons/md";
-import { Post } from "./types";
-import styles from "./Admin.module.scss";
+import { useAuth } from "@/contexts/AuthContext";
+import LoginForm from "../login/LoginForm";
+import BlogPostForm from "./PostForm";
+import { useState, useEffect } from "react";
+import { blogService } from "@/lib/blog-service";
+import { formatDate } from "@/lib/utils";
+import styles from "./BlogPage.module.scss";
 
-const AdminDashboard: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [stats, setStats] = useState({
-    totalPosts: 0,
-    publishedPosts: 0,
-    draftPosts: 0,
-    professionalPosts: 0,
-    artisticPosts: 0,
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function Home() {
+  const { user, loading, signOut } = useAuth();
+  const [posts, setPosts] = useState<any[]>([]);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [loadingPosts, setLoadingPosts] = useState(false);
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    if (user) {
+      loadUserPosts();
+    }
+  }, [user]);
 
-  const fetchPosts = async () => {
+  const loadUserPosts = async () => {
+    setLoadingPosts(true);
     try {
-      setError(null);
-      const response = await fetch("/api/posts");
-      if (!response.ok) {
-        throw new Error("Failed to fetch posts");
-      }
-      const data = await response.json();
-      const postsData = data.posts || [];
-      setPosts(postsData);
-
-      const published = postsData.filter(
-        (post: Post) => post.status === "PUBLISHED"
-      ).length;
-      const professional = postsData.filter(
-        (post: Post) => post.category === "PROFESSIONAL"
-      ).length;
-      const artistic = postsData.filter(
-        (post: Post) => post.category === "ARTISTIC"
-      ).length;
-
-      setStats({
-        totalPosts: postsData.length,
-        publishedPosts: published,
-        draftPosts: postsData.length - published,
-        professionalPosts: professional,
-        artisticPosts: artistic,
-      });
+      const userPosts = await blogService.getUserPosts();
+      setPosts(userPosts);
     } catch (error) {
-      console.error("Error fetching posts:", error);
-      setError("Failed to load dashboard data. Please try again.");
-      setPosts([]);
+      console.error("Error loading posts:", error);
     } finally {
-      setLoading(false);
+      setLoadingPosts(false);
     }
   };
 
-  const formatCategoryName = (category: string) => {
-    return category.charAt(0).toUpperCase() + category.slice(1);
+  const handleDeletePost = async (postId: string) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+      try {
+        await blogService.deletePost(postId);
+        loadUserPosts(); // Refresh the list
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      }
+    }
   };
 
-  const recentPosts = posts.slice(0, 5);
+  const handleTogglePublish = async (postId: string) => {
+    try {
+      await blogService.togglePublishStatus(postId);
+      loadUserPosts(); // Refresh the list
+    } catch (error) {
+      console.error("Error toggling publish status:", error);
+    }
+  };
 
-  const content = (
-    <div className={styles.dashboard}>
-      <div className={styles.welcomeSection}>
-        <h1>Welcome to Admin Dashboard</h1>
-        <p>Manage your blog posts and monitor your content performance.</p>
+  if (loading) {
+    return <div className={styles.loadingContainer}>Loading...</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className={styles.loginContainer}>
+        <div className={styles.loginContent}>
+          <h1 className={styles.loginTitle}>Welcome to Blog App</h1>
+          <LoginForm />
+        </div>
       </div>
+    );
+  }
 
-      {loading ? (
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <p>Loading dashboard...</p>
-        </div>
-      ) : error ? (
-        <div className={styles.error}>
-          <h3>Error</h3>
-          <p>{error}</p>
-          <button onClick={fetchPosts} className={styles.retryButton}>
-            Try Again
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <MdArticle />
-              </div>
-              <div className={styles.statContent}>
-                <h3 className={styles.statNumber}>{stats.totalPosts}</h3>
-                <p className={styles.statLabel}>Total Posts</p>
-              </div>
-            </div>
-
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <MdVisibility />
-              </div>
-              <div className={styles.statContent}>
-                <h3 className={styles.statNumber}>{stats.publishedPosts}</h3>
-                <p className={styles.statLabel}>Published</p>
-              </div>
-            </div>
-
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <MdEdit />
-              </div>
-              <div className={styles.statContent}>
-                <h3 className={styles.statNumber}>{stats.draftPosts}</h3>
-                <p className={styles.statLabel}>Drafts</p>
-              </div>
-            </div>
-
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <MdBusinessCenter />
-              </div>
-              <div className={styles.statContent}>
-                <h3 className={styles.statNumber}>{stats.professionalPosts}</h3>
-                <p className={styles.statLabel}>Professional</p>
-              </div>
-            </div>
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.headerTitle}>My Blog Dashboard</h1>
+          <div className={styles.headerActions}>
+            <span className={styles.welcomeText}>Welcome, {user.email}</span>
+            <button
+              onClick={() => setShowCreateForm(!showCreateForm)}
+              className={styles.primaryButton}
+            >
+              {showCreateForm ? "Cancel" : "New Post"}
+            </button>
+            <button onClick={signOut} className={styles.secondaryButton}>
+              Sign Out
+            </button>
           </div>
+        </div>
+      </header>
 
-          <div className={styles.recentSection}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Recent Posts</h2>
-              <Link href="/admin/posts" className={styles.viewAllLink}>
-                View All
-              </Link>
-            </div>
+      <main className={styles.main}>
+        {showCreateForm ? (
+          <BlogPostForm
+            onSuccess={() => {
+              setShowCreateForm(false);
+              loadUserPosts();
+            }}
+          />
+        ) : (
+          <div>
+            <h2 className={styles.sectionTitle}>Your Posts</h2>
 
-            <div className={styles.postsList}>
-              {recentPosts.length === 0 ? (
-                <div className={styles.emptyState}>
-                  <MdArticle className={styles.emptyIcon} />
-                  <h3>No posts yet</h3>
-                  <p>Create your first blog post to get started.</p>
-                  <Link href="/admin/posts/new" className={styles.createButton}>
-                    <MdAdd /> Create First Post
-                  </Link>
-                </div>
-              ) : (
-                recentPosts.map((post) => (
-                  <div key={post.id} className={styles.postItem}>
-                    <div className={styles.postContent}>
-                      <h3 className={styles.postTitle}>{post.title}</h3>
-                      <p className={styles.postMeta}>
-                        {formatCategoryName(post.category)} •{" "}
-                        {new Date(post.createdAt).toLocaleDateString()} •{" "}
-                        <span
+            {loadingPosts ? (
+              <div className={styles.loadingText}>Loading posts...</div>
+            ) : posts.length === 0 ? (
+              <div className={styles.emptyState}>
+                <p className={styles.emptyStateText}>
+                  You haven't created any posts yet.
+                </p>
+                <button
+                  onClick={() => setShowCreateForm(true)}
+                  className={styles.primaryButton}
+                >
+                  Create Your First Post
+                </button>
+              </div>
+            ) : (
+              <div className={styles.postsGrid}>
+                {posts.map((post) => (
+                  <div key={post.id} className={styles.postCard}>
+                    <div className={styles.postHeader}>
+                      <div className={styles.postContent}>
+                        <h3 className={styles.postTitle}>{post.title}</h3>
+                        <p className={styles.postExcerpt}>{post.excerpt}</p>
+                        <div className={styles.postMeta}>
+                          <span>Created: {formatDate(post.created_at)}</span>
+                          <span
+                            className={
+                              post.published
+                                ? styles.publishedBadge
+                                : styles.draftBadge
+                            }
+                          >
+                            {post.published ? "Published" : "Draft"}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={styles.postActions}>
+                        <button
+                          onClick={() => handleTogglePublish(post.id)}
                           className={
-                            post.status === "PUBLISHED"
-                              ? styles.published
-                              : styles.draft
+                            post.published
+                              ? styles.unpublishButton
+                              : styles.publishButton
                           }
                         >
-                          {post.status === "PUBLISHED" ? "Published" : "Draft"}
-                        </span>
-                      </p>
-                      <p className={styles.postExcerpt}>
-                        {post.content.length > 100
-                          ? post.content.substring(0, 100) + "..."
-                          : post.content}
-                      </p>
+                          {post.published ? "Unpublish" : "Publish"}
+                        </button>
+                        <button
+                          onClick={() => handleDeletePost(post.id)}
+                          className={styles.deleteButton}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                    <div className={styles.postActions}>
-                      <Link
-                        href={`/admin/posts/${post.id}/edit`}
-                        className={styles.editLink}
-                      >
-                        Edit
-                      </Link>
-                    </div>
+
+                    {post.tags && post.tags.length > 0 && (
+                      <div className={styles.tagsContainer}>
+                        {post.tags.map((tag: string, index: number) => (
+                          <span key={index} className={styles.tag}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
-        </>
-      )}
+        )}
+      </main>
     </div>
   );
-
-  return content;
-};
-
-export default AdminDashboard;
+}

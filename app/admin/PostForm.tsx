@@ -1,522 +1,205 @@
-// components/admin/PostForm.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import {
-  MdAdd,
-  MdDelete,
-  MdSave,
-  MdCancel,
-  MdStar,
-  MdRemove,
-  MdSearch,
-} from "react-icons/md";
-import { Post, PostFormData, CATEGORIES, STATUSES } from "./types";
+import { useState } from "react";
+import { blogService } from "@/lib/blog-service";
+import { generateSlug, extractExcerpt } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import styles from "./PostForm.module.scss";
 
 interface PostFormProps {
-  post?: Post;
-  onSubmit: (data: PostFormData) => Promise<void>;
-  isLoading?: boolean;
+  onSuccess?: () => void;
+  initialData?: any;
+  isEditing?: boolean;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ post, onSubmit, isLoading }) => {
-  const router = useRouter();
-  const [formData, setFormData] = useState<PostFormData>({
-    title: "",
-    content: "",
-    excerpt: "",
-    category: "PROFESSIONAL",
-    status: "DRAFT",
-    featured: false,
-    seoTitle: "",
-    seoDescription: "",
-    images: [],
-    tags: [],
-  });
+export default function PostForm({
+  onSuccess,
+  initialData,
+  isEditing = false,
+}: PostFormProps) {
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [content, setContent] = useState(initialData?.content || "");
+  const [tags, setTags] = useState(initialData?.tags?.join(", ") || "");
+  const [metaDescription, setMetaDescription] = useState(
+    initialData?.meta_description || ""
+  );
+  const [featuredImage, setFeaturedImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [newImageUrl, setNewImageUrl] = useState("");
-  const [newImageAlt, setNewImageAlt] = useState("");
-  const [newImageCaption, setNewImageCaption] = useState("");
-  const [newTag, setNewTag] = useState("");
-  const [availableTags, setAvailableTags] = useState<string[]>([]);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    if (post) {
-      setFormData({
-        title: post.title,
-        content: post.content,
-        excerpt: post.excerpt || "",
-        category: post.category,
-        status: post.status,
-        featured: post.featured,
-        seoTitle: post.seoTitle || "",
-        seoDescription: post.seoDescription || "",
-        images: post.images.map((img) => ({
-          url: img.url,
-          alt: img.alt || "",
-          caption: img.caption || "",
-          width: img.width || undefined,
-          height: img.height || undefined,
-          fileSize: img.fileSize || undefined,
-          mimeType: img.mimeType || "",
-          isFeatured: img.isFeatured,
-          isOptimized: img.isOptimized || false,
-        })),
-        tags: post.tags.map((postTag) => postTag.tag.slug),
-      });
-    }
-    fetchAvailableTags();
-  }, [post]);
-
-  const fetchAvailableTags = async () => {
-    try {
-      // This would need a new API endpoint to fetch available tags
-      // For now, we'll use a simple array
-      setAvailableTags([
-        "nextjs",
-        "react",
-        "typescript",
-        "web-development",
-        "design",
-        "tutorial",
-        "prisma",
-      ]);
-    } catch (error) {
-      console.error("Failed to fetch tags:", error);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFeaturedImage(e.target.files[0]);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (
+    e: React.FormEvent,
+    publishNow: boolean = false
+  ) => {
     e.preventDefault();
-    await onSubmit(formData);
-  };
+    if (!user) return;
 
-  const handleAddImage = () => {
-    if (newImageUrl.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        images: [
-          ...prev.images,
-          {
-            url: newImageUrl.trim(),
-            alt: newImageAlt.trim(),
-            caption: newImageCaption.trim(),
-            isFeatured: false,
-            isOptimized: false,
-          },
-        ],
-      }));
-      setNewImageUrl("");
-      setNewImageAlt("");
-      setNewImageCaption("");
+    setLoading(true);
+    setError("");
+
+    try {
+      let imageUrl = initialData?.featured_image_url || null;
+
+      // Upload image if new one selected
+      if (featuredImage) {
+        imageUrl = await blogService.uploadImage(featuredImage, user.id);
+      }
+
+      const postData = {
+        title,
+        slug: generateSlug(title),
+        content,
+        excerpt: extractExcerpt(content),
+        featured_image_url: imageUrl,
+        published: publishNow,
+        tags: tags
+          .split(",")
+          .map((tag: string) => tag.trim())
+          .filter((tag: string) => tag),
+        meta_description: metaDescription || extractExcerpt(content, 160),
+      };
+
+      if (isEditing && initialData?.id) {
+        await blogService.updatePost(initialData.id, postData);
+      } else {
+        await blogService.createPost(postData);
+      }
+
+      alert(isEditing ? "Post updated!" : "Post created!");
+      onSuccess?.();
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleToggleFeatured = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.map((img, i) =>
-        i === index ? { ...img, isFeatured: !img.isFeatured } : img
-      ),
-    }));
-  };
-
-  const handleAddTag = () => {
-    if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...prev.tags, newTag.trim()],
-      }));
-      setNewTag("");
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: prev.tags.filter((tag) => tag !== tagToRemove),
-    }));
-  };
-
-  const generateExcerpt = () => {
-    if (formData.content) {
-      const excerpt = formData.content.substring(0, 200).trim() + "...";
-      setFormData((prev) => ({ ...prev, excerpt }));
-    }
-  };
-
-  const generateSEOTitle = () => {
-    if (formData.title) {
-      setFormData((prev) => ({ ...prev, seoTitle: formData.title }));
-    }
-  };
-
-  const generateSEODescription = () => {
-    if (formData.excerpt || formData.content) {
-      const description = (formData.excerpt || formData.content)
-        .substring(0, 160)
-        .trim();
-      setFormData((prev) => ({ ...prev, seoDescription: description }));
-    }
-  };
+  if (!user) {
+    return (
+      <div className={styles.loginMessage}>Please log in to create posts.</div>
+    );
+  }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.formRow}>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2>{isEditing ? "Edit Post" : "Create New Post"}</h2>
+      </div>
+
+      <form className={styles.form}>
         <div className={styles.formGroup}>
-          <label htmlFor="title" className={styles.label}>
-            Title *
+          <label
+            htmlFor="title"
+            className={`${styles.label} ${styles.required}`}
+          >
+            Title
           </label>
           <input
             type="text"
             id="title"
-            className={styles.input}
-            value={formData.title}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
+            className={styles.input}
+            placeholder="Enter your blog post title..."
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>
-            <input
-              type="checkbox"
-              checked={formData.featured}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, featured: e.target.checked }))
-              }
-              className={styles.checkbox}
-            />
-            <MdStar className={styles.starIcon} />
-            Featured Post
+          <label
+            htmlFor="content"
+            className={`${styles.label} ${styles.required}`}
+          >
+            Content (Markdown supported)
           </label>
-        </div>
-      </div>
-
-      <div className={styles.formRow}>
-        <div className={styles.formGroup}>
-          <label htmlFor="category" className={styles.label}>
-            Category *
-          </label>
-          <select
-            id="category"
-            className={styles.select}
-            value={formData.category}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                category: e.target.value as any,
-              }))
-            }
+          <textarea
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             required
-          >
-            {CATEGORIES.map((category) => (
-              <option key={category.value} value={category.value}>
-                {category.label}
-              </option>
-            ))}
-          </select>
+            className={`${styles.textarea} ${styles.content}`}
+            placeholder="Write your blog post content here... You can use Markdown formatting."
+          />
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="status" className={styles.label}>
-            Status *
-          </label>
-          <select
-            id="status"
-            className={styles.select}
-            value={formData.status}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                status: e.target.value as any,
-              }))
-            }
-            required
-          >
-            {STATUSES.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="excerpt" className={styles.label}>
-          Excerpt
-          <button
-            type="button"
-            onClick={generateExcerpt}
-            className={styles.generateButton}
-            title="Generate from content"
-          >
-            Auto-generate
-          </button>
-        </label>
-        <textarea
-          id="excerpt"
-          className={styles.textarea}
-          value={formData.excerpt}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, excerpt: e.target.value }))
-          }
-          placeholder="Brief description of the post (optional - will be auto-generated if empty)"
-          rows={3}
-        />
-      </div>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="content" className={styles.label}>
-          Content *
-        </label>
-        <textarea
-          id="content"
-          className={styles.textarea}
-          value={formData.content}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, content: e.target.value }))
-          }
-          required
-          placeholder="Write your blog post content here..."
-          rows={10}
-        />
-      </div>
-
-      {/* SEO Section */}
-      <div className={styles.seoSection}>
-        <h3 className={styles.sectionTitle}>SEO Settings</h3>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="seoTitle" className={styles.label}>
-            SEO Title
-            <button
-              type="button"
-              onClick={generateSEOTitle}
-              className={styles.generateButton}
-              title="Use post title"
-            >
-              Use Title
-            </button>
+          <label htmlFor="tags" className={styles.label}>
+            Tags (comma-separated)
           </label>
           <input
             type="text"
-            id="seoTitle"
+            id="tags"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
             className={styles.input}
-            value={formData.seoTitle}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, seoTitle: e.target.value }))
-            }
-            placeholder="SEO-optimized title"
-            maxLength={60}
+            placeholder="react, javascript, web development"
           />
-          <small className={styles.hint}>
-            {(formData.seoTitle || "").length}/60 characters
-          </small>
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="seoDescription" className={styles.label}>
-            SEO Description
-            <button
-              type="button"
-              onClick={generateSEODescription}
-              className={styles.generateButton}
-              title="Generate from excerpt/content"
-            >
-              Auto-generate
-            </button>
+          <label htmlFor="meta-description" className={styles.label}>
+            Meta Description (SEO)
           </label>
           <textarea
-            id="seoDescription"
+            id="meta-description"
+            value={metaDescription}
+            onChange={(e) => setMetaDescription(e.target.value)}
             className={styles.textarea}
-            value={formData.seoDescription}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                seoDescription: e.target.value,
-              }))
-            }
-            placeholder="SEO meta description"
-            rows={3}
-            maxLength={160}
+            placeholder="Brief description for search engines (will auto-generate if left empty)"
           />
-          <small className={styles.hint}>
-            {(formData.seoDescription || "").length}/160 characters
-          </small>
         </div>
-      </div>
-
-      {/* Tags Section */}
-      <div className={styles.tagsSection}>
-        <h3 className={styles.sectionTitle}>Tags</h3>
 
         <div className={styles.formGroup}>
-          <label htmlFor="newTag" className={styles.label}>
-            Add Tags
+          <label htmlFor="featured-image" className={styles.label}>
+            Featured Image
           </label>
-          <div className={styles.tagInputContainer}>
+          <div className={styles.fileInput}>
             <input
-              type="text"
-              id="newTag"
-              className={styles.input}
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
-              placeholder="Enter tag name"
-              list="availableTags"
+              type="file"
+              id="featured-image"
+              accept="image/*"
+              onChange={handleImageChange}
             />
-            <datalist id="availableTags">
-              {availableTags.map((tag) => (
-                <option key={tag} value={tag} />
-              ))}
-            </datalist>
-            <button
-              type="button"
-              onClick={handleAddTag}
-              className={styles.addButton}
-            >
-              <MdAdd /> Add
-            </button>
-          </div>
-        </div>
-
-        {formData.tags.length > 0 && (
-          <div className={styles.tagsList}>
-            {formData.tags.map((tag) => (
-              <span key={tag} className={styles.tag}>
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveTag(tag)}
-                  className={styles.removeTagButton}
-                >
-                  <MdRemove />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Images Section */}
-      <div className={styles.imagesSection}>
-        <h3 className={styles.sectionTitle}>Images</h3>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="imageUrl" className={styles.label}>
-            Add Image
-          </label>
-          <div className={styles.imageInputContainer}>
-            <input
-              type="url"
-              id="imageUrl"
-              className={styles.input}
-              value={newImageUrl}
-              onChange={(e) => setNewImageUrl(e.target.value)}
-              placeholder="Image URL"
-            />
-            <input
-              type="text"
-              className={styles.input}
-              value={newImageAlt}
-              onChange={(e) => setNewImageAlt(e.target.value)}
-              placeholder="Alt text"
-            />
-            <input
-              type="text"
-              className={styles.input}
-              value={newImageCaption}
-              onChange={(e) => setNewImageCaption(e.target.value)}
-              placeholder="Caption (optional)"
-            />
-            <button
-              type="button"
-              onClick={handleAddImage}
-              className={styles.addButton}
-            >
-              <MdAdd /> Add
-            </button>
-          </div>
-        </div>
-
-        {formData.images.map((image, index) => (
-          <div key={index} className={styles.imageItem}>
-            <img
-              src={image.url}
-              alt={image.alt || `Preview ${index + 1}`}
-              className={styles.imagePreview}
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/placeholder.jpg";
-              }}
-            />
-            <div className={styles.imageDetails}>
-              <div className={styles.imageUrl}>{image.url}</div>
-              {image.alt && (
-                <div className={styles.imageAlt}>Alt: {image.alt}</div>
-              )}
-              {image.caption && (
-                <div className={styles.imageCaption}>
-                  Caption: {image.caption}
-                </div>
-              )}
-              {image.isFeatured && (
-                <div className={styles.featuredBadge}>
-                  <MdStar /> Featured
-                </div>
-              )}
-              <div className={styles.imageControls}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={image.isFeatured}
-                    onChange={() => handleToggleFeatured(index)}
-                    className={styles.checkbox}
-                  />
-                  Featured image
-                </label>
-              </div>
+            <div className={styles.fileInputLabel}>
+              {featuredImage
+                ? featuredImage.name
+                : "Choose an image file or drag it here"}
             </div>
-            <button
-              type="button"
-              onClick={() => handleRemoveImage(index)}
-              className={styles.deleteImageButton}
-            >
-              <MdDelete />
-            </button>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className={styles.formActions}>
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className={styles.cancelButton}
-        >
-          <MdCancel /> Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={styles.submitButton}
-        >
-          <MdSave /> {isLoading ? "Saving..." : "Save Post"}
-        </button>
-      </div>
-    </form>
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
+        <div className={styles.buttonGroup}>
+          <button
+            type="button"
+            onClick={(e) => handleSubmit(e, false)}
+            disabled={loading}
+            className={`${styles.draftButton} ${loading ? styles.loading : ""}`}
+          >
+            {loading ? "Saving..." : "Save as Draft"}
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => handleSubmit(e, true)}
+            disabled={loading}
+            className={`${styles.publishButton} ${
+              loading ? styles.loading : ""
+            }`}
+          >
+            {loading ? "Publishing..." : "Publish Now"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
-};
-
-export default PostForm;
+}

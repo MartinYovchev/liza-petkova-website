@@ -1,329 +1,177 @@
-// app/admin/posts/page.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
+import { blogService } from "@/lib/blog-service";
+import { formatDate } from "@/lib/utils";
 import Link from "next/link";
-import {
-  MdAdd,
-  MdEdit,
-  MdDelete,
-  MdVisibility,
-  MdVisibilityOff,
-  MdStar,
-  MdStarBorder,
-  MdAccessTime,
-  MdRemoveRedEye,
-} from "react-icons/md";
-import AdminLayout from "../layout";
-import { Post, STATUSES } from "../types";
-import styles from "./Posts.module.scss";
 
-const AdminPostsPage: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<
-    "all" | "DRAFT" | "PUBLISHED" | "ARCHIVED" | "SCHEDULED"
-  >("all");
+export default function AdminPostsPage() {
+  const { user, loading } = useAuth();
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    if (user) {
+      loadUserPosts();
+    }
+  }, [user]);
 
-  const fetchPosts = async () => {
+  const loadUserPosts = async () => {
+    setLoadingPosts(true);
     try {
-      setError(null);
-      const response = await fetch("/api/posts");
-      if (!response.ok) {
-        throw new Error("Failed to fetch posts");
-      }
-      const data = await response.json();
-      setPosts(data.posts || []);
+      const userPosts = await blogService.getUserPosts();
+      setPosts(userPosts);
     } catch (error) {
-      console.error("Error fetching posts:", error);
-      setError("Failed to load posts. Please try again.");
-      setPosts([]);
+      console.error("Error loading posts:", error);
     } finally {
-      setLoading(false);
+      setLoadingPosts(false);
     }
   };
 
-  const handleDelete = async (postId: number) => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
-
-    try {
-      const response = await fetch(`/api/posts/${postId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        setPosts(posts.filter((post) => post.id !== postId));
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to delete post");
+  const handleDeletePost = async (postId: string) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+      try {
+        await blogService.deletePost(postId);
+        loadUserPosts();
+      } catch (error) {
+        console.error("Error deleting post:", error);
       }
+    }
+  };
+
+  const handleTogglePublish = async (postId: string) => {
+    try {
+      await blogService.togglePublishStatus(postId);
+      loadUserPosts();
     } catch (error) {
-      console.error("Error deleting post:", error);
-      alert(
-        `Failed to delete post: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      console.error("Error toggling publish status:", error);
     }
   };
 
-  const formatCategoryName = (category: string) => {
-    switch (category) {
-      case "PROFESSIONAL":
-        return "Professional";
-      case "ARTISTIC":
-        return "Artistic";
-      case "PERSONAL":
-        return "Personal";
-      case "TUTORIAL":
-        return "Tutorial";
-      case "NEWS":
-        return "News";
-      default:
-        return (
-          category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
-        );
-    }
-  };
+  if (loading) {
+    return <div style={{ padding: "2rem" }}>Loading...</div>;
+  }
 
-  const formatStatusName = (status: string) => {
-    switch (status) {
-      case "DRAFT":
-        return "Draft";
-      case "PUBLISHED":
-        return "Published";
-      case "ARCHIVED":
-        return "Archived";
-      case "SCHEDULED":
-        return "Scheduled";
-      default:
-        return status;
-    }
-  };
+  if (!user) {
+    return <div style={{ padding: "2rem" }}>Please log in to access admin area.</div>;
+  }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "PUBLISHED":
-        return <MdVisibility className={styles.statusIcon} />;
-      case "DRAFT":
-        return <MdVisibilityOff className={styles.statusIcon} />;
-      case "ARCHIVED":
-        return <MdVisibilityOff className={styles.statusIcon} />;
-      case "SCHEDULED":
-        return <MdAccessTime className={styles.statusIcon} />;
-      default:
-        return <MdVisibilityOff className={styles.statusIcon} />;
-    }
-  };
-
-  const filteredPosts = posts.filter((post) => {
-    if (filter === "all") return true;
-    return post.status === filter;
-  });
-
-  const getPostCounts = () => {
-    return {
-      all: posts.length,
-      DRAFT: posts.filter((p) => p.status === "DRAFT").length,
-      PUBLISHED: posts.filter((p) => p.status === "PUBLISHED").length,
-      ARCHIVED: posts.filter((p) => p.status === "ARCHIVED").length,
-      SCHEDULED: posts.filter((p) => p.status === "SCHEDULED").length,
-      featured: posts.filter((p) => p.featured).length,
-    };
-  };
-
-  const counts = getPostCounts();
-
-  const content = (
-    <div className={styles.postsPage}>
-      <div className={styles.pageHeader}>
+  return (
+    <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <h1>Manage Posts</h1>
-        <div className={styles.headerStats}>
-          <span className={styles.stat}>Total: {counts.all}</span>
-          <span className={styles.stat}>Featured: {counts.featured}</span>
-        </div>
-        <Link href="/admin/posts/new" className={styles.createButton}>
-          <MdAdd /> Create New Post
+        <Link 
+          href="/admin/posts/new"
+          style={{
+            background: "#3b82f6",
+            color: "white",
+            padding: "0.5rem 1rem",
+            borderRadius: "4px",
+            textDecoration: "none"
+          }}
+        >
+          New Post
         </Link>
       </div>
 
-      <div className={styles.filters}>
-        <button
-          className={`${styles.filterButton} ${
-            filter === "all" ? styles.active : ""
-          }`}
-          onClick={() => setFilter("all")}
-        >
-          All ({counts.all})
-        </button>
-        {STATUSES.map((statusOption) => (
-          <button
-            key={statusOption.value}
-            className={`${styles.filterButton} ${
-              filter === statusOption.value ? styles.active : ""
-            }`}
-            onClick={() => setFilter(statusOption.value)}
-          >
-            {statusOption.label} (
-            {counts[statusOption.value as keyof typeof counts] || 0})
-          </button>
-        ))}
-      </div>
-
-      {loading ? (
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <p>Loading posts...</p>
-        </div>
-      ) : error ? (
-        <div className={styles.error}>
-          <h3>Error</h3>
-          <p>{error}</p>
-          <button onClick={fetchPosts} className={styles.retryButton}>
-            Try Again
-          </button>
-        </div>
-      ) : filteredPosts.length === 0 ? (
-        <div className={styles.emptyState}>
-          <h3>No posts found</h3>
-          <p>
-            {filter === "all"
-              ? "You haven't created any posts yet."
-              : `No ${formatStatusName(filter)} posts found.`}
-          </p>
-          <Link href="/admin/posts/new" className={styles.createButton}>
-            <MdAdd /> Create Your First Post
-          </Link>
+      {loadingPosts ? (
+        <div>Loading posts...</div>
+      ) : posts.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "3rem" }}>
+          <p>No posts found.</p>
+          <Link href="/admin/posts/new">Create your first post</Link>
         </div>
       ) : (
-        <div className={styles.postsTable}>
-          <div className={styles.tableHeader}>
-            <div className={styles.headerCell}>Title</div>
-            <div className={styles.headerCell}>Category</div>
-            <div className={styles.headerCell}>Status</div>
-            <div className={styles.headerCell}>Stats</div>
-            <div className={styles.headerCell}>Date</div>
-            <div className={styles.headerCell}>Actions</div>
-          </div>
-
-          {filteredPosts.map((post) => (
-            <div key={post.id} className={styles.tableRow}>
-              <div className={styles.cell}>
-                <div className={styles.postTitleContainer}>
-                  <div className={styles.postTitle}>{post.title}</div>
-                  {post.featured && (
-                    <MdStar
-                      className={styles.featuredIcon}
-                      title="Featured Post"
-                    />
-                  )}
-                </div>
-                <div className={styles.postExcerpt}>
-                  {post.excerpt ||
-                    (post.content.length > 80
-                      ? post.content.substring(0, 80) + "..."
-                      : post.content)}
+        <div style={{ display: "grid", gap: "1rem" }}>
+          {posts.map((post) => (
+            <div 
+              key={post.id} 
+              style={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "8px",
+                padding: "1.5rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start"
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: "0 0 0.5rem 0" }}>{post.title}</h3>
+                <p style={{ margin: "0 0 1rem 0", color: "#6b7280" }}>{post.excerpt}</p>
+                <div style={{ display: "flex", gap: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>
+                  <span>Created: {formatDate(post.created_at)}</span>
+                  <span style={{
+                    background: post.published ? "#10b981" : "#f59e0b",
+                    color: "white",
+                    padding: "0.25rem 0.5rem",
+                    borderRadius: "4px",
+                    fontSize: "0.75rem"
+                  }}>
+                    {post.published ? "Published" : "Draft"}
+                  </span>
                 </div>
                 {post.tags && post.tags.length > 0 && (
-                  <div className={styles.postTags}>
-                    {post.tags.slice(0, 3).map((postTag) => (
-                      <span
-                        key={postTag.tag.id}
-                        className={styles.tag}
+                  <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                    {post.tags.map((tag: string, index: number) => (
+                      <span 
+                        key={index}
                         style={{
-                          backgroundColor: postTag.tag.color || "#007acc",
+                          background: "#e5e7eb",
+                          padding: "0.25rem 0.5rem",
+                          borderRadius: "4px",
+                          fontSize: "0.75rem"
                         }}
                       >
-                        {postTag.tag.name}
+                        {tag}
                       </span>
                     ))}
-                    {post.tags.length > 3 && (
-                      <span className={styles.moreTagsIndicator}>
-                        +{post.tags.length - 3} more
-                      </span>
-                    )}
                   </div>
                 )}
               </div>
-              <div className={styles.cell}>
-                <span className={styles.category}>
-                  {formatCategoryName(post.category)}
-                </span>
-              </div>
-              <div className={styles.cell}>
-                <div className={styles.statusContainer}>
-                  {getStatusIcon(post.status)}
-                  <span
-                    className={`${styles.status} ${
-                      styles[post.status.toLowerCase()]
-                    }`}
-                  >
-                    {formatStatusName(post.status)}
-                  </span>
-                </div>
-              </div>
-              <div className={styles.cell}>
-                <div className={styles.stats}>
-                  <div className={styles.statItem}>
-                    <MdRemoveRedEye className={styles.statIcon} />
-                    {post.viewCount}
-                  </div>
-                  {post.readTime && (
-                    <div className={styles.statItem}>
-                      <MdAccessTime className={styles.statIcon} />
-                      {post.readTime}m
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className={styles.cell}>
-                <div className={styles.date}>
-                  <div className={styles.dateLabel}>
-                    {post.status === "PUBLISHED" && post.publishedAt
-                      ? "Published"
-                      : "Created"}
-                  </div>
-                  <div className={styles.dateValue}>
-                    {new Date(
-                      post.status === "PUBLISHED" && post.publishedAt
-                        ? post.publishedAt
-                        : post.createdAt
-                    ).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.cell}>
-                <div className={styles.actions}>
-                  <Link
-                    href={`/admin/posts/${post.id}/edit`}
-                    className={styles.actionButton}
-                    title="Edit"
-                  >
-                    <MdEdit />
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(post.id)}
-                    className={`${styles.actionButton} ${styles.deleteButton}`}
-                    title="Delete"
-                  >
-                    <MdDelete />
-                  </button>
-                  {post.status === "PUBLISHED" && (
-                    <Link
-                      href={`/blog/${post.id}`}
-                      className={styles.actionButton}
-                      title="View Post"
-                      target="_blank"
-                    >
-                      <MdVisibility />
-                    </Link>
-                  )}
-                </div>
+              
+              <div style={{ display: "flex", gap: "0.5rem", marginLeft: "1rem" }}>
+                <Link
+                  href={`/admin/posts/${post.id}/edit`}
+                  style={{
+                    background: "#6b7280",
+                    color: "white",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "4px",
+                    textDecoration: "none",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Edit
+               </Link>
+                <button
+                  onClick={() => handleTogglePublish(post.id)}
+                  style={{
+                    background: post.published ? "#ef4444" : "#10b981",
+                    color: "white",
+                    border: "none",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  {post.published ? "Unpublish" : "Publish"}
+                </button>
+                <button
+                  onClick={() => handleDeletePost(post.id)}
+                  style={{
+                    background: "#ef4444",
+                    color: "white",
+                    border: "none",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -331,8 +179,4 @@ const AdminPostsPage: React.FC = () => {
       )}
     </div>
   );
-
-  return content;
-};
-
-export default AdminPostsPage;
+}

@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import AdminLayout from "../../../layout";
+import { blogService } from "@/lib/blog-service";
 import PostForm from "../../../PostForm";
-import { Post, PostFormData } from "../../../types";
 
 interface EditPostPageProps {
   params: { id: string };
@@ -12,9 +11,8 @@ interface EditPostPageProps {
 
 const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
   const router = useRouter();
-  const [post, setPost] = useState<Post | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
+  const [post, setPost] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,123 +22,76 @@ const EditPostPage: React.FC<EditPostPageProps> = ({ params }) => {
   const fetchPost = async () => {
     try {
       setError(null);
-      const response = await fetch(`/api/posts/${params.id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setPost(data.post);
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Post not found");
-      }
-    } catch (error) {
+      const postData = await blogService.getPost(params.id);
+      setPost(postData);
+    } catch (error: any) {
       console.error("Error fetching post:", error);
-      setError(error instanceof Error ? error.message : "Failed to load post");
+      setError(error.message || "Failed to load post");
     } finally {
-      setIsFetching(false);
+      setLoading(false);
     }
   };
 
-  const handleSubmit = async (data: PostFormData) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/posts/${params.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        router.push("/admin/posts");
-        router.refresh(); // Refresh to show updated data
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to update post");
-      }
-    } catch (error) {
-      console.error("Error updating post:", error);
-      alert(
-        `Failed to update post: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSuccess = () => {
+    router.push("/admin/posts");
   };
 
-  if (isFetching) {
+  if (loading) {
     return (
-      <AdminLayout title="Edit Post">
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              border: "3px solid #e5e7eb",
-              borderTop: "3px solid #3b82f6",
-              borderRadius: "50%",
-              margin: "0 auto 1rem",
-              animation: "spin 1s linear infinite",
-            }}
-          ></div>
-          Loading post...
-        </div>
-      </AdminLayout>
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <div>Loading post...</div>
+      </div>
     );
   }
 
   if (error || !post) {
     return (
-      <AdminLayout title="Edit Post">
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <h3>Error</h3>
-          <p>{error || "Post not found"}</p>
-          <div
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h3>Error</h3>
+        <p>{error || "Post not found"}</p>
+        <div
+          style={{
+            marginTop: "1rem",
+            display: "flex",
+            gap: "1rem",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            onClick={() => router.push("/admin/posts")}
             style={{
-              marginTop: "1rem",
-              display: "flex",
-              gap: "1rem",
-              justifyContent: "center",
+              padding: "0.5rem 1rem",
+              background: "#6b7280",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
             }}
           >
-            <button
-              onClick={() => router.push("/admin/posts")}
-              style={{
-                padding: "0.5rem 1rem",
-                background: "#6b7280",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Back to Posts
-            </button>
-            <button
-              onClick={fetchPost}
-              style={{
-                padding: "0.5rem 1rem",
-                background: "#3b82f6",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              Try Again
-            </button>
-          </div>
+            Back to Posts
+          </button>
+          <button
+            onClick={fetchPost}
+            style={{
+              padding: "0.5rem 1rem",
+              background: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
         </div>
-      </AdminLayout>
+      </div>
     );
   }
 
   return (
-    <AdminLayout title={`Edit: ${post.title}`}>
-      <PostForm post={post} onSubmit={handleSubmit} isLoading={isLoading} />
-    </AdminLayout>
+    <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <PostForm initialData={post} isEditing={true} onSuccess={handleSuccess} />
+    </div>
   );
 };
 
