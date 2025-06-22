@@ -1,201 +1,204 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { blogService } from "@/lib/blog-service";
-import { formatDate } from "@/lib/utils";
-import Link from "next/link";
-import styles from "./BlogDetail.module.scss";
+import { blogService } from "../../lib/blogService";
+import { BlogPost } from "../../lib/types";
 
-interface BlogDetailPageProps {
-  params: { id: string };
-}
+import BlogCard from "../../components/BlogCard/BlogCard";
+import Pagination from "../../components/Pagination/Pagination";
+import styles from "./BlogPage.module.scss";
 
-export default function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const [post, setPost] = useState<any | null>(null);
+export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
+  const postsPerPage = parseInt(process.env.NEXT_PUBLIC_POSTS_PER_PAGE || "9");
 
   useEffect(() => {
-    fetchPost();
-  }, [params.id]);
+    fetchPosts();
+    fetchFeaturedPosts();
+  }, [currentPage, searchQuery]);
 
-  const fetchPost = async () => {
+  const fetchPosts = async () => {
     try {
-      setError(null);
-      // Try to get post by slug first (assuming id could be a slug)
-      let postData = await blogService.getPostBySlug(params.id);
+      setLoading(true);
+      let result;
 
-      // If not found by slug, try to get all published posts and find by id
-      if (!postData) {
-        const allPosts = await blogService.getPublishedPosts();
-        postData =
-          allPosts.find((p) => p.id === params.id || p.slug === params.id) ||
-          null;
+      if (searchQuery.trim()) {
+        result = await blogService.searchPosts(
+          searchQuery,
+          currentPage,
+          postsPerPage
+        );
+      } else {
+        result = await blogService.getAllPosts(currentPage, postsPerPage);
       }
 
-      if (!postData) {
-        throw new Error("Post not found");
-      }
-
-      // Only show if post is published (unless it's the author viewing their own post)
-      if (!postData.published) {
-        throw new Error("Post not found");
-      }
-
-      setPost(postData);
-    } catch (error: any) {
-      console.error("Error fetching post:", error);
-      setError(error.message || "Failed to load post");
+      setPosts(result.posts);
+      setTotalCount(result.totalCount);
+      setTotalPages(Math.ceil(result.totalCount / postsPerPage));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading post...</div>
-      </div>
-    );
-  }
+  const fetchFeaturedPosts = async () => {
+    try {
+      const featured = await blogService.getFeaturedPosts(3);
+      setFeaturedPosts(featured);
+    } catch (err) {
+      console.error("Error fetching featured posts:", err);
+    }
+  };
 
-  if (error || !post) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.error}>
-          <h2>Post Not Found</h2>
-          <p>{error || "The blog post you're looking for doesn't exist."}</p>
-          <Link href="/blog" className={styles.backLink}>
-            ← Back to Blog
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setCurrentPage(1);
+    fetchPosts();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setCurrentPage(1);
+  };
 
   return (
-    <div className={styles.container}>
-      <article className={styles.article}>
+    <div className={styles.page}>
+      <div className={styles.container}>
         <header className={styles.header}>
-          <Link href="/blog" className={styles.backLink}>
-            ← Back to Blog
-          </Link>
-
-          <h1 className={styles.title}>{post.title}</h1>
-
-          <div className={styles.meta}>
-            <time className={styles.date}>{formatDate(post.created_at)}</time>
-            {post.tags && post.tags.length > 0 && (
-              <div className={styles.tags}>
-                {post.tags.map((tag: string, index: number) => (
-                  <span key={index} className={styles.tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>Our Blog</h1>
+            <p className={styles.subtitle}>
+              Discover insights, tutorials, and stories from our team
+            </p>
           </div>
 
-          {post.featured_image_url && (
-            <div className={styles.featuredImage}>
-              <img
-                src={post.featured_image_url}
-                alt={post.title}
-                className={styles.image}
+          <form onSubmit={handleSearch} className={styles.searchForm}>
+            <div className={styles.searchContainer}>
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={styles.searchInput}
               />
+              <button type="submit" className={styles.searchButton}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className={styles.clearButton}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              )}
             </div>
-          )}
+          </form>
         </header>
 
-        <div className={styles.content}>
-          {post.content.split("\n").map((paragraph: string, index: number) => {
-            if (paragraph.trim() === "") return <br key={index} />;
-
-            // Basic markdown parsing for bold, italic, and links
-            let processedParagraph = paragraph
-              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-              .replace(/\*(.*?)\*/g, "<em>$1</em>")
-              .replace(
-                /\[([^\]]+)\]\(([^)]+)\)/g,
-                '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-              );
-
-            if (paragraph.startsWith("# ")) {
-              return (
-                <h1
-                  key={index}
-                  dangerouslySetInnerHTML={{
-                    __html: processedParagraph.substring(2),
-                  }}
-                />
-              );
-            } else if (paragraph.startsWith("## ")) {
-              return (
-                <h2
-                  key={index}
-                  dangerouslySetInnerHTML={{
-                    __html: processedParagraph.substring(3),
-                  }}
-                />
-              );
-            } else if (paragraph.startsWith("### ")) {
-              return (
-                <h3
-                  key={index}
-                  dangerouslySetInnerHTML={{
-                    __html: processedParagraph.substring(4),
-                  }}
-                />
-              );
-            } else {
-              return (
-                <p
-                  key={index}
-                  dangerouslySetInnerHTML={{ __html: processedParagraph }}
-                />
-              );
-            }
-          })}
-        </div>
-
-        <footer className={styles.footer}>
-          <div className={styles.shareSection}>
-            <h3>Share this post</h3>
-            <div className={styles.shareButtons}>
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                  post.title
-                )}&url=${encodeURIComponent(window.location.href)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.shareButton}
-              >
-                Twitter
-              </a>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                  window.location.href
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.shareButton}
-              >
-                Facebook
-              </a>
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                  window.location.href
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.shareButton}
-              >
-                LinkedIn
-              </a>
+        {/* Featured Posts Section */}
+        {!searchQuery && featuredPosts.length > 0 && (
+          <section className={styles.featuredSection}>
+            <h2 className={styles.sectionTitle}>Featured Articles</h2>
+            <div className={styles.featuredGrid}>
+              {featuredPosts.map((post) => (
+                <div key={post.id} className={styles.featuredCard}>
+                  <BlogCard post={post} />
+                </div>
+              ))}
             </div>
-          </div>
-        </footer>
-      </article>
+          </section>
+        )}
+
+        {/* Main Content */}
+        <section className={styles.mainSection}>
+          {searchQuery && (
+            <div className={styles.searchResults}>
+              <h2>Search Results for "{searchQuery}"</h2>
+              <p>
+                {totalCount} article{totalCount !== 1 ? "s" : ""} found
+              </p>
+            </div>
+          )}
+
+          {loading && (
+            <div className={styles.loading}>
+              <div className={styles.spinner} />
+              <p>Loading articles...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className={styles.error}>
+              <h3>Oops! Something went wrong</h3>
+              <p>{error}</p>
+              <button onClick={fetchPosts} className={styles.retryButton}>
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && (
+            <>
+              {posts.length === 0 ? (
+                <div className={styles.noPosts}>
+                  <div className={styles.noPostsIcon}>📝</div>
+                  <h3>No articles found</h3>
+                  <p>
+                    {searchQuery
+                      ? `No articles match your search for "${searchQuery}"`
+                      : "No articles have been published yet."}
+                  </p>
+                  {searchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className={styles.clearSearchButton}
+                    >
+                      View All Articles
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className={styles.postsGrid}>
+                    {posts.map((post) => (
+                      <BlogCard key={post.id} post={post} />
+                    ))}
+                  </div>
+
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalCount}
+                    itemsPerPage={postsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                </>
+              )}
+            </>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

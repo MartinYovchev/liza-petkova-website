@@ -19,9 +19,8 @@ import {
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dual Theme Website",
+  title: "Liza Petkova",
   description: "Professional and Artistic dual-themed website",
-  generator: "v0.dev",
 };
 
 const footerSections = [

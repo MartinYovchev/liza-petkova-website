@@ -1,175 +1,345 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
-import LoginForm from "../login/LoginForm";
-import BlogPostForm from "./PostForm";
 import { useState, useEffect } from "react";
-import { blogService } from "@/lib/blog-service";
-import { formatDate } from "@/lib/utils";
-import styles from "./BlogPage.module.scss";
+import Link from "next/link";
+import { blogService } from "../../lib/blogService";
+import { BlogPost, BlogStats } from "../../lib/types";
+import BlogPostForm from "../../components/BlogPostForm/BlogPostForm";
+import Pagination from "../../components/Pagination/Pagination";
+import styles from "../../styles/AdminPage.module.scss";
 
-export default function Home() {
-  const { user, loading, signOut } = useAuth();
-  const [posts, setPosts] = useState<any[]>([]);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [loadingPosts, setLoadingPosts] = useState(false);
+export default function AdminDashboard() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [stats, setStats] = useState<BlogStats>({
+    total: 0,
+    published: 0,
+    drafts: 0,
+    archived: 0,
+  });
+  const postsPerPage = 10;
 
   useEffect(() => {
-    if (user) {
-      loadUserPosts();
-    }
-  }, [user]);
+    fetchPosts();
+  }, [currentPage]);
 
-  const loadUserPosts = async () => {
-    setLoadingPosts(true);
+  const fetchPosts = async () => {
     try {
-      const userPosts = await blogService.getUserPosts();
-      setPosts(userPosts);
-    } catch (error) {
-      console.error("Error loading posts:", error);
+      setLoading(true);
+      const result = await blogService.getAllPostsAdmin(
+        currentPage,
+        postsPerPage
+      );
+      setPosts(result.posts);
+      setTotalCount(result.totalCount);
+      setTotalPages(Math.ceil(result.totalCount / postsPerPage));
+
+      // Calculate stats
+      const published = result.posts.filter(
+        (p) => p.status === "published"
+      ).length;
+      const drafts = result.posts.filter((p) => p.status === "draft").length;
+      const archived = result.posts.filter(
+        (p) => p.status === "archived"
+      ).length;
+
+      setStats({
+        total: result.totalCount,
+        published,
+        drafts,
+        archived,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setLoadingPosts(false);
+      setLoading(false);
     }
   };
 
-  const handleDeletePost = async (postId: string) => {
-    if (confirm("Are you sure you want to delete this post?")) {
+  const handleDelete = async (id: string) => {
+    if (
+      confirm(
+        "Are you sure you want to delete this post? This action cannot be undone."
+      )
+    ) {
       try {
-        await blogService.deletePost(postId);
-        loadUserPosts(); // Refresh the list
-      } catch (error) {
-        console.error("Error deleting post:", error);
+        await blogService.deletePost(id);
+        setPosts(posts.filter((post) => post.id !== id));
+        setTotalCount((prev) => prev - 1);
+      } catch (err) {
+        alert(
+          "Error deleting post: " +
+            (err instanceof Error ? err.message : "Unknown error")
+        );
       }
     }
   };
 
-  const handleTogglePublish = async (postId: string) => {
+  const handleStatusToggle = async (post: BlogPost) => {
     try {
-      await blogService.togglePublishStatus(postId);
-      loadUserPosts(); // Refresh the list
-    } catch (error) {
-      console.error("Error toggling publish status:", error);
+      const newStatus = post.status === "published" ? "draft" : "published";
+      const updatedPost = await blogService.updatePost(post.id, {
+        status: newStatus,
+      });
+      setPosts(posts.map((p) => (p.id === post.id ? updatedPost : p)));
+    } catch (err) {
+      alert(
+        "Error updating post status: " +
+          (err instanceof Error ? err.message : "Unknown error")
+      );
     }
   };
 
-  if (loading) {
-    return <div className={styles.loadingContainer}>Loading...</div>;
-  }
+  const handleSave = (savedPost: BlogPost) => {
+    if (editingPost) {
+      setPosts(
+        posts.map((post) => (post.id === savedPost.id ? savedPost : post))
+      );
+    } else {
+      setPosts([savedPost, ...posts]);
+      setTotalCount((prev) => prev + 1);
+    }
+    setShowForm(false);
+    setEditingPost(null);
+  };
 
-  if (!user) {
+  const handleCancel = () => {
+    setShowForm(false);
+    setEditingPost(null);
+  };
+
+  const handleEdit = (post: BlogPost) => {
+    setEditingPost(post);
+    setShowForm(true);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const formatDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  if (loading && posts.length === 0) {
     return (
-      <div className={styles.loginContainer}>
-        <div className={styles.loginContent}>
-          <h1 className={styles.loginTitle}>Welcome to Blog App</h1>
-          <LoginForm />
-        </div>
+      <div className={styles.loading}>
+        <div className={styles.spinner} />
+        <p>Loading dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.headerTitle}>My Blog Dashboard</h1>
-          <div className={styles.headerActions}>
-            <span className={styles.welcomeText}>Welcome, {user.email}</span>
-            <button
-              onClick={() => setShowCreateForm(!showCreateForm)}
-              className={styles.primaryButton}
-            >
-              {showCreateForm ? "Cancel" : "New Post"}
-            </button>
-            <button onClick={signOut} className={styles.secondaryButton}>
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className={styles.main}>
-        {showCreateForm ? (
-          <BlogPostForm
-            onSuccess={() => {
-              setShowCreateForm(false);
-              loadUserPosts();
-            }}
-          />
-        ) : (
-          <div>
-            <h2 className={styles.sectionTitle}>Your Posts</h2>
-
-            {loadingPosts ? (
-              <div className={styles.loadingText}>Loading posts...</div>
-            ) : posts.length === 0 ? (
-              <div className={styles.emptyState}>
-                <p className={styles.emptyStateText}>
-                  You haven't created any posts yet.
+    <div className={styles.page}>
+      <div className={styles.container}>
+        {!showForm ? (
+          <>
+            <header className={styles.header}>
+              <div className={styles.headerContent}>
+                <h1 className={styles.title}>Blog Administration</h1>
+                <p className={styles.subtitle}>
+                  Manage your blog posts and content
                 </p>
+              </div>
+              <div className={styles.headerActions}>
                 <button
-                  onClick={() => setShowCreateForm(true)}
-                  className={styles.primaryButton}
+                  onClick={() => setShowForm(true)}
+                  className={styles.createButton}
                 >
-                  Create Your First Post
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  Create New Post
+                </button>
+                <Link href="/blog" className={styles.viewBlogButton}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  View Blog
+                </Link>
+              </div>
+            </header>
+
+            {error && (
+              <div className={styles.error}>
+                <h3>Error Loading Posts</h3>
+                <p>{error}</p>
+                <button onClick={fetchPosts} className={styles.retryButton}>
+                  Try Again
                 </button>
               </div>
-            ) : (
-              <div className={styles.postsGrid}>
-                {posts.map((post) => (
-                  <div key={post.id} className={styles.postCard}>
-                    <div className={styles.postHeader}>
-                      <div className={styles.postContent}>
-                        <h3 className={styles.postTitle}>{post.title}</h3>
-                        <p className={styles.postExcerpt}>{post.excerpt}</p>
-                        <div className={styles.postMeta}>
-                          <span>Created: {formatDate(post.created_at)}</span>
-                          <span
-                            className={
-                              post.published
-                                ? styles.publishedBadge
-                                : styles.draftBadge
-                            }
-                          >
-                            {post.published ? "Published" : "Draft"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className={styles.postActions}>
-                        <button
-                          onClick={() => handleTogglePublish(post.id)}
-                          className={
-                            post.published
-                              ? styles.unpublishButton
-                              : styles.publishButton
-                          }
-                        >
-                          {post.published ? "Unpublish" : "Publish"}
-                        </button>
-                        <button
-                          onClick={() => handleDeletePost(post.id)}
-                          className={styles.deleteButton}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-
-                    {post.tags && post.tags.length > 0 && (
-                      <div className={styles.tagsContainer}>
-                        {post.tags.map((tag: string, index: number) => (
-                          <span key={index} className={styles.tag}>
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
             )}
-          </div>
+
+            <div className={styles.statsGrid}>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon}>📝</div>
+                <div className={styles.statContent}>
+                  <h3>Total Posts</h3>
+                  <p>{stats.total}</p>
+                </div>
+              </div>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon}>✅</div>
+                <div className={styles.statContent}>
+                  <h3>Published</h3>
+                  <p>{stats.published}</p>
+                </div>
+              </div>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon}>📄</div>
+                <div className={styles.statContent}>
+                  <h3>Drafts</h3>
+                  <p>{stats.drafts}</p>
+                </div>
+              </div>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon}>📦</div>
+                <div className={styles.statContent}>
+                  <h3>Archived</h3>
+                  <p>{stats.archived}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Post</th>
+                    <th>Status</th>
+                    <th>Images</th>
+                    <th>Views</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {posts.map((post) => (
+                    <tr key={post.id}>
+                      <td>
+                        <div className={styles.postInfo}>
+                          <h4 className={styles.postTitle}>{post.title}</h4>
+                          {post.excerpt && (
+                            <p className={styles.postExcerpt}>
+                              {post.excerpt.substring(0, 100)}...
+                            </p>
+                          )}
+                          {post.tags && post.tags.length > 0 && (
+                            <div className={styles.postTags}>
+                              {post.tags.slice(0, 3).map((tag) => (
+                                <span key={tag} className={styles.postTag}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => handleStatusToggle(post)}
+                          className={`${styles.statusBadge} ${
+                            styles[post.status]
+                          }`}
+                        >
+                          {post.status}
+                        </button>
+                      </td>
+                      <td>
+                        <span className={styles.imageCount}>
+                          {post.images?.length || 0}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={styles.viewCount}>
+                          {post.view_count || 0}
+                        </span>
+                      </td>
+                      <td>{formatDate(post.created_at)}</td>
+                      <td>{formatDate(post.updated_at)}</td>
+                      <td>
+                        <div className={styles.actionButtons}>
+                          <Link
+                            href={`/blog/${post.slug}`}
+                            className={styles.viewButton}
+                            target="_blank"
+                            title="View post"
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          </Link>
+                          <button
+                            onClick={() => handleEdit(post)}
+                            className={styles.editButton}
+                            title="Edit post"
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(post.id)}
+                            className={styles.deleteButton}
+                            title="Delete post"
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <polyline points="3,6 5,6 21,6" />
+                              <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6" />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalCount}
+              itemsPerPage={postsPerPage}
+              onPageChange={handlePageChange}
+            />
+          </>
+        ) : (
+          <BlogPostForm
+            post={editingPost}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         )}
-      </main>
+      </div>
     </div>
   );
 }

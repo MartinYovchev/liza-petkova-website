@@ -1,54 +1,23 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
 
-export const createClient = () => createClientComponentClient();
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export type Database = {
-  public: {
-    Tables: {
-      blog_posts: {
-        Row: {
-          id: string;
-          title: string;
-          slug: string;
-          content: string;
-          excerpt: string | null;
-          featured_image_url: string | null;
-          published: boolean;
-          created_at: string;
-          updated_at: string;
-          author_id: string;
-          tags: string[] | null;
-          meta_description: string | null;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          slug: string;
-          content: string;
-          excerpt?: string | null;
-          featured_image_url?: string | null;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-          author_id: string;
-          tags?: string[] | null;
-          meta_description?: string | null;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          slug?: string;
-          content?: string;
-          excerpt?: string | null;
-          featured_image_url?: string | null;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-          author_id?: string;
-          tags?: string[] | null;
-          meta_description?: string | null;
-        };
-      };
-    };
-  };
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Helper function to get public URL for uploaded images
+export const getImageUrl = (imagePath: string | null): string | null => {
+  if (!imagePath) return null;
+  if (imagePath.startsWith("http")) return imagePath;
+  return `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL}blog-images/${imagePath}`;
+};
+
+// Helper function to get file URL
+export const getFileUrl = (
+  filePath: string | null,
+  bucket: string = "blog-files"
+): string | null => {
+  if (!filePath) return null;
+  if (filePath.startsWith("http")) return filePath;
+  return `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL}${bucket}/${filePath}`;
 };
