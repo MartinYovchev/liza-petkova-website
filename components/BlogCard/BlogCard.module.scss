@@ -76,7 +76,7 @@
 }
 
 .readingTime::before {
-  content: "•";
+  content: '•';
   position: absolute;
   left: 0.25rem;
   color: #adb5bd;
@@ -186,7 +186,7 @@
 }
 
 .card.featured::before {
-  content: "⭐ Featured";
+  content: '⭐ Featured';
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -205,7 +205,7 @@
 }
 
 .card.popular::before {
-  content: "🔥 Popular";
+  content: '🔥 Popular';
   position: absolute;
   top: 1rem;
   right: 1rem;

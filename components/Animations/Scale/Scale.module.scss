@@ -1,7 +1,8 @@
 .scale {
   opacity: 0;
   transform: scale(var(--scale, 0.8));
-  transition: opacity var(--duration, 0.5s) ease-out,
+  transition:
+    opacity var(--duration, 0.5s) ease-out,
     transform var(--duration, 0.5s) ease-out;
   transition-delay: var(--delay, 0s);
   will-change: opacity, transform;

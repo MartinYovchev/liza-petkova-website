@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import NextImage, { ImageProps as NextImageProps } from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import styles from "./Image.module.scss";
-import Text from "../Typography/Text";
+import React, { useState } from 'react';
+import NextImage, { ImageProps as NextImageProps } from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import styles from './Image.module.scss';
+import Text from '../Typography/Text';
 
-type ImageProps = Omit<NextImageProps, "onLoadingComplete"> & {
+type ImageProps = Omit<NextImageProps, 'onLoadingComplete'> & {
   className?: string;
   wrapperClassName?: string;
   priority?: boolean;
-  loading?: "lazy" | "eager";
+  loading?: 'lazy' | 'eager';
   quality?: number;
-  placeholder?: "blur" | "empty";
+  placeholder?: 'blur' | 'empty';
   blurDataURL?: string;
 };
 
@@ -18,9 +18,9 @@ const Image = ({
   className,
   wrapperClassName,
   priority = false,
-  loading = "lazy",
+  loading = 'lazy',
   quality = 75,
-  placeholder = "empty",
+  placeholder = 'empty',
   blurDataURL,
   alt,
   ...props
@@ -29,7 +29,7 @@ const Image = ({
   const [error, setError] = useState(false);
 
   return (
-    <div className={`${styles.imageWrapper} ${wrapperClassName || ""}`}>
+    <div className={`${styles.imageWrapper} ${wrapperClassName || ''}`}>
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -44,15 +44,15 @@ const Image = ({
       </AnimatePresence>
 
       <NextImage
-        className={`${styles.image} ${className || ""} ${
-          isLoading ? styles.loading : ""
-        } ${error ? styles.error : ""}`}
+        className={`${styles.image} ${className || ''} ${
+          isLoading ? styles.loading : ''
+        } ${error ? styles.error : ''}`}
         priority={priority}
         loading={loading}
         quality={quality}
         placeholder={placeholder}
         blurDataURL={blurDataURL}
-        alt={alt || ""}
+        alt={alt || ''}
         onLoadingComplete={() => setIsLoading(false)}
         onError={() => {
           setError(true);
@@ -63,7 +63,7 @@ const Image = ({
 
       {error && (
         <div className={styles.errorMessage}>
-          <Text as="span" noStyles={true}>
+          <Text as='span' noStyles={true}>
             Failed to load image
           </Text>
         </div>

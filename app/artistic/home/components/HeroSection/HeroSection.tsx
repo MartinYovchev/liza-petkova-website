@@ -1,11 +1,11 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import RevealText from "@/components/Animations/RevealText/RevealText";
-import Title from "@/components/Typography/Title";
-import Text from "@/components/Typography/Text";
-import styles from "../../ArtisticHome.module.scss";
+'use client';
+import Link from 'next/link';
+import Image from 'next/image';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import RevealText from '@/components/Animations/RevealText/RevealText';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
+import styles from '../../ArtisticHome.module.scss';
 
 interface HeroSectionProps {
   title: string;
@@ -44,13 +44,13 @@ export default function HeroSection({
         <div className={styles.heroLeft}>
           <FadeIn
             delay={0.3}
-            direction="right"
+            direction='right'
             className={styles.heroImageContainer}
           >
             <div className={styles.heroImage}>
               <div className={styles.heroImage}>
                 <Image
-                  src={image.src || "/placeholder.svg"}
+                  src={image.src || '/placeholder.svg'}
                   alt={image.alt}
                   className={styles.heroImage}
                   width={100}
@@ -61,10 +61,10 @@ export default function HeroSection({
               <div className={styles.floatingCard}>
                 <div className={styles.cardIcon}>💝</div>
                 <div>
-                  <Title level="h4" className={styles.cardTitle}>
+                  <Title level='h4' className={styles.cardTitle}>
                     Personalized Approach
                   </Title>
-                  <Text as="p" className={styles.cardDesc}>
+                  <Text as='p' className={styles.cardDesc}>
                     Every journey is unique
                   </Text>
                 </div>
@@ -73,31 +73,31 @@ export default function HeroSection({
           </FadeIn>
 
           <div className={styles.heroContent}>
-            <div className="mb-6">
-              <RevealText direction="up" delay={0.2}>
+            <div className='mb-6'>
+              <RevealText direction='up' delay={0.2}>
                 <h1
                   className={styles.heroTitle}
                   dangerouslySetInnerHTML={{ __html: title }}
                 />
               </RevealText>
-              <FadeIn delay={0.4} direction="up">
-                <Text as="p" className={styles.heroSubtitle}>
+              <FadeIn delay={0.4} direction='up'>
+                <Text as='p' className={styles.heroSubtitle}>
                   {subtitle}
                 </Text>
               </FadeIn>
             </div>
 
-            <FadeIn delay={0.6} direction="up">
+            <FadeIn delay={0.6} direction='up'>
               <div className={styles.heroDescription}>
                 {description.map((paragraph, index) => (
-                  <Text as="p" key={index}>
+                  <Text as='p' key={index}>
                     {paragraph}
                   </Text>
                 ))}
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.8} direction="up">
+            <FadeIn delay={0.8} direction='up'>
               <div className={styles.heroActions}>
                 <div>
                   <Link href={primaryCTA.href} className={styles.ctaPrimary}>
@@ -116,14 +116,14 @@ export default function HeroSection({
               </div>
             </FadeIn>
 
-            <FadeIn delay={1} direction="up">
+            <FadeIn delay={1} direction='up'>
               <div className={styles.heroStats}>
                 {stats.map((stat, index) => (
                   <div key={index} className={styles.heroStat}>
-                    <Text as="p" className={styles.statNumber}>
+                    <Text as='p' className={styles.statNumber}>
                       {stat.number}
                     </Text>
-                    <Text as="p" className={styles.statLabel}>
+                    <Text as='p' className={styles.statLabel}>
                       {stat.label}
                     </Text>
                   </div>

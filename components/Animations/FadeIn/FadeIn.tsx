@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./FadeIn.module.scss";
+import React, { useEffect, useRef } from 'react';
+import styles from './FadeIn.module.scss';
 
 type FadeInProps = {
   children: React.ReactNode;
-  direction?: "up" | "down" | "left" | "right";
+  direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
   duration?: number;
   threshold?: number;
@@ -12,7 +12,7 @@ type FadeInProps = {
 
 export const FadeIn = ({
   children,
-  direction = "up",
+  direction = 'up',
   delay = 0,
   duration = 0.5,
   threshold = 0.1,
@@ -44,18 +44,18 @@ export const FadeIn = ({
   }, [threshold]);
 
   const animationStyle = {
-    "--delay": `${delay}s`,
-    "--duration": `${duration}s`,
+    '--delay': `${delay}s`,
+    '--duration': `${duration}s`,
   } as React.CSSProperties;
 
   const classes = [
     styles.fadeIn,
     styles[direction],
-    isVisible ? styles.visible : "",
+    isVisible ? styles.visible : '',
     className,
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   return (
     <div

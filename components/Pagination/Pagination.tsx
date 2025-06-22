@@ -1,5 +1,5 @@
-import { PaginationProps } from "../../lib/types";
-import styles from "./Pagination.module.scss";
+import { PaginationProps } from '../../lib/types';
+import styles from './Pagination.module.scss';
 
 export default function Pagination({
   currentPage,
@@ -22,21 +22,21 @@ export default function Pagination({
         for (let i = 1; i <= 4; i++) {
           pages.push(i);
         }
-        pages.push("...");
+        pages.push('...');
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         pages.push(1);
-        pages.push("...");
+        pages.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         pages.push(1);
-        pages.push("...");
+        pages.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
         }
-        pages.push("...");
+        pages.push('...');
         pages.push(totalPages);
       }
     }
@@ -63,8 +63,8 @@ export default function Pagination({
           disabled={currentPage === 1}
           className={`${styles.button} ${styles.navButton}`}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="15,18 9,12 15,6" />
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+            <polyline points='15,18 9,12 15,6' />
           </svg>
           Previous
         </button>
@@ -72,11 +72,11 @@ export default function Pagination({
         {getPageNumbers().map((page, index) => (
           <button
             key={index}
-            onClick={() => typeof page === "number" && onPageChange(page)}
-            disabled={page === "..." || page === currentPage}
+            onClick={() => typeof page === 'number' && onPageChange(page)}
+            disabled={page === '...' || page === currentPage}
             className={`${styles.button} ${
-              page === currentPage ? styles.active : ""
-            } ${page === "..." ? styles.dots : ""}`}
+              page === currentPage ? styles.active : ''
+            } ${page === '...' ? styles.dots : ''}`}
           >
             {page}
           </button>
@@ -88,8 +88,8 @@ export default function Pagination({
           className={`${styles.button} ${styles.navButton}`}
         >
           Next
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="9,18 15,12 9,6" />
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+            <polyline points='9,18 15,12 9,6' />
           </svg>
         </button>
       </div>

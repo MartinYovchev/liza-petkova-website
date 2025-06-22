@@ -1,11 +1,11 @@
-"use client";
-import Link from "next/link";
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import StaggerChildren from "@/components/Animations/StaggerChildren/StaggerChildren";
-import { HoverScale } from "@/components/Animations/HoverScale/HoverScale";
-import styles from "./ServiceSection.module.scss";
-import Title from "@/components/Typography/Title";
-import Text from "@/components/Typography/Text";
+'use client';
+import Link from 'next/link';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
+import styles from './ServiceSection.module.scss';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
 
 type ServicesSectionProps = {
   title: string;
@@ -26,11 +26,11 @@ export default function ServicesSection({
   return (
     <section className={styles.services}>
       <div className={styles.container}>
-        <FadeIn delay={0.2} direction="up" className={styles.sectionHeader}>
-          <Title level="h2" noStyles={true} className={styles.sectionTitle}>
+        <FadeIn delay={0.2} direction='up' className={styles.sectionHeader}>
+          <Title level='h2' noStyles={true} className={styles.sectionTitle}>
             {title}
           </Title>
-          <Text as="p" noStyles={true} className={styles.sectionSubtitle}>
+          <Text as='p' noStyles={true} className={styles.sectionSubtitle}>
             {subtitle}
           </Text>
         </FadeIn>
@@ -39,17 +39,17 @@ export default function ServicesSection({
           {services.map((service, index) => (
             <HoverScale key={index} scale={1.03}>
               <div className={styles.serviceCard}>
-                <div className="text-4xl mb-4">{service.icon}</div>
+                <div className='text-4xl mb-4'>{service.icon}</div>
 
                 <Title
-                  level="h3"
+                  level='h3'
                   noStyles={true}
                   className={styles.serviceTitle}
                 >
                   {service.title}
                 </Title>
                 <Text
-                  as="p"
+                  as='p'
                   noStyles={true}
                   className={styles.serviceDescription}
                 >
@@ -60,9 +60,9 @@ export default function ServicesSection({
                   {service.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className={styles.serviceFeature}>
                       <Text
-                        as="span"
+                        as='span'
                         noStyles={true}
-                        className="text-blue-500 mr-2"
+                        className='text-blue-500 mr-2'
                       >
                         ✓
                       </Text>
@@ -73,7 +73,7 @@ export default function ServicesSection({
 
                 <div className={styles.serviceLink}>
                   <Link
-                    href="/professional/services"
+                    href='/professional/services'
                     className={styles.serviceLink}
                   >
                     Learn More

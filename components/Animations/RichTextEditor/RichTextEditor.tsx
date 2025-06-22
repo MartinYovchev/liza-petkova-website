@@ -1,8 +1,8 @@
-"use client";
-import React from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import styles from "./RichTextEditor.module.scss";
+'use client';
+import React from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import styles from './RichTextEditor.module.scss';
 
 interface RichTextEditorProps {
   value: string;
@@ -38,9 +38,9 @@ export default function RichTextEditor({
         <button
           onClick={() => editor?.chain().focus().toggleBold().run()}
           className={`${styles.button} ${
-            editor?.isActive("bold") ? styles.active : ""
+            editor?.isActive('bold') ? styles.active : ''
           }`}
-          type="button"
+          type='button'
           disabled={disabled}
         >
           Bold
@@ -48,9 +48,9 @@ export default function RichTextEditor({
         <button
           onClick={() => editor?.chain().focus().toggleItalic().run()}
           className={`${styles.button} ${
-            editor?.isActive("italic") ? styles.active : ""
+            editor?.isActive('italic') ? styles.active : ''
           }`}
-          type="button"
+          type='button'
           disabled={disabled}
         >
           Italic
@@ -58,9 +58,9 @@ export default function RichTextEditor({
         <button
           onClick={() => editor?.chain().focus().toggleBulletList().run()}
           className={`${styles.button} ${
-            editor?.isActive("bulletList") ? styles.active : ""
+            editor?.isActive('bulletList') ? styles.active : ''
           }`}
-          type="button"
+          type='button'
           disabled={disabled}
         >
           Bullet List
@@ -68,9 +68,9 @@ export default function RichTextEditor({
         <button
           onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           className={`${styles.button} ${
-            editor?.isActive("orderedList") ? styles.active : ""
+            editor?.isActive('orderedList') ? styles.active : ''
           }`}
-          type="button"
+          type='button'
           disabled={disabled}
         >
           Numbered List
@@ -80,9 +80,9 @@ export default function RichTextEditor({
             editor?.chain().focus().toggleHeading({ level: 2 }).run()
           }
           className={`${styles.button} ${
-            editor?.isActive("heading", { level: 2 }) ? styles.active : ""
+            editor?.isActive('heading', { level: 2 }) ? styles.active : ''
           }`}
-          type="button"
+          type='button'
           disabled={disabled}
         >
           Heading

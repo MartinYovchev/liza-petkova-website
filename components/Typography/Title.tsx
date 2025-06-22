@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import styles from "./Typography.module.scss";
+import React from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import styles from './Typography.module.scss';
 
-type TitleLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+type TitleLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 type TitleProps = {
   level?: TitleLevel;
@@ -13,14 +13,14 @@ type TitleProps = {
   animate?: boolean;
   id?: string;
   style?: React.CSSProperties;
-  motionProps?: HTMLMotionProps<"div">;
+  motionProps?: HTMLMotionProps<'div'>;
   noStyles?: boolean;
 };
 
 const Title = ({
-  level = "h1",
+  level = 'h1',
   children,
-  className = "",
+  className = '',
   animate = false,
   id,
   style,

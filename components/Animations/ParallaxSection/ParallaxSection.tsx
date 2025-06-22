@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { ReactNode, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface ParallaxSectionProps {
   children: ReactNode;
@@ -13,13 +13,13 @@ interface ParallaxSectionProps {
 export default function ParallaxSection({
   children,
   speed = 0.2,
-  className = "",
+  className = '',
   id,
 }: ParallaxSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"],
+    offset: ['start end', 'end start'],
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [0, 100 * speed]);
@@ -30,8 +30,8 @@ export default function ParallaxSection({
       id={id}
       style={{ y }}
       className={`relative ${className}`}
-      aria-hidden="true"
-      role="presentation"
+      aria-hidden='true'
+      role='presentation'
     >
       {children}
     </motion.div>

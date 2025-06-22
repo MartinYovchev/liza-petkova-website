@@ -130,7 +130,7 @@
     gap: 0.5rem;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       bottom: -0.5rem;
       left: 0;
@@ -270,7 +270,9 @@
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);

@@ -1,4 +1,4 @@
-import styles from "./Dropdown.module.scss";
+import styles from './Dropdown.module.scss';
 
 export type DropdownOption = {
   label: string;
@@ -23,10 +23,10 @@ const Dropdown = ({
     <div className={styles.dropdown}>
       <select
         value={selectedValue}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         className={styles.select}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <option
             key={option.value}
             className={styles.option}

@@ -1,7 +1,12 @@
-"use client";
+'use client';
 
-import HomePage from "./home/HomePage";
+import { Layout } from '@/components/Layout/Layout';
+import HomePage from './home/HomePage';
 
 export default function Home() {
-  return <HomePage />;
+  return (
+    <Layout>
+      <HomePage />
+    </Layout>
+  );
 }

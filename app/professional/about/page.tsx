@@ -1,5 +1,10 @@
-import ProfessionalAbout from "./ProfessionalAbout";
+import { Layout } from '@/components/Layout/Layout';
+import ProfessionalAbout from './ProfessionalAbout';
 
 export default function AboutPage() {
-  return <ProfessionalAbout />;
+  return (
+    <Layout>
+      <ProfessionalAbout />
+    </Layout>
+  );
 }

@@ -1,11 +1,11 @@
-import Link from "next/link";
-import Title from "@/components/Typography/Title";
-import Text from "@/components/Typography/Text";
-import Image from "@/components/Image/Image";
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import { HoverScale } from "@/components/Animations/HoverScale/HoverScale";
-import styles from "./ServicesGrid.module.scss";
-import { Service } from "../../types";
+import Link from 'next/link';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
+import Image from '@/components/Image/Image';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
+import styles from './ServicesGrid.module.scss';
+import { Service } from '../../types';
 
 interface ServicesGridProps {
   services: Service[];
@@ -21,19 +21,19 @@ export const ServicesGrid = ({
   return (
     <div className={styles.servicesMain}>
       <div className={styles.servicesHeader}>
-        <Title level="h2" className={styles.servicesTitle}>
-          {selectedCategory === "all"
-            ? "All Services"
-            : categories.find((c) => c.id === selectedCategory)?.name}
+        <Title level='h2' className={styles.servicesTitle}>
+          {selectedCategory === 'all'
+            ? 'All Services'
+            : categories.find(c => c.id === selectedCategory)?.name}
         </Title>
-        <Text as="p" className={styles.servicesCount}>
-          {services.length} service{services.length !== 1 ? "s" : ""} available
+        <Text as='p' className={styles.servicesCount}>
+          {services.length} service{services.length !== 1 ? 's' : ''} available
         </Text>
       </div>
 
       <div className={styles.servicesGrid}>
-        {services.map((service) => (
-          <FadeIn key={service.id} direction="up">
+        {services.map(service => (
+          <FadeIn key={service.id} direction='up'>
             <HoverScale scale={1.02}>
               <div className={styles.serviceCard}>
                 {service.popular && (
@@ -42,7 +42,7 @@ export const ServicesGrid = ({
 
                 <div className={styles.serviceImage}>
                   <Image
-                    src={service.image || "/placeholder.svg"}
+                    src={service.image || '/placeholder.svg'}
                     alt={service.title}
                     width={300}
                     height={200}
@@ -50,10 +50,10 @@ export const ServicesGrid = ({
                 </div>
 
                 <div className={styles.serviceContent}>
-                  <Title level="h3" className={styles.serviceTitle}>
+                  <Title level='h3' className={styles.serviceTitle}>
                     {service.title}
                   </Title>
-                  <Text as="p" className={styles.serviceDescription}>
+                  <Text as='p' className={styles.serviceDescription}>
                     {service.description}
                   </Text>
 
@@ -79,7 +79,7 @@ export const ServicesGrid = ({
                     >
                       View Details
                     </Link>
-                    <Link href="/contact" className={styles.learnMoreBtn}>
+                    <Link href='/contact' className={styles.learnMoreBtn}>
                       Contact Us
                     </Link>
                   </div>

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { blogService } from "../../lib/blogService";
-import { BlogPost, BlogStats } from "../../lib/types";
-import BlogPostForm from "../../components/BlogPostForm/BlogPostForm";
-import Pagination from "../../components/Pagination/Pagination";
-import styles from "../../styles/AdminPage.module.scss";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { blogService } from '../../lib/blogService';
+import { BlogPost, BlogStats } from '../../lib/types';
+import BlogPostForm from '../../components/BlogPostForm/BlogPostForm';
+import Pagination from '../../components/Pagination/Pagination';
+import styles from './AdminPage.module.scss';
 
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -42,12 +42,10 @@ export default function AdminDashboard() {
 
       // Calculate stats
       const published = result.posts.filter(
-        (p) => p.status === "published"
+        p => p.status === 'published'
       ).length;
-      const drafts = result.posts.filter((p) => p.status === "draft").length;
-      const archived = result.posts.filter(
-        (p) => p.status === "archived"
-      ).length;
+      const drafts = result.posts.filter(p => p.status === 'draft').length;
+      const archived = result.posts.filter(p => p.status === 'archived').length;
 
       setStats({
         total: result.totalCount,
@@ -56,7 +54,7 @@ export default function AdminDashboard() {
         archived,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -65,17 +63,17 @@ export default function AdminDashboard() {
   const handleDelete = async (id: string) => {
     if (
       confirm(
-        "Are you sure you want to delete this post? This action cannot be undone."
+        'Are you sure you want to delete this post? This action cannot be undone.'
       )
     ) {
       try {
         await blogService.deletePost(id);
-        setPosts(posts.filter((post) => post.id !== id));
-        setTotalCount((prev) => prev - 1);
+        setPosts(posts.filter(post => post.id !== id));
+        setTotalCount(prev => prev - 1);
       } catch (err) {
         alert(
-          "Error deleting post: " +
-            (err instanceof Error ? err.message : "Unknown error")
+          'Error deleting post: ' +
+            (err instanceof Error ? err.message : 'Unknown error')
         );
       }
     }
@@ -83,15 +81,15 @@ export default function AdminDashboard() {
 
   const handleStatusToggle = async (post: BlogPost) => {
     try {
-      const newStatus = post.status === "published" ? "draft" : "published";
+      const newStatus = post.status === 'published' ? 'draft' : 'published';
       const updatedPost = await blogService.updatePost(post.id, {
         status: newStatus,
       });
-      setPosts(posts.map((p) => (p.id === post.id ? updatedPost : p)));
+      setPosts(posts.map(p => (p.id === post.id ? updatedPost : p)));
     } catch (err) {
       alert(
-        "Error updating post status: " +
-          (err instanceof Error ? err.message : "Unknown error")
+        'Error updating post status: ' +
+          (err instanceof Error ? err.message : 'Unknown error')
       );
     }
   };
@@ -99,11 +97,11 @@ export default function AdminDashboard() {
   const handleSave = (savedPost: BlogPost) => {
     if (editingPost) {
       setPosts(
-        posts.map((post) => (post.id === savedPost.id ? savedPost : post))
+        posts.map(post => (post.id === savedPost.id ? savedPost : post))
       );
     } else {
       setPosts([savedPost, ...posts]);
-      setTotalCount((prev) => prev + 1);
+      setTotalCount(prev => prev + 1);
     }
     setShowForm(false);
     setEditingPost(null);
@@ -124,10 +122,10 @@ export default function AdminDashboard() {
   };
 
   const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -157,16 +155,16 @@ export default function AdminDashboard() {
                   onClick={() => setShowForm(true)}
                   className={styles.createButton}
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
+                  <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+                    <line x1='12' y1='5' x2='12' y2='19' />
+                    <line x1='5' y1='12' x2='19' y2='12' />
                   </svg>
                   Create New Post
                 </button>
-                <Link href="/blog" className={styles.viewBlogButton}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
+                <Link href='/blog' className={styles.viewBlogButton}>
+                  <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+                    <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
+                    <circle cx='12' cy='12' r='3' />
                   </svg>
                   View Blog
                 </Link>
@@ -228,7 +226,7 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {posts.map((post) => (
+                  {posts.map(post => (
                     <tr key={post.id}>
                       <td>
                         <div className={styles.postInfo}>
@@ -240,7 +238,7 @@ export default function AdminDashboard() {
                           )}
                           {post.tags && post.tags.length > 0 && (
                             <div className={styles.postTags}>
-                              {post.tags.slice(0, 3).map((tag) => (
+                              {post.tags.slice(0, 3).map(tag => (
                                 <span key={tag} className={styles.postTag}>
                                   {tag}
                                 </span>
@@ -276,44 +274,44 @@ export default function AdminDashboard() {
                           <Link
                             href={`/blog/${post.slug}`}
                             className={styles.viewButton}
-                            target="_blank"
-                            title="View post"
+                            target='_blank'
+                            title='View post'
                           >
                             <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
                             >
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                              <circle cx="12" cy="12" r="3" />
+                              <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
+                              <circle cx='12' cy='12' r='3' />
                             </svg>
                           </Link>
                           <button
                             onClick={() => handleEdit(post)}
                             className={styles.editButton}
-                            title="Edit post"
+                            title='Edit post'
                           >
                             <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
                             >
-                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                              <path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7' />
+                              <path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z' />
                             </svg>
                           </button>
                           <button
                             onClick={() => handleDelete(post.id)}
                             className={styles.deleteButton}
-                            title="Delete post"
+                            title='Delete post'
                           >
                             <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
+                              viewBox='0 0 24 24'
+                              fill='none'
+                              stroke='currentColor'
                             >
-                              <polyline points="3,6 5,6 21,6" />
-                              <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6" />
+                              <polyline points='3,6 5,6 21,6' />
+                              <path d='M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6' />
                             </svg>
                           </button>
                         </div>

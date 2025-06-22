@@ -1,9 +1,9 @@
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import RevealText from "@/components/Animations/RevealText/RevealText";
-import Text from "@/components/Typography/Text";
-import styles from "../../ArtisticHome.module.scss";
-import Title from "@/components/Typography/Title";
-import Link from "next/link";
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import RevealText from '@/components/Animations/RevealText/RevealText';
+import Text from '@/components/Typography/Text';
+import styles from '../../ArtisticHome.module.scss';
+import Title from '@/components/Typography/Title';
+import Link from 'next/link';
 
 export type Offering = {
   title: string;
@@ -21,13 +21,13 @@ export default function OfferingSection({
   return (
     <div className={styles.services}>
       <div className={styles.servicesContent}>
-        <FadeIn direction="up" className={styles.sectionHeader}>
+        <FadeIn direction='up' className={styles.sectionHeader}>
           <RevealText delay={0.2}>
-            <Title level="h2" className={styles.sectionTitle}>
+            <Title level='h2' className={styles.sectionTitle}>
               Creative Offerings
             </Title>
           </RevealText>
-          <Text as="p" className={styles.sectionSubtitle}>
+          <Text as='p' className={styles.sectionSubtitle}>
             Transformative experiences tailored to different stages of your
             creative journey
           </Text>
@@ -38,13 +38,13 @@ export default function OfferingSection({
             <FadeIn
               key={offering.title}
               delay={0.3 + index * 0.15}
-              direction="up"
+              direction='up'
             >
               <div className={styles.serviceCard}>
-                <Title level="h3" className={styles.serviceTitle}>
+                <Title level='h3' className={styles.serviceTitle}>
                   {offering.title}
                 </Title>
-                <Text as="p" className={styles.serviceDescription}>
+                <Text as='p' className={styles.serviceDescription}>
                   {offering.description}
                 </Text>
                 <ul className={styles.serviceFeatures}>

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./Scale.module.scss";
+import React, { useEffect, useRef } from 'react';
+import styles from './Scale.module.scss';
 
 type ScaleProps = {
   children: React.ReactNode;
@@ -44,14 +44,14 @@ export const Scale = ({
   }, [threshold]);
 
   const animationStyle = {
-    "--delay": `${delay}s`,
-    "--duration": `${duration}s`,
-    "--scale": scale,
+    '--delay': `${delay}s`,
+    '--duration': `${duration}s`,
+    '--scale': scale,
   } as React.CSSProperties;
 
-  const classes = [styles.scale, isVisible ? styles.visible : "", className]
+  const classes = [styles.scale, isVisible ? styles.visible : '', className]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   return (
     <div

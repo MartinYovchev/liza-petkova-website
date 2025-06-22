@@ -12,7 +12,7 @@
   position: relative;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -2rem;
     left: 50%;
@@ -53,7 +53,7 @@
   color: #333;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -76,7 +76,7 @@
   overflow: hidden;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -169,7 +169,7 @@
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -203,7 +203,7 @@
   gap: 0.5rem;
 
   &::before {
-    content: "→";
+    content: '→';
     font-size: 1.2rem;
   }
 }

@@ -1,12 +1,12 @@
-"use client";
-import Link from "next/link";
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import RevealText from "@/components/Animations/RevealText/RevealText";
-import { GradientText } from "@/components/Animations/GradientText/GradientText";
-import styles from "./HeroSection.module.scss";
-import Title from "@/components/Typography/Title";
-import Text from "@/components/Typography/Text";
-import Image from "@/components/Image/Image";
+'use client';
+import Link from 'next/link';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import RevealText from '@/components/Animations/RevealText/RevealText';
+import { GradientText } from '@/components/Animations/GradientText/GradientText';
+import styles from './HeroSection.module.scss';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
+import Image from '@/components/Image/Image';
 
 type HeroSectionProps = {
   title: string;
@@ -44,32 +44,32 @@ export default function HeroSection({
       <div className={styles.container}>
         <div className={styles.contentWrapper}>
           <div className={styles.textContent}>
-            <div className="mb-6">
-              <RevealText direction="right" delay={0.2}>
+            <div className='mb-6'>
+              <RevealText direction='right' delay={0.2}>
                 <Title noStyles={true} className={styles.title}>
                   {title}
                 </Title>
               </RevealText>
-              <FadeIn delay={0.4} direction="up">
-                <Text as="p" noStyles={true} className={styles.subtitle}>
+              <FadeIn delay={0.4} direction='up'>
+                <Text as='p' noStyles={true} className={styles.subtitle}>
                   {subtitle}
                 </Text>
               </FadeIn>
             </div>
 
-            <FadeIn delay={0.6} direction="up">
+            <FadeIn delay={0.6} direction='up'>
               <div className={styles.featuresContainer}>
                 {features.map((feature, index) => (
                   <div key={index} className={styles.featureItem}>
                     <Text
-                      as="span"
+                      as='span'
                       noStyles={true}
                       className={styles.featureIcon}
                     >
                       ✓
                     </Text>
                     <Text
-                      as="span"
+                      as='span'
                       noStyles={true}
                       className={styles.featureText}
                     >
@@ -80,7 +80,7 @@ export default function HeroSection({
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.8} direction="up">
+            <FadeIn delay={0.8} direction='up'>
               <div className={styles.ctaContainer}>
                 <Link href={primaryCTA.href} className={styles.primaryButton}>
                   {primaryCTA.text}
@@ -95,11 +95,11 @@ export default function HeroSection({
             </FadeIn>
           </div>
 
-          <FadeIn delay={0.5} direction="left" className={styles.imageWrapper}>
+          <FadeIn delay={0.5} direction='left' className={styles.imageWrapper}>
             <div className={styles.imageContainer}>
-              <div className="rounded-2xl shadow-2xl overflow-hidden">
+              <div className='rounded-2xl shadow-2xl overflow-hidden'>
                 <Image
-                  src={image.src || "/placeholder.svg"}
+                  src={image.src || '/placeholder.svg'}
                   alt={image.alt}
                   className={styles.heroImage}
                   width={500}

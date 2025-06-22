@@ -4,7 +4,7 @@ export type BlogPost = {
   slug: string;
   content: string;
   excerpt?: string;
-  status: "draft" | "published" | "archived";
+  status: 'draft' | 'published' | 'archived';
   tags?: string[];
   images?: string[];
   cover_image?: string;
@@ -25,7 +25,7 @@ export type BlogPostFormData = {
   slug: string;
   content: string;
   excerpt?: string;
-  status: "draft" | "published" | "archived";
+  status: 'draft' | 'published' | 'archived';
   tags: string;
   meta_title?: string;
   meta_description?: string;

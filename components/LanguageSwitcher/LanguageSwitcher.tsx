@@ -1,9 +1,9 @@
-import Dropdown, { DropdownOption } from "../Dropdown/Dropdown";
+import Dropdown, { DropdownOption } from '../Dropdown/Dropdown';
 
-import EnFlag from "../../public/placeholder.svg";
-import BgFlag from "../../public/placeholder.svg";
+import EnFlag from '../../public/placeholder.svg';
+import BgFlag from '../../public/placeholder.svg';
 
-type Language = "en" | "bg";
+type Language = 'en' | 'bg';
 
 interface LanguageSwitcherProps {
   value: Language;
@@ -12,8 +12,8 @@ interface LanguageSwitcherProps {
 }
 
 const options: DropdownOption[] = [
-  { label: "English", value: "en", icon: EnFlag },
-  { label: "Български", value: "bg", icon: BgFlag },
+  { label: 'English', value: 'en', icon: EnFlag },
+  { label: 'Български', value: 'bg', icon: BgFlag },
 ];
 
 const LanguageSwitcher = ({
@@ -26,7 +26,7 @@ const LanguageSwitcher = ({
       className={className}
       options={options}
       selectedValue={value}
-      onChange={(val) => onChange(val as Language)}
+      onChange={val => onChange(val as Language)}
     />
   );
 };

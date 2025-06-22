@@ -1,13 +1,13 @@
-import { TIMELINE } from "../constants";
-import styles from "../ProfessionalAbout.module.scss";
-import Text from "@/components/Typography/Text";
-import Title from "@/components/Typography/Title";
+import { TIMELINE } from '../constants';
+import styles from '../ProfessionalAbout.module.scss';
+import Text from '@/components/Typography/Text';
+import Title from '@/components/Typography/Title';
 
 export default function Timeline() {
   return (
     <div className={styles.timeline}>
       <div className={styles.timelineContent}>
-        <Title level="h2" className={styles.sectionTitle}>
+        <Title level='h2' className={styles.sectionTitle}>
           Our Journey
         </Title>
         <div className={styles.timelineItems}>
@@ -15,10 +15,10 @@ export default function Timeline() {
             <div key={index} className={styles.timelineItem}>
               <div className={styles.timelineYear}>{item.year}</div>
               <div className={styles.timelineDetails}>
-                <Title level="h4" className={styles.timelineTitle}>
+                <Title level='h4' className={styles.timelineTitle}>
                   {item.title}
                 </Title>
-                <Text as="p" className={styles.timelineDescription}>
+                <Text as='p' className={styles.timelineDescription}>
                   {item.description}
                 </Text>
               </div>

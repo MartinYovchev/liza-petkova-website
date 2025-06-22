@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import styles from "./Typography.module.scss";
+import React from 'react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
+import styles from './Typography.module.scss';
 
-type TextSize = "xs" | "sm" | "md" | "lg" | "xl";
-type TextWeight = "normal" | "medium" | "semibold" | "bold";
+type TextSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 type TextProps = {
   children: React.ReactNode;
@@ -13,20 +13,20 @@ type TextProps = {
   weight?: TextWeight;
   className?: string;
   animate?: boolean;
-  as?: "p" | "span" | "label";
+  as?: 'p' | 'span' | 'label';
   id?: string;
   style?: React.CSSProperties;
-  motionProps?: HTMLMotionProps<"div">;
+  motionProps?: HTMLMotionProps<'div'>;
   noStyles?: boolean;
 };
 
 const Text = ({
   children,
-  size = "md",
-  weight = "normal",
-  className = "",
+  size = 'md',
+  weight = 'normal',
+  className = '',
   animate = false,
-  as: Component = "p",
+  as: Component = 'p',
   id,
   style,
   motionProps,

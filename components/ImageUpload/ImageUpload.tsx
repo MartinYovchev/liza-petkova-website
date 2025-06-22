@@ -1,8 +1,8 @@
-import { useState, useRef, ChangeEvent, DragEvent } from "react";
-import Image from "next/image";
-import { getImageUrl } from "../../lib/supabase";
-import { ImageUploadProps } from "../../lib/types";
-import styles from "./ImageUpload.module.scss";
+import { useState, useRef, ChangeEvent, DragEvent } from 'react';
+import Image from 'next/image';
+import { getImageUrl } from '../../lib/supabase';
+import { ImageUploadProps } from '../../lib/types';
+import styles from './ImageUpload.module.scss';
 
 export default function ImageUpload({
   images = [],
@@ -15,8 +15,8 @@ export default function ImageUpload({
 
   const handleFiles = (files: FileList) => {
     const fileArray = Array.from(files);
-    const validFiles = fileArray.filter((file) => {
-      const isImage = file.type.startsWith("image/");
+    const validFiles = fileArray.filter(file => {
+      const isImage = file.type.startsWith('image/');
       const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
       return isImage && isValidSize;
     });
@@ -32,9 +32,9 @@ export default function ImageUpload({
   const handleDrag = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true);
-    } else if (e.type === "dragleave") {
+    } else if (e.type === 'dragleave') {
       setDragActive(false);
     }
   };
@@ -89,7 +89,7 @@ export default function ImageUpload({
     <div className={styles.container}>
       <div
         className={`${styles.uploadZone} ${
-          dragActive ? styles.dragActive : ""
+          dragActive ? styles.dragActive : ''
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -99,19 +99,19 @@ export default function ImageUpload({
       >
         <input
           ref={fileInputRef}
-          type="file"
+          type='file'
           multiple
-          accept="image/*"
+          accept='image/*'
           onChange={handleFileInput}
           className={styles.hiddenInput}
         />
 
         <div className={styles.uploadContent}>
           <div className={styles.uploadIcon}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17,8 12,3 7,8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
+            <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+              <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+              <polyline points='17,8 12,3 7,8' />
+              <line x1='12' y1='3' x2='12' y2='15' />
             </svg>
           </div>
           <h3>Upload Images</h3>
@@ -139,11 +139,11 @@ export default function ImageUpload({
               <div key={`existing-${index}`} className={styles.previewItem}>
                 <div className={styles.imageWrapper}>
                   <Image
-                    src={getImageUrl(imagePath) || "/placeholder.svg"}
+                    src={getImageUrl(imagePath) || '/placeholder.svg'}
                     alt={`Existing ${index + 1}`}
                     fill
                     className={styles.previewImage}
-                    sizes="150px"
+                    sizes='150px'
                   />
                   {index === 0 && totalImages > 0 && (
                     <div className={styles.coverBadge}>Cover</div>
@@ -152,47 +152,47 @@ export default function ImageUpload({
 
                 <div className={styles.imageControls}>
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => removeImage(index, true)}
                     className={styles.removeBtn}
-                    title="Remove image"
+                    title='Remove image'
                   >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
+                    <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+                      <line x1='18' y1='6' x2='6' y2='18' />
+                      <line x1='6' y1='6' x2='18' y2='18' />
                     </svg>
                   </button>
 
                   <div className={styles.moveControls}>
                     {index > 0 && (
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => moveImage(index, index - 1, true)}
                         className={styles.moveBtn}
-                        title="Move left"
+                        title='Move left'
                       >
                         <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                         >
-                          <polyline points="15,18 9,12 15,6" />
+                          <polyline points='15,18 9,12 15,6' />
                         </svg>
                       </button>
                     )}
                     {index < existingImages.length - 1 && (
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => moveImage(index, index + 1, true)}
                         className={styles.moveBtn}
-                        title="Move right"
+                        title='Move right'
                       >
                         <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                         >
-                          <polyline points="9,18 15,12 9,6" />
+                          <polyline points='9,18 15,12 9,6' />
                         </svg>
                       </button>
                     )}
@@ -206,11 +206,11 @@ export default function ImageUpload({
               <div key={`new-${index}`} className={styles.previewItem}>
                 <div className={styles.imageWrapper}>
                   <Image
-                    src={URL.createObjectURL(file) || "/placeholder.svg"}
+                    src={URL.createObjectURL(file) || '/placeholder.svg'}
                     alt={`New ${index + 1}`}
                     fill
                     className={styles.previewImage}
-                    sizes="150px"
+                    sizes='150px'
                   />
                   {existingImages.length === 0 && index === 0 && (
                     <div className={styles.coverBadge}>Cover</div>
@@ -220,47 +220,47 @@ export default function ImageUpload({
 
                 <div className={styles.imageControls}>
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => removeImage(index, false)}
                     className={styles.removeBtn}
-                    title="Remove image"
+                    title='Remove image'
                   >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
+                    <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
+                      <line x1='18' y1='6' x2='6' y2='18' />
+                      <line x1='6' y1='6' x2='18' y2='18' />
                     </svg>
                   </button>
 
                   <div className={styles.moveControls}>
                     {index > 0 && (
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => moveImage(index, index - 1, false)}
                         className={styles.moveBtn}
-                        title="Move left"
+                        title='Move left'
                       >
                         <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                         >
-                          <polyline points="15,18 9,12 15,6" />
+                          <polyline points='15,18 9,12 15,6' />
                         </svg>
                       </button>
                     )}
                     {index < images.length - 1 && (
                       <button
-                        type="button"
+                        type='button'
                         onClick={() => moveImage(index, index + 1, false)}
                         className={styles.moveBtn}
-                        title="Move right"
+                        title='Move right'
                       >
                         <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
                         >
-                          <polyline points="9,18 15,12 9,6" />
+                          <polyline points='9,18 15,12 9,6' />
                         </svg>
                       </button>
                     )}

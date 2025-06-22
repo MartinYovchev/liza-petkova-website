@@ -1,24 +1,29 @@
-import type { Metadata } from "next";
-import ArtisticHome from "./home/ArtisticHome";
+import type { Metadata } from 'next';
+import ArtisticHome from './home/ArtisticHome';
+import { Layout } from '@/components/Layout/Layout';
 
 export const metadata: Metadata = {
-  title: "Creative Coaching & Artistic Expression | Natalia",
+  title: 'Creative Coaching & Artistic Expression | Natalia',
   description:
-    "Unlock your creative potential through personalized coaching and artistic guidance. Transform your life through the power of creativity and personal growth.",
+    'Unlock your creative potential through personalized coaching and artistic guidance. Transform your life through the power of creativity and personal growth.',
   keywords: [
-    "creative coaching",
-    "artistic expression",
-    "personal development",
-    "art therapy",
-    "creative workshops",
+    'creative coaching',
+    'artistic expression',
+    'personal development',
+    'art therapy',
+    'creative workshops',
   ],
   openGraph: {
-    title: "Creative Coaching & Artistic Expression | Natalia",
-    description: "Where imagination meets reality through artistic vision",
-    type: "website",
+    title: 'Creative Coaching & Artistic Expression | Natalia',
+    description: 'Where imagination meets reality through artistic vision',
+    type: 'website',
   },
 };
 
 export default function ArtisticPage() {
-  return <ArtisticHome />;
+  return (
+    <Layout>
+      <ArtisticHome />
+    </Layout>
+  );
 }

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Title from "@/components/Typography/Title";
-import styles from "./Progress.module.scss";
-import { projects } from "./constants";
-import Text from "@/components/Typography/Text";
-import { useState } from "react";
-import { Button } from "@/components/Button/Button";
-import Image from "next/image";
+import Title from '@/components/Typography/Title';
+import styles from './Progress.module.scss';
+import { projects } from './constants';
+import Text from '@/components/Typography/Text';
+import { useState } from 'react';
+import { Button } from '@/components/Button/Button';
+import Image from 'next/image';
 
 export default function Progress() {
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
@@ -18,10 +18,10 @@ export default function Progress() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Title level="h1" className={styles.title}>
+        <Title level='h1' className={styles.title}>
           Creative Progress
         </Title>
-        <Text as="p" className={styles.subtitle}>
+        <Text as='p' className={styles.subtitle}>
           Journey through ongoing artistic endeavors and completed works
         </Text>
       </div>
@@ -30,32 +30,32 @@ export default function Progress() {
         {projects.map((project, index) => (
           <div key={index} className={styles.project}>
             <div className={styles.projectHeader}>
-              <Title level="h3" className={styles.projectTitle}>
+              <Title level='h3' className={styles.projectTitle}>
                 {project.title}
               </Title>
               <Text
-                as="span"
+                as='span'
                 className={`${styles.status} ${
-                  styles[project.status.toLowerCase().replace(" ", "")]
+                  styles[project.status.toLowerCase().replace(' ', '')]
                 }`}
               >
                 {project.status}
               </Text>
             </div>
-            <Text as="p" className={styles.projectDescription}>
+            <Text as='p' className={styles.projectDescription}>
               {project.description}
             </Text>
             <div className={styles.progressBar}>
               <div
                 className={styles.progressFill}
                 style={{ width: `${project.completion}%` }}
-                role="progressbar"
+                role='progressbar'
                 aria-valuenow={project.completion}
                 aria-valuemin={0}
                 aria-valuemax={100}
               ></div>
             </div>
-            <Text as="span" className={styles.percentage}>
+            <Text as='span' className={styles.percentage}>
               {project.completion}% Complete
             </Text>
 
@@ -63,13 +63,13 @@ export default function Progress() {
               <>
                 <Button
                   className={`${styles.expandButton} ${
-                    expandedProject === index ? styles.expanded : ""
+                    expandedProject === index ? styles.expanded : ''
                   }`}
                   onClick={() => toggleProject(index)}
                   aria-expanded={expandedProject === index}
                 >
-                  <Text as="span" className={styles.arrow}>
-                    {expandedProject === index ? "↑" : "↓"}
+                  <Text as='span' className={styles.arrow}>
+                    {expandedProject === index ? '↑' : '↓'}
                   </Text>
                 </Button>
 
@@ -84,7 +84,7 @@ export default function Progress() {
                           width={100}
                           height={100}
                         />
-                        <Text as="p" className={styles.imageDescription}>
+                        <Text as='p' className={styles.imageDescription}>
                           {image.description}
                         </Text>
                       </div>

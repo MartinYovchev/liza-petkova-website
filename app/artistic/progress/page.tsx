@@ -1,5 +1,10 @@
-import Progress from "./Progress/Progress";
+import { Layout } from '@/components/Layout/Layout';
+import Progress from './Progress/Progress';
 
 export default function ProgressPage() {
-  return <Progress />;
+  return (
+    <Layout>
+      <Progress />
+    </Layout>
+  );
 }

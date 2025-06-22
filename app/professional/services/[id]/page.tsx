@@ -1,4 +1,4 @@
-import ServiceDetails from "./ServiceDetails";
+import ServiceDetails from './ServiceDetails';
 
 interface PageProps {
   params: {

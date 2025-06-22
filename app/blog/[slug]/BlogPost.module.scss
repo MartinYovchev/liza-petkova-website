@@ -161,7 +161,7 @@
 
 .readingTime::before,
 .views::before {
-  content: "•";
+  content: '•';
   position: absolute;
   left: 0.25rem;
   color: #adb5bd;
@@ -303,7 +303,7 @@
 }
 
 .contentHeading::before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -326,7 +326,7 @@
   border-radius: 8px;
   overflow-x: auto;
   margin: 1.5rem 0;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9rem;
   line-height: 1.6;
   border-left: 4px solid #007bff;
@@ -357,7 +357,7 @@
 }
 
 .relatedTitle::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -0.5rem;
   left: 50%;

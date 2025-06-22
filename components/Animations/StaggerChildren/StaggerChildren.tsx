@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 interface StaggerChildrenProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ interface StaggerChildrenProps {
 
 export default function StaggerChildren({
   children,
-  className = "",
+  className = '',
   id,
   staggerDelay = 0.1,
   animationDuration = 0.5,
@@ -36,7 +36,7 @@ export default function StaggerChildren({
       y: 0,
       transition: {
         duration: animationDuration,
-        ease: "easeOut",
+        ease: 'easeOut',
       },
     },
   };
@@ -46,9 +46,9 @@ export default function StaggerChildren({
       id={id}
       className={className}
       variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      initial='hidden'
+      whileInView='visible'
+      viewport={{ once: true, margin: '-100px' }}
     >
       {Array.isArray(children) ? (
         children.map((child, index) => (

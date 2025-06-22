@@ -1,6 +1,6 @@
-"use client";
-import { ReactNode } from "react";
-import styles from "./HoverScale.module.scss";
+'use client';
+import { ReactNode } from 'react';
+import styles from './HoverScale.module.scss';
 
 interface HoverScaleProps {
   children: ReactNode;
@@ -13,15 +13,15 @@ export const HoverScale = ({
   children,
   scale = 1.05,
   duration = 0.2,
-  className = "",
+  className = '',
 }: HoverScaleProps) => {
   return (
     <div
       className={`${styles.hoverScale} ${className}`}
       style={
         {
-          "--scale": scale,
-          "--duration": `${duration}s`,
+          '--scale': scale,
+          '--duration': `${duration}s`,
         } as React.CSSProperties
       }
     >

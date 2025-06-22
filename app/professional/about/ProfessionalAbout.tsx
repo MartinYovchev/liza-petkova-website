@@ -1,16 +1,16 @@
-"use client";
-import styles from "./ProfessionalAbout.module.scss";
-import Hero from "./components/Hero";
-import Mission from "./components/Mission";
-import Timeline from "./components/Timeline";
-import Team from "./components/Team";
-import Certifications from "./components/Certifications";
-import Technology from "./components/Technology";
-import CTA from "./components/CTA";
-import { FadeIn } from "@/components/Animations/FadeIn/FadeIn";
-import StaggerChildren from "@/components/Animations/StaggerChildren/StaggerChildren";
-import ParallaxSection from "@/components/Animations/ParallaxSection/ParallaxSection";
-import { HoverScale } from "@/components/Animations/HoverScale/HoverScale";
+'use client';
+import styles from './ProfessionalAbout.module.scss';
+import Hero from './components/Hero';
+import Mission from './components/Mission';
+import Timeline from './components/Timeline';
+import Team from './components/Team';
+import Certifications from './components/Certifications';
+import Technology from './components/Technology';
+import CTA from './components/CTA';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
+import ParallaxSection from '@/components/Animations/ParallaxSection/ParallaxSection';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 
 export default function ProfessionalAbout() {
   return (

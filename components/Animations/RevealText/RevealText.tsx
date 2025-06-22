@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 interface RevealTextProps {
   children: ReactNode;
@@ -9,28 +9,28 @@ interface RevealTextProps {
   id?: string;
   delay?: number;
   duration?: number;
-  direction?: "up" | "down" | "left" | "right";
+  direction?: 'up' | 'down' | 'left' | 'right';
   once?: boolean;
 }
 
 export default function RevealText({
   children,
-  className = "",
+  className = '',
   id,
   delay = 0,
   duration = 0.5,
-  direction = "up",
+  direction = 'up',
   once = true,
 }: RevealTextProps) {
   const getDirectionOffset = () => {
     switch (direction) {
-      case "up":
+      case 'up':
         return { y: 20 };
-      case "down":
+      case 'down':
         return { y: -20 };
-      case "left":
+      case 'left':
         return { x: 20 };
-      case "right":
+      case 'right':
         return { x: -20 };
       default:
         return { y: 20 };
@@ -60,9 +60,9 @@ export default function RevealText({
     <motion.div
       id={id}
       className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: "-50px" }}
+      initial='hidden'
+      whileInView='visible'
+      viewport={{ once, margin: '-50px' }}
       variants={variants}
     >
       {children}

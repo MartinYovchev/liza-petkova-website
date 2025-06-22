@@ -1,8 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getImageUrl } from "../../lib/supabase";
-import { BlogPost } from "../../lib/types";
-import styles from "./BlogCard.module.scss";
+import Link from 'next/link';
+import Image from 'next/image';
+import { getImageUrl } from '../../lib/supabase';
+import { BlogPost } from '../../lib/types';
+import styles from './BlogCard.module.scss';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -13,10 +13,10 @@ export default function BlogCard({ post }: BlogCardProps) {
   const imageUrl = getImageUrl(coverImage as string | null);
 
   const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
@@ -25,11 +25,11 @@ export default function BlogCard({ post }: BlogCardProps) {
       {imageUrl && (
         <div className={styles.imageContainer}>
           <Image
-            src={imageUrl || "/placeholder.svg"}
+            src={imageUrl || '/placeholder.svg'}
             alt={post.title}
             fill
             className={styles.image}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           />
           <div className={styles.imageOverlay} />
         </div>
@@ -55,7 +55,7 @@ export default function BlogCard({ post }: BlogCardProps) {
 
         {post.tags && post.tags.length > 0 && (
           <div className={styles.tags}>
-            {post.tags.slice(0, 3).map((tag) => (
+            {post.tags.slice(0, 3).map(tag => (
               <span key={tag} className={styles.tag}>
                 {tag}
               </span>
@@ -68,13 +68,13 @@ export default function BlogCard({ post }: BlogCardProps) {
             Read More
             <svg
               className={styles.arrow}
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              viewBox='0 0 20 20'
+              fill='currentColor'
             >
               <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
+                fillRule='evenodd'
+                d='M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z'
+                clipRule='evenodd'
               />
             </svg>
           </Link>

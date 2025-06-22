@@ -53,7 +53,7 @@
 }
 
 .artisticText {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
   letter-spacing: -0.02em;
 }
@@ -64,13 +64,16 @@
   gap: 0.5rem;
 }
 .professionalText {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
   letter-spacing: -0.02em;
 }
 
 .defaultText {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .languageSwitcher {
