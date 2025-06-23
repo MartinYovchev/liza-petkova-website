@@ -85,23 +85,51 @@
 
 @media (max-width: 768px) {
   .stats {
-    padding: 4rem 0;
+    padding: 3rem 0;
+  }
+
+  .statsContainer {
+    padding: 0 1rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 3rem;
   }
 
   .sectionTitle {
     font-size: 2.5rem;
   }
 
+  .sectionSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .statItem {
+    padding: 1.5rem 1rem;
+  }
+
+  .statNumber {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .statLabel {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .statsGrid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .statItem {
     padding: 1.5rem;
-  }
-
-  .statNumber {
-    font-size: 3rem;
   }
 }

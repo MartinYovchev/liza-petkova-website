@@ -143,14 +143,54 @@
 
 @media (max-width: 768px) {
   .services {
-    padding: 4rem 0;
+    padding: 4rem 0 3rem;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 
   .sectionTitle {
     font-size: 2.5rem;
   }
 
+  .sectionSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .serviceCard {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .serviceTitle {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .serviceDescription {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .serviceFeature {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
   .servicesGrid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .serviceCard {
+    padding: 1.25rem;
   }
 }

@@ -60,12 +60,26 @@
   width: 100%;
   height: 250px;
   overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 
   img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.3s ease;
+  }
+
+  /* Fallback for broken images */
+  &::before {
+    content: '🖼️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: #adb5bd;
+    z-index: 0;
+    opacity: 0.5;
   }
 }
 
@@ -173,21 +187,117 @@
 @media (max-width: 768px) {
   .servicesMain {
     padding: 1rem;
+    flex: 1;
+  }
+
+  .servicesHeader {
+    margin-bottom: 2rem;
   }
 
   .servicesTitle {
     font-size: 2rem;
   }
 
+  .servicesCount {
+    font-size: 1rem;
+  }
+
   .servicesGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .serviceCard {
+    border-radius: 0.75rem;
+  }
+
+  .serviceImage {
+    height: 140px;
+    border-radius: 0.5rem 0.5rem 0 0;
+
+    img {
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    &::before {
+      font-size: 1.5rem;
+    }
   }
 
   .serviceContent {
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+
+  .serviceTitle {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .serviceDescription {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .serviceFeature {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .serviceDetails {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+  }
+
+  .serviceDuration {
+    font-size: 0.9rem;
   }
 
   .serviceActions {
     flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .serviceButton,
+  .learnMoreBtn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .serviceImage {
+    height: 180px;
+    border-radius: 0.75rem 0.75rem 0 0;
+
+    img {
+      object-position: center center;
+    }
+
+    &::before {
+      font-size: 1.8rem;
+    }
+  }
+
+  .serviceContent {
+    padding: 1.25rem;
+  }
+
+  .serviceTitle {
+    font-size: 1.3rem;
+  }
+
+  .serviceDescription {
+    font-size: 0.95rem;
+  }
+
+  .serviceFeature {
+    font-size: 0.9rem;
   }
 }

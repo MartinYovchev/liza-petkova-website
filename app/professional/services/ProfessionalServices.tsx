@@ -4,7 +4,6 @@ import { useState } from 'react';
 import styles from './ProfessionalServices.module.scss';
 import { categories, services } from './constants';
 import { Hero } from './components/Hero/Hero';
-import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { ServicesGrid } from './components/ServicesGrid/ServicesGrid';
 import { Process } from './components/Process/Process';
@@ -22,7 +21,6 @@ export default function ServicesPage() {
   return (
     <div className={styles.container}>
       <Hero />
-      <Breadcrumb />
       <div className={styles.mainContent}>
         <Sidebar
           selectedCategory={selectedCategory}

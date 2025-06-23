@@ -201,20 +201,50 @@
 
 @media (max-width: 768px) {
   .heroSection {
-    padding: 4rem 0;
+    height: auto;
+    min-height: calc(100vh - 80px); /* Account for header height */
+    padding: 6rem 0 4rem; /* Add top padding for header space */
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 
   .title {
     font-size: 2.5rem;
   }
 
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .featuresContainer {
+    gap: 0.75rem;
+  }
+
+  .featureItem {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
   .ctaContainer {
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .primaryButton,
   .secondaryButton {
     width: 100%;
     text-align: center;
+    padding: 0.875rem 1.5rem;
+  }
+
+  /* Hide image wrapper and stats card on mobile */
+  .imageWrapper {
+    display: none;
+  }
+
+  .statsCard {
+    display: none;
   }
 }

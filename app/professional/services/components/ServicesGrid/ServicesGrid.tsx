@@ -44,8 +44,8 @@ export const ServicesGrid = ({
                   <Image
                     src={service.image || '/placeholder.svg'}
                     alt={service.title}
-                    width={300}
-                    height={200}
+                    fill
+                    sizes='(max-width: 768px) 50vw, (max-width: 480px) 100vw, 300px'
                   />
                 </div>
 

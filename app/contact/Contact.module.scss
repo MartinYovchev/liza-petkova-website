@@ -207,14 +207,85 @@
 
 @media (max-width: 768px) {
   .contactContainer {
-    padding: 2rem 1rem;
+    padding: 6rem 1rem 2rem; /* Add top padding for header */
+    min-height: calc(100vh - 80px);
+  }
+
+  .headerSection {
+    margin-bottom: 3rem;
   }
 
   .title {
     font-size: 2.5rem;
   }
 
+  .description {
+    font-size: 1rem;
+  }
+
+  .contactGrid {
+    gap: 2rem;
+  }
+
+  .infoCard {
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.1rem;
+    }
+  }
+
   .contactForm {
     padding: 1.5rem;
+  }
+
+  .input,
+  .textarea {
+    padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+    font-size: 0.95rem;
+  }
+
+  .inputIcon {
+    left: 0.875rem;
+    font-size: 1.1rem;
+  }
+
+  .textarea {
+    min-height: 120px;
+  }
+
+  .submitButton {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactContainer {
+    padding: 5rem 0.75rem 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+
+  .contactGrid {
+    gap: 1.5rem;
+  }
+
+  .infoCard {
+    padding: 1.25rem;
+  }
+
+  .contactForm {
+    padding: 1.25rem;
+  }
+
+  .formGroup {
+    margin-bottom: 1.25rem;
   }
 }
