@@ -3,7 +3,7 @@ import ProfessionalHomePage from './home/ProfessionalHomePage';
 
 export default function Professional() {
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <ProfessionalHomePage />
     </Layout>
   );

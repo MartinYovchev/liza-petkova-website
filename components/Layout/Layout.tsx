@@ -63,14 +63,6 @@ const defaultFooterSections = [
       { label: 'Progress', href: '/artistic/progress', icon: <FaUser /> },
     ],
   },
-  {
-    title: 'Admin',
-    icon: <FaQuestionCircle />,
-    links: [
-      { label: 'Admin Panel', href: '/admin', icon: <FaCog /> },
-      { label: 'Manage Posts', href: '/admin/posts', icon: <FaBlog /> },
-    ],
-  },
 ];
 
 const defaultContactInfo = {

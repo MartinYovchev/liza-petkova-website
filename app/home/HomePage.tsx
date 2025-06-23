@@ -7,79 +7,76 @@ import Image from '@/components/Image/Image';
 import Text from '@/components/Typography/Text';
 import { Button } from '@/components/Button/Button';
 import { useTheme } from '../context/ThemeContext';
-import { Layout } from '@/components/Layout/Layout';
 
 export default function HomePage() {
   const { setTheme } = useTheme();
 
   return (
-    <Layout>
-      <div className={styles.container}>
-        <div className={styles.splitContainer}>
-          <div className={`${styles.side} ${styles.professional}`}>
-            <Link href='/professional' className={styles.link}>
-              <div className={styles.overlay}>
-                <FadeIn delay={0.4} className={styles.content}>
-                  <Scale className={styles.title}>Professional website</Scale>
-                  <Text as='p' className={styles.subtitle}>
-                    Find the world of a professional life
-                  </Text>
-                  <Button
-                    className={styles.cta}
-                    variant='outline'
-                    onClick={() => {
-                      setTheme('professional');
-                    }}
-                  >
-                    Go to professional page
-                  </Button>
-                </FadeIn>
-              </div>
-              <div className={styles.imageContainer}>
-                <Image
-                  src='/placeholder.svg?height=800&width=600'
-                  alt='Professional workspace'
-                  className={styles.image}
-                  width={600}
-                  height={800}
-                />
-              </div>
-            </Link>
-          </div>
+    <div className={styles.container}>
+      <div className={styles.splitContainer}>
+        <div className={`${styles.side} ${styles.professional}`}>
+          <Link href='/professional' className={styles.link}>
+            <div className={styles.overlay}>
+              <FadeIn delay={0.4} className={styles.content}>
+                <Scale className={styles.title}>Professional website</Scale>
+                <Text as='p' className={styles.subtitle}>
+                  Find the world of a professional life
+                </Text>
+                <Button
+                  className={styles.cta}
+                  variant='outline'
+                  onClick={() => {
+                    setTheme('professional');
+                  }}
+                >
+                  Go to professional page
+                </Button>
+              </FadeIn>
+            </div>
+            <div className={styles.imageContainer}>
+              <Image
+                src='/placeholder.svg?height=800&width=600'
+                alt='Professional workspace'
+                className={styles.image}
+                width={600}
+                height={800}
+              />
+            </div>
+          </Link>
+        </div>
 
-          <div className={`${styles.side} ${styles.artistic}`}>
-            <Link href='/artistic' className={styles.link}>
-              <div className={styles.overlay}>
-                <FadeIn delay={0.6} className={styles.content}>
-                  <Scale className={styles.title}>Artistic website</Scale>
+        <div className={`${styles.side} ${styles.artistic}`}>
+          <Link href='/artistic' className={styles.link}>
+            <div className={styles.overlay}>
+              <FadeIn delay={0.6} className={styles.content}>
+                <Scale className={styles.title}>Artistic website</Scale>
 
-                  <Text as='p' className={styles.subtitle}>
-                    Find the world of a artistic life
-                  </Text>
-                  <Button
-                    className={styles.cta}
-                    variant='outline'
-                    onClick={() => {
-                      setTheme('artistic');
-                    }}
-                  >
-                    Go to artistic page
-                  </Button>
-                </FadeIn>
-              </div>
-              <div className={styles.imageContainer}>
-                <Image
-                  src='/placeholder.svg?height=800&width=600'
-                  alt='Artistic workspace'
-                  className={styles.image}
-                  width={600}
-                  height={800}
-                />
-              </div>
-            </Link>
-          </div>
+                <Text as='p' className={styles.subtitle}>
+                  Find the world of a artistic life
+                </Text>
+                <Button
+                  className={styles.cta}
+                  variant='outline'
+                  onClick={() => {
+                    setTheme('artistic');
+                  }}
+                >
+                  Go to artistic page
+                </Button>
+              </FadeIn>
+            </div>
+            <div className={styles.imageContainer}>
+              <Image
+                src='/placeholder.svg?height=800&width=600'
+                alt='Artistic workspace'
+                className={styles.image}
+                width={600}
+                height={800}
+              />
+            </div>
+          </Link>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }

@@ -31,35 +31,35 @@
 
   // Artistic theme
   &.artistic {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+    background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 50%, #e0e7ff 100%);
+    color: #374151;
 
     .sectionTitle {
-      color: white;
+      color: #7c3aed;
       &::after {
-        background-color: white;
+        background-color: #a855f7;
       }
     }
 
     .link {
-      color: rgba(255, 255, 255, 0.9);
+      color: #6b7280;
       &:hover {
-        color: white;
+        color: #7c3aed;
         transform: translateX(0.5rem);
       }
     }
 
     .socialLink {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
+      background-color: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
       &:hover {
-        background-color: white;
-        color: #f093fb;
+        background-color: #7c3aed;
+        color: white;
       }
     }
 
     .copyright {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(55, 65, 81, 0.7);
     }
   }
 

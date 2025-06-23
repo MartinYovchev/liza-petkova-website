@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function ArtisticPage() {
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <ArtisticHome />
     </Layout>
   );

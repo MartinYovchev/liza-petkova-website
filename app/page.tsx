@@ -5,7 +5,7 @@ import HomePage from './home/HomePage';
 
 export default function Home() {
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <HomePage />
     </Layout>
   );

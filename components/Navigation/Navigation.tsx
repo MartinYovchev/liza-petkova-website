@@ -5,8 +5,8 @@ import Link from 'next/link';
 import styles from './Navigation.module.scss';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useTheme } from '@/app/context/ThemeContext';
-import { Button } from '../Button/Button';
-import { FaBriefcase } from 'react-icons/fa';
+import { IoMdContacts } from 'react-icons/io';
+import { FaBriefcase, FaBars, FaTimes, FaBook } from 'react-icons/fa';
 import { TbPencilExclamation } from 'react-icons/tb';
 
 type NavigationProps = {
@@ -22,6 +22,7 @@ type NavigationProps = {
 export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
   const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +33,32 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    setTheme('default');
+    closeMobileMenu();
+  };
 
   const navItems = (() => {
     if (style === 'default') {
@@ -56,8 +83,26 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           href: '/artistic',
           style: 'artistic',
         },
-        { label: 'Contact', href: '/contact', style: 'default' },
-        { label: 'Blog', href: '/blog', style: 'default' },
+        {
+          label: (
+            <div className={styles.contactLabel}>
+              <IoMdContacts />
+              Contact
+            </div>
+          ),
+          href: '/contact',
+          style: 'default',
+        },
+        {
+          label: (
+            <div className={styles.blogLabel}>
+              <FaBook />
+              Blog
+            </div>
+          ),
+          href: '/blog',
+          style: 'default',
+        },
       ];
     } else if (style === 'artistic') {
       return [
@@ -81,6 +126,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
       ];
     }
   })();
+
   const getTextStyle = () => {
     switch (theme) {
       case 'artistic':
@@ -92,38 +138,59 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
     }
   };
 
-  return (
-    <div
-      className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''}`}
-      role='banner'
-    >
-      <div className={styles.container}>
-        <div className={`${styles.logo} ${getTextStyle()}`}>
-          {logo || (
-            <Link href='/'>
-              <Button onClick={() => setTheme('default')}>
-                Liza's website
-              </Button>
-            </Link>
-          )}
-        </div>
+  const getThemeClass = () => {
+    switch (theme) {
+      case 'artistic':
+        return styles.artisticTheme;
+      case 'professional':
+        return styles.professionalTheme;
+      default:
+        return '';
+    }
+  };
 
-        <div
-          className={styles.nav}
-          role='navigation'
-          aria-label='Main navigation'
-        >
-          <ul className={styles.navList}>
-            {navItems?.map(item => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`${styles.navLink} ${getTextStyle()}`}
+  return (
+    <>
+      <div
+        className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''} ${
+          isMobileMenuOpen ? styles.mobileMenuOpen : ''
+        } ${getThemeClass()}`}
+        role='banner'
+      >
+        <div className={styles.container}>
+          <Link
+            href='/'
+            onClick={handleLogoClick}
+            className={`${styles.logo} ${getTextStyle()}`}
+          >
+            Liza's Website
+          </Link>
+
+          {/* Burger Menu Button */}
+          <button
+            className={`${styles.burgerButton} ${getTextStyle()}`}
+            onClick={toggleMobileMenu}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+
+          {/* Desktop Navigation */}
+          <div
+            className={`${styles.nav} ${styles.desktopNav}`}
+            role='navigation'
+            aria-label='Main navigation'
+          >
+            <ul className={styles.navList}>
+              {navItems?.map((item, index) => (
+                <li
+                  key={item.href}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <Button
-                    style={{
-                      all: 'unset',
-                    }}
+                  <Link
+                    href={item.href}
+                    className={`${styles.navLink} ${getTextStyle()}`}
                     onClick={() =>
                       setTheme(
                         item.style as 'professional' | 'artistic' | 'default'
@@ -131,18 +198,71 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
                     }
                   >
                     {item.label}
-                  </Button>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Desktop Language Switcher */}
+          <LanguageSwitcher
+            className={`${styles.languageSwitcher} ${styles.desktopLanguageSwitcher}`}
+            value='en'
+            onChange={() => {}}
+          />
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className={styles.mobileMenuOverlay} onClick={closeMobileMenu}>
+            {/* Close button on overlay */}
+            <button
+              className={styles.overlayCloseButton}
+              onClick={closeMobileMenu}
+              aria-label='Close menu'
+            >
+              <FaTimes />
+            </button>
+          </div>
+        )}
+
+        {/* Mobile Navigation */}
+        <div
+          className={`${styles.mobileNav} ${
+            isMobileMenuOpen ? styles.mobileNavOpen : ''
+          } ${getTextStyle()}`}
+          role='navigation'
+          aria-label='Mobile navigation'
+        >
+          <ul className={styles.mobileNavList}>
+            {navItems?.map((item, index) => (
+              <li
+                key={item.href}
+                className={styles.mobileNavItem}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <Link
+                  href={item.href}
+                  className={`${styles.mobileNavLink} ${getTextStyle()}`}
+                  onClick={() => {
+                    setTheme(
+                      item.style as 'professional' | 'artistic' | 'default'
+                    );
+                    closeMobileMenu();
+                  }}
+                >
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
+
+          {/* Mobile Language Switcher */}
+          <div className={styles.mobileLanguageSwitcher}>
+            <LanguageSwitcher value='en' onChange={() => {}} />
+          </div>
         </div>
-        <LanguageSwitcher
-          className={styles.languageSwitcher}
-          value='en'
-          onChange={() => {}}
-        />
       </div>
-    </div>
+    </>
   );
 };

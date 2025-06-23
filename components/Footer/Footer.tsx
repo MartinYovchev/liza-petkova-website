@@ -6,6 +6,14 @@ import styles from './Footer.module.scss';
 import Title from '../Typography/Title';
 import Text from '../Typography/Text';
 import { useTheme } from '@/app/context/ThemeContext';
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaGithub,
+  FaYoutube,
+} from 'react-icons/fa';
 
 type FooterLink = {
   label: string;
@@ -27,10 +35,43 @@ type FooterProps = {
   }[];
 };
 
+const defaultSocialLinks = [
+  {
+    platform: 'Facebook',
+    url: 'https://facebook.com',
+    icon: <FaFacebook />,
+  },
+  {
+    platform: 'Twitter',
+    url: 'https://twitter.com',
+    icon: <FaTwitter />,
+  },
+  {
+    platform: 'Instagram',
+    url: 'https://instagram.com',
+    icon: <FaInstagram />,
+  },
+  {
+    platform: 'LinkedIn',
+    url: 'https://linkedin.com',
+    icon: <FaLinkedin />,
+  },
+  {
+    platform: 'GitHub',
+    url: 'https://github.com',
+    icon: <FaGithub />,
+  },
+  {
+    platform: 'YouTube',
+    url: 'https://youtube.com',
+    icon: <FaYoutube />,
+  },
+];
+
 export const Footer = ({
   sections,
   copyright = `© ${new Date().getFullYear()} Liza's website. All rights reserved. Powered by Martin Yovchev`,
-  socialLinks = [],
+  socialLinks = defaultSocialLinks,
 }: FooterProps) => {
   const { theme } = useTheme();
 
@@ -67,22 +108,20 @@ export const Footer = ({
           ))}
         </div>
 
-        {socialLinks.length > 0 && (
-          <div className={styles.social}>
-            {socialLinks.map(social => (
-              <Link
-                key={social.platform}
-                href={social.url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className={styles.socialLink}
-                aria-label={`Follow us on ${social.platform}`}
-              >
-                {social.icon}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className={styles.social}>
+          {socialLinks.map(social => (
+            <Link
+              key={social.platform}
+              href={social.url}
+              target='_blank'
+              rel='noopener noreferrer'
+              className={styles.socialLink}
+              aria-label={`Follow us on ${social.platform}`}
+            >
+              {social.icon}
+            </Link>
+          ))}
+        </div>
 
         <div className={styles.bottom}>
           <Text as='p' className={styles.copyright}>
