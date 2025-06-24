@@ -227,6 +227,8 @@
   color: #4a5568;
   z-index: 1001;
   position: relative;
+  min-width: 44px; /* Ensure minimum touch target */
+  height: 44px;
 
   &:hover {
     background: rgba(0, 0, 0, 0.04);
@@ -445,16 +447,24 @@
 
   .container {
     justify-content: space-between;
+    align-items: center;
+    position: relative;
   }
 
   .logo {
     font-size: 1rem;
+    flex: 1; /* Allow logo to take available space */
 
     &::before {
       width: 36px;
       height: 36px;
       font-size: 1.125rem;
     }
+  }
+
+  .burgerButton {
+    flex-shrink: 0; /* Prevent burger button from shrinking */
+    margin-left: 1rem; /* Add some space between logo and burger */
   }
 }
 

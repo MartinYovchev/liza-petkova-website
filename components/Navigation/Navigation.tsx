@@ -85,16 +85,6 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
         },
         {
           label: (
-            <div className={styles.contactLabel}>
-              <IoMdContacts />
-              Contact
-            </div>
-          ),
-          href: '/contact',
-          style: 'default',
-        },
-        {
-          label: (
             <div className={styles.blogLabel}>
               <FaBook />
               Blog
@@ -103,14 +93,24 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           href: '/blog',
           style: 'default',
         },
+        {
+          label: (
+            <div className={styles.contactLabel}>
+              <IoMdContacts />
+              Contact
+            </div>
+          ),
+          href: '/contact',
+          style: 'default',
+        },
       ];
     } else if (style === 'artistic') {
       return [
         { label: 'Home', href: '/artistic', style: 'artistic' },
         { label: 'Progress', href: '/artistic/progress', style: 'artistic' },
         { label: 'About', href: '/artistic/about', style: 'artistic' },
-        { label: 'Contact', href: '/contact', style: 'artistic' },
         { label: 'Blog', href: '/blog', style: 'artistic' },
+        { label: 'Contact', href: '/contact', style: 'artistic' },
       ];
     } else if (style === 'professional') {
       return [
@@ -121,8 +121,8 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           style: 'professional',
         },
         { label: 'About', href: '/professional/about', style: 'professional' },
-        { label: 'Contact', href: '/contact', style: 'professional' },
         { label: 'Blog', href: '/blog', style: 'professional' },
+        { label: 'Contact', href: '/contact', style: 'professional' },
       ];
     }
   })();
@@ -166,16 +166,6 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
             Liza's Website
           </Link>
 
-          {/* Burger Menu Button */}
-          <button
-            className={`${styles.burgerButton} ${getTextStyle()}`}
-            onClick={toggleMobileMenu}
-            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-
           {/* Desktop Navigation */}
           <div
             className={`${styles.nav} ${styles.desktopNav}`}
@@ -207,9 +197,19 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           {/* Desktop Language Switcher */}
           <LanguageSwitcher
             className={`${styles.languageSwitcher} ${styles.desktopLanguageSwitcher}`}
-            value='en'
-            onChange={() => {}}
+            currentLanguage='en'
+            onLanguageChange={() => {}}
           />
+
+          {/* Burger Menu Button */}
+          <button
+            className={`${styles.burgerButton} ${getTextStyle()}`}
+            onClick={toggleMobileMenu}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
 
         {/* Mobile Menu Overlay */}
@@ -259,7 +259,10 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
 
           {/* Mobile Language Switcher */}
           <div className={styles.mobileLanguageSwitcher}>
-            <LanguageSwitcher value='en' onChange={() => {}} />
+            <LanguageSwitcher
+              currentLanguage='en'
+              onLanguageChange={() => {}}
+            />
           </div>
         </div>
       </div>

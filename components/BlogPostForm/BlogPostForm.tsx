@@ -1,4 +1,10 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
+import {
+  HiOutlineDocumentText,
+  HiOutlinePhotograph,
+  HiOutlineSearchCircle,
+  HiOutlineCog,
+} from 'react-icons/hi';
 import { blogService } from '../../lib/blogService';
 import { BlogPost, BlogPostFormData } from '../../lib/types';
 import ImageUpload from '../ImageUpload/ImageUpload';
@@ -104,10 +110,10 @@ export default function BlogPostForm({
   };
 
   const tabs = [
-    { id: 'content', label: 'Content', icon: '📝' },
-    { id: 'images', label: 'Images', icon: '🖼️' },
-    { id: 'seo', label: 'SEO', icon: '🔍' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' },
+    { id: 'content', label: 'Content', icon: HiOutlineDocumentText },
+    { id: 'images', label: 'Images', icon: HiOutlinePhotograph },
+    { id: 'seo', label: 'SEO', icon: HiOutlineSearchCircle },
+    { id: 'settings', label: 'Settings', icon: HiOutlineCog },
   ];
 
   return (
@@ -128,7 +134,9 @@ export default function BlogPostForm({
                 activeTab === tab.id ? styles.activeTab : ''
               }`}
             >
-              <span className={styles.tabIcon}>{tab.icon}</span>
+              <span className={styles.tabIcon}>
+                <tab.icon />
+              </span>
               {tab.label}
             </button>
           ))}
@@ -318,19 +326,6 @@ export default function BlogPostForm({
                     <option value='published'>Published</option>
                     <option value='archived'>Archived</option>
                   </select>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.checkboxLabel}>
-                    <input
-                      type='checkbox'
-                      name='featured'
-                      checked={formData.featured}
-                      onChange={handleChange}
-                      className={styles.checkbox}
-                    />
-                    <span className={styles.checkboxText}>Featured Post</span>
-                  </label>
                 </div>
               </div>
             </div>

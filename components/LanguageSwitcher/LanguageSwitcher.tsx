@@ -1,33 +1,62 @@
-import Dropdown, { DropdownOption } from '../Dropdown/Dropdown';
+import React, { useState } from 'react';
+import styles from './LanguageSwitcher.module.scss';
 
-import EnFlag from '../../public/placeholder.svg';
-import BgFlag from '../../public/placeholder.svg';
+interface Language {
+  code: 'bg' | 'en';
+  name: string;
+  flag: string;
+}
 
-type Language = 'en' | 'bg';
+const languages: Language[] = [
+  { code: 'bg', name: 'БГ', flag: '🇧🇬' },
+  { code: 'en', name: 'EN', flag: '🇺🇸' },
+];
 
 interface LanguageSwitcherProps {
-  value: Language;
-  onChange: (lang: Language) => void;
+  currentLanguage?: 'bg' | 'en';
+  onLanguageChange?: (language: 'bg' | 'en') => void;
   className?: string;
 }
 
-const options: DropdownOption[] = [
-  { label: 'English', value: 'en', icon: EnFlag },
-  { label: 'Български', value: 'bg', icon: BgFlag },
-];
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+  currentLanguage = 'en',
+  onLanguageChange,
+  className = '',
+}) => {
+  const [selectedLang, setSelectedLang] = useState<'bg' | 'en'>(
+    currentLanguage
+  );
 
-const LanguageSwitcher = ({
-  value,
-  onChange,
-  className,
-}: LanguageSwitcherProps) => {
+  const handleLanguageChange = (langCode: 'bg' | 'en') => {
+    setSelectedLang(langCode);
+    onLanguageChange?.(langCode);
+  };
+
   return (
-    <Dropdown
-      className={className}
-      options={options}
-      selectedValue={value}
-      onChange={val => onChange(val as Language)}
-    />
+    <div className={`${styles.languageSwitcher} ${className}`}>
+      <div
+        className={`${styles.slider} ${selectedLang === 'bg' ? styles.sliderBg : styles.sliderEn}`}
+      />
+      {languages.map(lang => (
+        <button
+          key={lang.code}
+          className={`${styles.langOption} ${
+            selectedLang === lang.code ? styles.active : ''
+          }`}
+          onClick={() => handleLanguageChange(lang.code)}
+          aria-label={`Switch to ${lang.name}`}
+        >
+          <span
+            className={styles.flag}
+            role='img'
+            aria-label={`${lang.name} flag`}
+          >
+            {lang.flag}
+          </span>
+          <span className={styles.langText}>{lang.name}</span>
+        </button>
+      ))}
+    </div>
   );
 };
 

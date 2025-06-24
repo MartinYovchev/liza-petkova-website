@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.scss';
 import Title from '../Typography/Title';
@@ -13,6 +13,8 @@ import {
   FaLinkedin,
   FaGithub,
   FaYoutube,
+  FaChevronDown,
+  FaChevronUp,
 } from 'react-icons/fa';
 
 type FooterLink = {
@@ -73,7 +75,15 @@ export const Footer = ({
   copyright = `© ${new Date().getFullYear()} Liza's website. All rights reserved. Powered by Martin Yovchev`,
   socialLinks = defaultSocialLinks,
 }: FooterProps) => {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+
+  const toggleSection = (sectionTitle: string) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [sectionTitle]: !prev[sectionTitle],
+    }));
+  };
 
   const getThemeClass = () => {
     switch (theme) {
@@ -86,24 +96,66 @@ export const Footer = ({
     }
   };
 
+  const getThemeForRoute = (
+    href: string
+  ): 'professional' | 'artistic' | 'default' => {
+    if (href.startsWith('/professional')) {
+      return 'professional';
+    } else if (href.startsWith('/artistic')) {
+      return 'artistic';
+    } else {
+      return 'default';
+    }
+  };
+
+  const handleLinkClick = (href: string) => {
+    const newTheme = getThemeForRoute(href);
+    setTheme(newTheme);
+  };
+
   return (
     <div className={`${styles.footer} ${getThemeClass()}`} role='contentinfo'>
       <div className={styles.container}>
         <div className={styles.sections}>
           {sections.map(section => (
             <div key={section.title} className={styles.section}>
-              <Title level='h3' className={styles.sectionTitle}>
-                {section.title}
-              </Title>
-              <ul className={styles.linkList}>
-                {section.links.map(link => (
-                  <li key={link.href}>
-                    <Link href={link.href} className={styles.link}>
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <button
+                className={styles.sectionHeader}
+                onClick={() => toggleSection(section.title)}
+                aria-expanded={openSections[section.title] || false}
+                aria-controls={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
+              >
+                <Title level='h3' className={styles.sectionTitle}>
+                  {section.title}
+                </Title>
+                <span className={styles.toggleIcon}>
+                  {openSections[section.title] ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  )}
+                </span>
+              </button>
+              <div
+                id={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
+                className={`${styles.linkListContainer} ${
+                  openSections[section.title] ? styles.open : ''
+                }`}
+              >
+                <ul className={styles.linkList}>
+                  {section.links.map(link => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={styles.link}
+                        onClick={() => handleLinkClick(link.href)}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { blogService } from '../../lib/blogService';
 import { BlogPost } from '../../lib/types';
-
 import BlogCard from '../../components/BlogCard/BlogCard';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './BlogPage.module.scss';

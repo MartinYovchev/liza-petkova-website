@@ -470,7 +470,7 @@
 .ctaContent {
   max-width: 800px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 1rem;
 }
 
 .ctaTitle {
@@ -478,7 +478,7 @@
   font-weight: 700;
   margin-bottom: 1rem;
 }
-x .ctaSubtitle {
+.ctaSubtitle {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   padding: 2rem;
@@ -487,6 +487,7 @@ x .ctaSubtitle {
 
 .ctaActions {
   display: flex;
+  padding: 1rem;
   gap: 1rem;
   justify-content: center;
   align-items: center;
@@ -549,6 +550,9 @@ x .ctaSubtitle {
 @media (max-width: 768px) {
   .heroTitle {
     font-size: 2.5rem;
+  }
+  .heroImageContainer {
+    display: none;
   }
 
   .valuesGrid {

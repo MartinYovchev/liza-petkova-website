@@ -1,34 +1,41 @@
 .container {
   background: linear-gradient(135deg, #d470c9 0%, #e2e8f0 100%);
+  padding-top: 10%;
 }
 
 /* Hero Section */
 .hero {
   position: relative;
   overflow: hidden;
-  height: 100vh;
-  padding: 4rem;
+  min-height: 100vh;
+  padding: 2rem;
   display: flex;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .heroContent {
-  padding: 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
   width: 100%;
   position: relative;
   z-index: 2;
-  justify-items: center;
 }
 
 .heroLeft {
   z-index: 2;
   animation: fadeInLeft 1s ease-out;
+}
+
+.heroRight {
+  position: relative;
   display: flex;
+  justify-content: center;
+  animation: fadeInRight 1s ease-out;
 }
 
 .heroTitle {
@@ -61,6 +68,12 @@
   line-height: 1.6;
   margin-bottom: 2rem;
   max-width: 500px;
+}
+
+.heroDescription {
+  margin-bottom: 2rem;
+  color: #4a154b;
+  line-height: 1.6;
 }
 
 .heroActions {
@@ -103,56 +116,6 @@
   border-color: white;
 }
 
-.heroStats {
-  display: flex;
-  justify-content: center;
-  width: fit-content;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-}
-
-.heroStat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
-  transition: transform 0.3s ease;
-}
-
-.heroStat:hover {
-  transform: translateY(-5px);
-}
-
-.statNumber {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(120deg, #ff6b6b, #ff8e8e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.25rem;
-}
-
-.statLabel {
-  font-size: 0.9rem;
-  color: #4a154b;
-  font-weight: 500;
-}
-
-.heroRight {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  animation: fadeInRight 1s ease-out;
-}
-
 .heroImageContainer {
   position: relative;
   border-radius: 30px;
@@ -160,8 +123,9 @@
   box-shadow: 0 20px 40px rgba(74, 21, 75, 0.15);
   transform: rotate(-3deg);
   transition: transform 0.5s ease;
-  width: 50rem;
-  height: 50rem;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
 }
 
 .heroImageContainer:hover {
@@ -171,8 +135,8 @@
 .heroImage {
   width: 100%;
   height: auto;
-  aspect-ratio: 4/5;
   object-fit: cover;
+  border-radius: 30px;
 }
 
 .floatingCard {
@@ -218,7 +182,7 @@
 
 /* Services Section */
 .services {
-  padding: 5rem 0;
+  padding: 5rem 2rem;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
 }
@@ -323,7 +287,7 @@
 
 /* Portfolio Section */
 .portfolio {
-  padding: 5rem 0;
+  padding: 5rem 2rem;
   background: linear-gradient(
     135deg,
     rgba(240, 147, 251, 0.1) 0%,
@@ -426,7 +390,7 @@
 
 /* Philosophy Section */
 .philosophy {
-  padding: 5rem 0;
+  padding: 5rem 2rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
 }
@@ -491,7 +455,7 @@
 
 /* Testimonials Section */
 .testimonials {
-  padding: 5rem 0;
+  padding: 5rem 2rem;
   background: linear-gradient(
     135deg,
     rgba(240, 147, 251, 0.1) 0%,
@@ -559,8 +523,7 @@
 
 /* CTA Section */
 .cta {
-  padding: 5rem 0;
-
+  padding: 5rem 2rem;
   color: black;
   text-align: center;
 }
@@ -644,31 +607,54 @@
   .heroActions {
     justify-content: center;
   }
+
+  .philosophyContent {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding-top: 120px; /* Increased padding for mobile header */
+  }
+
   .hero {
-    padding: 4rem 0 3rem;
+    padding: 2rem 1rem;
     min-height: auto;
   }
 
-  .heroContent {
-    gap: 2rem;
+  .heroImageContainer {
+    display: none;
   }
 
-  .heroImageContainer {
-    max-width: 350px;
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
   }
 
   .heroActions {
-    flex-direction: row;
+    flex-direction: column;
+    gap: 1rem;
     justify-content: center;
+    align-items: center;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    display: block;
+    text-align: center;
+    min-width: 200px;
   }
 
   .floatingCard {
     position: static;
-    margin: 1rem auto;
-    max-width: 300px;
+    margin: 1rem auto 0;
+    max-width: 280px;
+    transform: none;
   }
 
   .servicesGrid {
@@ -677,6 +663,12 @@
 
   .portfolioGrid {
     grid-template-columns: 1fr;
+  }
+
+  .philosophyContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1rem;
   }
 
   .philosophyItem {
@@ -690,6 +682,69 @@
 
   .ctaActions {
     flex-direction: column;
+  }
+
+  .services,
+  .portfolio,
+  .philosophy,
+  .testimonials,
+  .cta {
+    padding: 3rem 1rem;
+  }
+
+  .servicesContent,
+  .portfolioContent,
+  .philosophyContent,
+  .testimonialsContent,
+  .ctaContent {
+    padding: 0;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-top: 100px;
+  }
+
+  .hero {
+    padding: 1rem;
+  }
+
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+
+  .heroImageContainer {
+    max-width: 100%;
+    transform: none;
+  }
+
+  .heroImageContainer:hover {
+    transform: none;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .serviceCard {
+    padding: 1.5rem;
+  }
+  .serviceTitle,
+  .serviceIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 }
 

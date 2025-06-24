@@ -1,12 +1,13 @@
+/* Overlay styles */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,26 +15,24 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
+/* Container styles */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  gap: 1.5rem;
   padding: 2rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Simple spinner */
 .spinner {
-  position: relative;
-  display: inline-block;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  border: 3px solid #f3f4f6;
+  border-top-color: #3b82f6;
   animation: spin 1s linear infinite;
 }
 
@@ -55,28 +54,17 @@
   border-width: 4px;
 }
 
-.spinnerInner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  height: 60%;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: rgba(255, 255, 255, 0.6);
-  animation: spin 1.5s linear infinite reverse;
-}
-
+/* Message styles */
 .message {
   margin: 0;
-  color: #fff;
-  font-size: 0.875rem;
+  color: #374151;
+  font-size: 0.9rem;
   font-weight: 500;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.025em;
 }
 
+/* Animations */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -89,25 +77,12 @@
 @keyframes fadeIn {
   0% {
     opacity: 0;
+    transform: scale(0.95);
   }
   100% {
     opacity: 1;
+    transform: scale(1);
   }
-}
-
-/* Dark theme support */
-:global(.dark) .container {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-:global(.dark) .spinner {
-  border-color: rgba(255, 255, 255, 0.2);
-  border-top-color: #3b82f6;
-}
-
-:global(.dark) .spinnerInner {
-  border-top-color: rgba(59, 130, 246, 0.6);
 }
 
 /* Responsive adjustments */
@@ -118,6 +93,42 @@
   }
 
   .message {
-    font-size: 0.8125rem;
+    font-size: 0.85rem;
+  }
+
+  .large {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .message {
+    font-size: 0.8rem;
+  }
+
+  .medium {
+    width: 36px;
+    height: 36px;
+  }
+
+  .large {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+
+  .fadeIn {
+    animation: none;
   }
 }

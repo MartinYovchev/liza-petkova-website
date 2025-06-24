@@ -15,9 +15,9 @@ export const heroData = {
     href: '/artistic/progress',
   },
   stats: [
-    { number: '7+', label: 'Years Experience' },
-    { number: '200+', label: 'Lives Transformed' },
-    { number: '50+', label: 'Workshops Held' },
+    { number: '7+', label: 'Years Experience', icon: '🎨' },
+    { number: '200+', label: 'Lives Transformed', icon: '✨' },
+    { number: '50+', label: 'Workshops Held', icon: '🚀' },
   ],
   image: {
     src: '/images/artistic-hero.jpg',

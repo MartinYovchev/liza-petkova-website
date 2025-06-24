@@ -120,8 +120,13 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding-top: 15%;
+  }
+
   .splitContainer {
     flex-direction: column;
+    height: 100%;
   }
 
   .side {

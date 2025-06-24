@@ -36,15 +36,6 @@ export default function BlogCard({ post }: BlogCardProps) {
       )}
 
       <div className={styles.content}>
-        <div className={styles.meta}>
-          <time className={styles.date}>{formatDate(post.created_at)}</time>
-          {post.reading_time && (
-            <span className={styles.readingTime}>
-              {post.reading_time} min read
-            </span>
-          )}
-        </div>
-
         <h2 className={styles.title}>
           <Link href={`/blog/${post.slug}`} className={styles.titleLink}>
             {post.title}

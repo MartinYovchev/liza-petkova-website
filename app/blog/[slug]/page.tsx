@@ -10,6 +10,8 @@ import { BlogPost } from '../../../lib/types';
 import BlogCard from '../../../components/BlogCard/BlogCard';
 import styles from './BlogPost.module.scss';
 import { Layout } from '@/components/Layout/Layout';
+import { Loader } from '@/components/Loader/Loader';
+import { FaChevronLeft } from 'react-icons/fa';
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -97,12 +99,7 @@ export default function BlogPostPage() {
   };
 
   if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.spinner} />
-        <p>Loading article...</p>
-      </div>
-    );
+    return <Loader isLoading={loading} />;
   }
 
   if (error) {
@@ -111,7 +108,7 @@ export default function BlogPostPage() {
         <h2>Article Not Found</h2>
         <p>{error}</p>
         <Link href='/blog' className={styles.backLink}>
-          ← Back to Blog
+          Back to Blog
         </Link>
       </div>
     );
@@ -123,7 +120,8 @@ export default function BlogPostPage() {
         <h2>Article Not Found</h2>
         <p>The article you're looking for doesn't exist.</p>
         <Link href='/blog' className={styles.backLink}>
-          ← Back to Blog
+          <FaChevronLeft className={styles.backIcon} size={16} />
+          Back to Blog
         </Link>
       </div>
     );
@@ -138,9 +136,7 @@ export default function BlogPostPage() {
         <div className={styles.container}>
           <nav className={styles.breadcrumb}>
             <Link href='/blog' className={styles.breadcrumbLink}>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
-                <polyline points='15,18 9,12 15,6' />
-              </svg>
+              <FaChevronLeft className={styles.backIcon} size={16} />
               Back to Blog
             </Link>
           </nav>
@@ -150,11 +146,6 @@ export default function BlogPostPage() {
               <time className={styles.date}>
                 {formatDate(post.published_at || post.created_at)}
               </time>
-              {post.reading_time && (
-                <span className={styles.readingTime}>
-                  {post.reading_time} min read
-                </span>
-              )}
               {post.view_count > 0 && (
                 <span className={styles.views}>{post.view_count} views</span>
               )}
