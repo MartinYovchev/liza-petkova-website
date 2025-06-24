@@ -15,7 +15,16 @@ import BlogPostForm from '../../components/BlogPostForm/BlogPostForm';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './AdminPage.module.scss';
 
+// Add these imports for art projects
+import {
+  artProjectService,
+  ArtProject,
+  ArtProjectStats,
+} from '@/lib/artService';
+import ArtProjectForm from '@/components/ArtProjectForm/ArtProjectForm';
+
 export default function AdminDashboard() {
+  // Existing blog state
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,12 +39,31 @@ export default function AdminDashboard() {
     drafts: 0,
     archived: 0,
   });
+
+  // New art project state
+  const [activeTab, setActiveTab] = useState<'blog' | 'art'>('blog');
+  const [artProjects, setArtProjects] = useState<ArtProject[]>([]);
+  const [editingProject, setEditingProject] = useState<ArtProject | null>(null);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [artStats, setArtStats] = useState<ArtProjectStats>({
+    total: 0,
+    planning: 0,
+    in_progress: 0,
+    completed: 0,
+    on_hold: 0,
+  });
+
   const postsPerPage = 10;
 
   useEffect(() => {
-    fetchPosts();
-  }, [currentPage]);
+    if (activeTab === 'blog') {
+      fetchPosts();
+    } else {
+      fetchArtProjects();
+    }
+  }, [currentPage, activeTab]);
 
+  // Existing blog functions
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -47,7 +75,6 @@ export default function AdminDashboard() {
       setTotalCount(result.totalCount);
       setTotalPages(Math.ceil(result.totalCount / postsPerPage));
 
-      // Calculate stats
       const published = result.posts.filter(
         p => p.status === 'published'
       ).length;
@@ -60,6 +87,27 @@ export default function AdminDashboard() {
         drafts,
         archived,
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // New art project functions
+  const fetchArtProjects = async () => {
+    try {
+      setLoading(true);
+      const result = await artProjectService.getAllProjects(
+        currentPage,
+        postsPerPage
+      );
+      setArtProjects(result.projects);
+      setTotalCount(result.totalCount);
+      setTotalPages(Math.ceil(result.totalCount / postsPerPage));
+
+      const statsResult = await artProjectService.getStats();
+      setArtStats(statsResult);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -80,6 +128,25 @@ export default function AdminDashboard() {
       } catch (err) {
         alert(
           'Error deleting post: ' +
+            (err instanceof Error ? err.message : 'Unknown error')
+        );
+      }
+    }
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    if (
+      confirm(
+        'Are you sure you want to delete this project? This action cannot be undone.'
+      )
+    ) {
+      try {
+        await artProjectService.deleteProject(id);
+        setArtProjects(artProjects.filter(project => project.id !== id));
+        setTotalCount(prev => prev - 1);
+      } catch (err) {
+        alert(
+          'Error deleting project: ' +
             (err instanceof Error ? err.message : 'Unknown error')
         );
       }
@@ -114,14 +181,36 @@ export default function AdminDashboard() {
     setEditingPost(null);
   };
 
+  const handleSaveProject = (savedProject: ArtProject) => {
+    if (editingProject) {
+      setArtProjects(
+        artProjects.map(project =>
+          project.id === savedProject.id ? savedProject : project
+        )
+      );
+    } else {
+      setArtProjects([savedProject, ...artProjects]);
+      setTotalCount(prev => prev + 1);
+    }
+    setShowProjectForm(false);
+    setEditingProject(null);
+  };
+
   const handleCancel = () => {
     setShowForm(false);
     setEditingPost(null);
+    setShowProjectForm(false);
+    setEditingProject(null);
   };
 
   const handleEdit = (post: BlogPost) => {
     setEditingPost(post);
     setShowForm(true);
+  };
+
+  const handleEditProject = (project: ArtProject) => {
+    setEditingProject(project);
+    setShowProjectForm(true);
   };
 
   const handlePageChange = (page: number) => {
@@ -136,7 +225,7 @@ export default function AdminDashboard() {
     });
   };
 
-  if (loading && posts.length === 0) {
+  if (loading && posts.length === 0 && artProjects.length === 0) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner} />
@@ -148,165 +237,357 @@ export default function AdminDashboard() {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {!showForm ? (
+        {!showForm && !showProjectForm ? (
           <>
             <header className={styles.header}>
               <div className={styles.headerContent}>
-                <h1 className={styles.title}>Blog Administration</h1>
+                <h1 className={styles.title}>
+                  {activeTab === 'blog'
+                    ? 'Blog Administration'
+                    : 'Art Project Administration'}
+                </h1>
                 <p className={styles.subtitle}>
-                  Manage your blog posts and content
+                  {activeTab === 'blog'
+                    ? 'Manage your blog posts and content'
+                    : 'Manage your art projects and creative works'}
                 </p>
               </div>
               <div className={styles.headerActions}>
                 <button
-                  onClick={() => setShowForm(true)}
+                  onClick={() =>
+                    activeTab === 'blog'
+                      ? setShowForm(true)
+                      : setShowProjectForm(true)
+                  }
                   className={styles.createButton}
                 >
                   <FiPlus />
-                  Create New Post
+                  {activeTab === 'blog'
+                    ? 'Create New Post'
+                    : 'Create New Project'}
                 </button>
-                <Link href='/blog' className={styles.viewBlogButton}>
+                <Link
+                  href={activeTab === 'blog' ? '/blog' : '/progress'}
+                  className={styles.viewBlogButton}
+                >
                   <FiEye />
-                  View Blog
+                  {activeTab === 'blog' ? 'View Blog' : 'View Progress'}
                 </Link>
               </div>
             </header>
 
+            {/* Tab Navigation */}
+            <div
+              style={{
+                display: 'flex',
+                gap: '10px',
+                marginBottom: '20px',
+                borderBottom: '1px solid #ccc',
+              }}
+            >
+              <button
+                onClick={() => {
+                  setActiveTab('blog');
+                  setCurrentPage(1);
+                }}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderBottom:
+                    activeTab === 'blog'
+                      ? '2px solid #007bff'
+                      : '2px solid transparent',
+                  background: 'transparent',
+                  color: activeTab === 'blog' ? '#007bff' : '#666',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'blog' ? 'bold' : 'normal',
+                }}
+              >
+                Blog Posts
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('art');
+                  setCurrentPage(1);
+                }}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderBottom:
+                    activeTab === 'art'
+                      ? '2px solid #007bff'
+                      : '2px solid transparent',
+                  background: 'transparent',
+                  color: activeTab === 'art' ? '#007bff' : '#666',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'art' ? 'bold' : 'normal',
+                }}
+              >
+                Art Projects
+              </button>
+            </div>
+
             {error && (
               <div className={styles.error}>
-                <h3>Error Loading Posts</h3>
+                <h3>
+                  Error Loading {activeTab === 'blog' ? 'Posts' : 'Projects'}
+                </h3>
                 <p>{error}</p>
-                <button onClick={fetchPosts} className={styles.retryButton}>
+                <button
+                  onClick={activeTab === 'blog' ? fetchPosts : fetchArtProjects}
+                  className={styles.retryButton}
+                >
                   <FiRefreshCw />
                   Try Again
                 </button>
               </div>
             )}
 
+            {/* Stats Grid */}
             <div className={styles.statsGrid}>
-              <div className={styles.statCard}>
-                <div className={styles.statIcon}>
-                  <HiOutlineDocumentText />
-                </div>
-                <div className={styles.statContent}>
-                  <h3>Total Posts</h3>
-                  <p>{stats.total}</p>
-                </div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statIcon}>
-                  <HiOutlineCheckCircle />
-                </div>
-                <div className={styles.statContent}>
-                  <h3>Published</h3>
-                  <p>{stats.published}</p>
-                </div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statIcon}>
-                  <HiOutlineDocument />
-                </div>
-                <div className={styles.statContent}>
-                  <h3>Drafts</h3>
-                  <p>{stats.drafts}</p>
-                </div>
-              </div>
-              <div className={styles.statCard}>
-                <div className={styles.statIcon}>
-                  <HiOutlineArchive />
-                </div>
-                <div className={styles.statContent}>
-                  <h3>Archived</h3>
-                  <p>{stats.archived}</p>
-                </div>
-              </div>
+              {activeTab === 'blog' ? (
+                <>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineDocumentText />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Total Posts</h3>
+                      <p>{stats.total}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineCheckCircle />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Published</h3>
+                      <p>{stats.published}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineDocument />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Drafts</h3>
+                      <p>{stats.drafts}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineArchive />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Archived</h3>
+                      <p>{stats.archived}</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineDocumentText />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Total Projects</h3>
+                      <p>{artStats.total}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineCheckCircle />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Completed</h3>
+                      <p>{artStats.completed}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineDocument />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>In Progress</h3>
+                      <p>{artStats.in_progress}</p>
+                    </div>
+                  </div>
+                  <div className={styles.statCard}>
+                    <div className={styles.statIcon}>
+                      <HiOutlineArchive />
+                    </div>
+                    <div className={styles.statContent}>
+                      <h3>Planning</h3>
+                      <p>{artStats.planning}</p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
+            {/* Content Table */}
             <div className={styles.tableContainer}>
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Post</th>
-                    <th>Status</th>
-                    <th>Images</th>
-                    <th>Views</th>
-                    <th>Created</th>
-                    <th>Updated</th>
-                    <th>Actions</th>
+                    {activeTab === 'blog' ? (
+                      <>
+                        <th>Post</th>
+                        <th>Status</th>
+                        <th>Images</th>
+                        <th>Views</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                      </>
+                    ) : (
+                      <>
+                        <th>Project</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Images</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
-                  {posts.map(post => (
-                    <tr key={post.id}>
-                      <td>
-                        <div className={styles.postInfo}>
-                          <h4 className={styles.postTitle}>{post.title}</h4>
-                          {post.excerpt && (
-                            <p className={styles.postExcerpt}>
-                              {post.excerpt.substring(0, 100)}...
-                            </p>
-                          )}
-                          {post.tags && post.tags.length > 0 && (
-                            <div className={styles.postTags}>
-                              {post.tags.slice(0, 3).map(tag => (
-                                <span key={tag} className={styles.postTag}>
-                                  {tag}
-                                </span>
-                              ))}
+                  {activeTab === 'blog'
+                    ? posts.map(post => (
+                        <tr key={post.id}>
+                          <td>
+                            <div className={styles.postInfo}>
+                              <h4 className={styles.postTitle}>{post.title}</h4>
+                              {post.excerpt && (
+                                <p className={styles.postExcerpt}>
+                                  {post.excerpt.substring(0, 100)}...
+                                </p>
+                              )}
+                              {post.tags && post.tags.length > 0 && (
+                                <div className={styles.postTags}>
+                                  {post.tags.slice(0, 3).map(tag => (
+                                    <span key={tag} className={styles.postTag}>
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => handleStatusToggle(post)}
-                          className={`${styles.statusBadge} ${
-                            styles[post.status]
-                          }`}
-                        >
-                          {post.status}
-                        </button>
-                      </td>
-                      <td>
-                        <span className={styles.imageCount}>
-                          {post.images?.length || 0}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={styles.viewCount}>
-                          {post.view_count || 0}
-                        </span>
-                      </td>
-                      <td>{formatDate(post.created_at)}</td>
-                      <td>{formatDate(post.updated_at)}</td>
-                      <td>
-                        <div className={styles.actionButtons}>
-                          <Link
-                            href={`/blog/${post.slug}`}
-                            className={styles.viewButton}
-                            target='_blank'
-                            title='View post'
-                          >
-                            <FiEye />
-                          </Link>
-                          <button
-                            onClick={() => handleEdit(post)}
-                            className={styles.editButton}
-                            title='Edit post'
-                          >
-                            <FiEdit3 />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(post.id)}
-                            className={styles.deleteButton}
-                            title='Delete post'
-                          >
-                            <FiTrash2 />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => handleStatusToggle(post)}
+                              className={`${styles.statusBadge} ${
+                                styles[post.status]
+                              }`}
+                            >
+                              {post.status}
+                            </button>
+                          </td>
+                          <td>
+                            <span className={styles.imageCount}>
+                              {post.images?.length || 0}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={styles.viewCount}>
+                              {post.view_count || 0}
+                            </span>
+                          </td>
+                          <td>{formatDate(post.created_at)}</td>
+                          <td>{formatDate(post.updated_at)}</td>
+                          <td>
+                            <div className={styles.actionButtons}>
+                              <Link
+                                href={`/blog/${post.slug}`}
+                                className={styles.viewButton}
+                                target='_blank'
+                                title='View post'
+                              >
+                                <FiEye />
+                              </Link>
+                              <button
+                                onClick={() => handleEdit(post)}
+                                className={styles.editButton}
+                                title='Edit post'
+                              >
+                                <FiEdit3 />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(post.id)}
+                                className={styles.deleteButton}
+                                title='Delete post'
+                              >
+                                <FiTrash2 />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : artProjects.map(project => (
+                        <tr key={project.id}>
+                          <td>
+                            <div className={styles.postInfo}>
+                              <h4 className={styles.postTitle}>
+                                {project.title}
+                              </h4>
+                              {project.description && (
+                                <p className={styles.postExcerpt}>
+                                  {project.description.substring(0, 100)}...
+                                </p>
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <span
+                              className={`${styles.statusBadge} ${styles[project.status.replace('_', '')]}`}
+                            >
+                              {project.status.replace('_', ' ')}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={styles.percentage}>
+                              {project.completion}%
+                            </span>
+                          </td>
+                          <td>
+                            <span className={styles.imageCount}>
+                              {project.images?.length || 0}
+                            </span>
+                          </td>
+                          <td>{formatDate(project.created_at)}</td>
+                          <td>{formatDate(project.updated_at)}</td>
+                          <td>
+                            <div className={styles.actionButtons}>
+                              <Link
+                                href='/artistic/progress'
+                                className={styles.viewButton}
+                                target='_blank'
+                                title='View progress'
+                              >
+                                <FiEye />
+                              </Link>
+                              <button
+                                onClick={() => handleEditProject(project)}
+                                className={styles.editButton}
+                                title='Edit project'
+                              >
+                                <FiEdit3 />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteProject(project.id)}
+                                className={styles.deleteButton}
+                                title='Delete project'
+                              >
+                                <FiTrash2 />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
@@ -319,10 +600,16 @@ export default function AdminDashboard() {
               onPageChange={handlePageChange}
             />
           </>
-        ) : (
+        ) : activeTab === 'blog' ? (
           <BlogPostForm
             post={editingPost}
             onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        ) : (
+          <ArtProjectForm
+            project={editingProject}
+            onSave={handleSaveProject}
             onCancel={handleCancel}
           />
         )}

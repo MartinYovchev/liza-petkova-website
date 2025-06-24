@@ -2,78 +2,51 @@
 
 import Title from '@/components/Typography/Title';
 import styles from './Progress.module.scss';
-import { projects } from './constants';
 import Text from '@/components/Typography/Text';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/Button/Button';
 import Image from 'next/image';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-
-interface UploadedImage {
-  url: string;
-  description: string;
-}
+import { artProjectService, ArtProject } from '@/lib/artService';
 
 export default function Progress() {
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
-  const [projectImages, setProjectImages] = useState<
-    Record<number, UploadedImage[]>
-  >({});
+  const [projects, setProjects] = useState<ArtProject[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Simulate fetching uploaded images for each project
   useEffect(() => {
-    const fetchProjectImages = async () => {
-      // This would typically fetch from your API/database
-      const mockUploadedImages: Record<number, UploadedImage[]> = {
-        0: [
-          {
-            url: '/uploads/1749386535043_cod.svg',
-            description: 'Digital art piece #1',
-          },
-          {
-            url: '/uploads/1749386977912_1111.jpg',
-            description: 'Work in progress sketch',
-          },
-          {
-            url: '/uploads/1749387174501_check.png',
-            description: 'Concept validation',
-          },
-        ],
-        1: [
-          {
-            url: '/uploads/1749387251459_check.png',
-            description: 'Photography concept',
-          },
-        ],
-        2: [
-          {
-            url: '/uploads/1749386535043_cod.svg',
-            description: 'Sculpture design',
-          },
-          {
-            url: '/uploads/1749386977912_1111.jpg',
-            description: 'Final installation',
-          },
-        ],
-      };
-      setProjectImages(mockUploadedImages);
+    const fetchProjects = async () => {
+      try {
+        const result = await artProjectService.getAllProjects(1, 50); // Get all projects
+        setProjects(result.projects);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchProjectImages();
+    fetchProjects();
   }, []);
 
   const toggleProject = (index: number) => {
     setExpandedProject(expandedProject === index ? null : index);
   };
 
-  const getProjectImages = (projectIndex: number) => {
-    const uploaded = projectImages[projectIndex] || [];
-    const original = projects[projectIndex]?.images || [];
-
-    // Combine uploaded and original images, limit to 5 maximum
-    const allImages = [...uploaded, ...original];
-    return allImages.slice(0, 5);
-  };
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <Title level='h1' className={styles.title}>
+            Creative Progress
+          </Title>
+          <Text as='p' className={styles.subtitle}>
+            Loading projects...
+          </Text>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -88,10 +61,10 @@ export default function Progress() {
 
       <div className={styles.timeline}>
         {projects.map((project, index) => {
-          const images = getProjectImages(index);
+          const images = project.images || [];
 
           return (
-            <div key={index} className={styles.project}>
+            <div key={project.id} className={styles.project}>
               <div className={styles.projectHeader}>
                 <Title level='h3' className={styles.projectTitle}>
                   {project.title}
@@ -99,10 +72,10 @@ export default function Progress() {
                 <Text
                   as='span'
                   className={`${styles.status} ${
-                    styles[project.status.toLowerCase().replace(' ', '')]
+                    styles[project.status.toLowerCase().replace('_', '')]
                   }`}
                 >
-                  {project.status}
+                  {project.status.replace('_', ' ')}
                 </Text>
               </div>
 
@@ -154,19 +127,19 @@ export default function Progress() {
                     <div className={styles.expandedContent}>
                       <div className={styles.imageGrid}>
                         {images.map((image, imgIndex) => (
-                          <div key={imgIndex} className={styles.imageContainer}>
+                          <div key={image.id} className={styles.imageContainer}>
                             <div className={styles.imageWrapper}>
                               <Image
-                                src={image.url}
+                                src={image.url || '/placeholder.svg'}
                                 alt={image.description}
                                 className={styles.projectImage}
                                 width={400}
                                 height={300}
                                 style={{ objectFit: 'cover' }}
                                 onError={e => {
-                                  // Fallback for broken images
                                   const target = e.target as HTMLImageElement;
-                                  target.src = '/placeholder.jpg';
+                                  target.src =
+                                    '/placeholder.svg?height=300&width=400&text=Image+Not+Found';
                                 }}
                               />
                             </div>
