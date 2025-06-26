@@ -61,3 +61,34 @@ export type PaginationProps = {
   totalItems?: number;
   itemsPerPage?: number;
 };
+
+export type User = {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
+  createdAt: Date;
+};
+
+export type AuthState = {
+  user: User | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+};
+
+export type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
+export type SignupCredentials = LoginCredentials & {
+  name: string;
+  inviteCode: string;
+};
+
+export type Session = {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  expiresAt: Date;
+};

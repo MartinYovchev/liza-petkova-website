@@ -22,6 +22,7 @@ import {
   ArtProjectStats,
 } from '@/lib/artService';
 import ArtProjectForm from '@/components/ArtProjectForm/ArtProjectForm';
+import { AccountLayout } from '@/components/Account/AccountLayout';
 
 export default function AdminDashboard() {
   // Existing blog state
@@ -235,385 +236,396 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        {!showForm && !showProjectForm ? (
-          <>
-            <header className={styles.header}>
-              <div className={styles.headerContent}>
-                <h1 className={styles.title}>
-                  {activeTab === 'blog'
-                    ? 'Blog Administration'
-                    : 'Art Project Administration'}
-                </h1>
-                <p className={styles.subtitle}>
-                  {activeTab === 'blog'
-                    ? 'Manage your blog posts and content'
-                    : 'Manage your art projects and creative works'}
-                </p>
-              </div>
-              <div className={styles.headerActions}>
-                <button
-                  onClick={() =>
-                    activeTab === 'blog'
-                      ? setShowForm(true)
-                      : setShowProjectForm(true)
-                  }
-                  className={styles.createButton}
-                >
-                  <FiPlus />
-                  {activeTab === 'blog'
-                    ? 'Create New Post'
-                    : 'Create New Project'}
-                </button>
-                <Link
-                  href={activeTab === 'blog' ? '/blog' : '/progress'}
-                  className={styles.viewBlogButton}
-                >
-                  <FiEye />
-                  {activeTab === 'blog' ? 'View Blog' : 'View Progress'}
-                </Link>
-              </div>
-            </header>
+    <AccountLayout>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          {!showForm && !showProjectForm ? (
+            <>
+              <header className={styles.header}>
+                <div className={styles.headerContent}>
+                  <h1 className={styles.title}>
+                    {activeTab === 'blog'
+                      ? 'Blog Administration'
+                      : 'Art Project Administration'}
+                  </h1>
+                  <p className={styles.subtitle}>
+                    {activeTab === 'blog'
+                      ? 'Manage your blog posts and content'
+                      : 'Manage your art projects and creative works'}
+                  </p>
+                </div>
+                <div className={styles.headerActions}>
+                  <button
+                    onClick={() =>
+                      activeTab === 'blog'
+                        ? setShowForm(true)
+                        : setShowProjectForm(true)
+                    }
+                    className={styles.createButton}
+                  >
+                    <FiPlus />
+                    {activeTab === 'blog'
+                      ? 'Create New Post'
+                      : 'Create New Project'}
+                  </button>
+                  <Link
+                    href={activeTab === 'blog' ? '/blog' : '/progress'}
+                    className={styles.viewBlogButton}
+                  >
+                    <FiEye />
+                    {activeTab === 'blog' ? 'View Blog' : 'View Progress'}
+                  </Link>
+                </div>
+              </header>
 
-            {/* Tab Navigation */}
-            <div
-              style={{
-                display: 'flex',
-                gap: '10px',
-                marginBottom: '20px',
-                borderBottom: '1px solid #ccc',
-              }}
-            >
-              <button
-                onClick={() => {
-                  setActiveTab('blog');
-                  setCurrentPage(1);
-                }}
+              {/* Tab Navigation */}
+              <div
                 style={{
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderBottom:
-                    activeTab === 'blog'
-                      ? '2px solid #007bff'
-                      : '2px solid transparent',
-                  background: 'transparent',
-                  color: activeTab === 'blog' ? '#007bff' : '#666',
-                  cursor: 'pointer',
-                  fontWeight: activeTab === 'blog' ? 'bold' : 'normal',
+                  display: 'flex',
+                  gap: '10px',
+                  marginBottom: '20px',
+                  borderBottom: '1px solid #ccc',
                 }}
               >
-                Blog Posts
-              </button>
-              <button
-                onClick={() => {
-                  setActiveTab('art');
-                  setCurrentPage(1);
-                }}
-                style={{
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderBottom:
-                    activeTab === 'art'
-                      ? '2px solid #007bff'
-                      : '2px solid transparent',
-                  background: 'transparent',
-                  color: activeTab === 'art' ? '#007bff' : '#666',
-                  cursor: 'pointer',
-                  fontWeight: activeTab === 'art' ? 'bold' : 'normal',
-                }}
-              >
-                Art Projects
-              </button>
-            </div>
-
-            {error && (
-              <div className={styles.error}>
-                <h3>
-                  Error Loading {activeTab === 'blog' ? 'Posts' : 'Projects'}
-                </h3>
-                <p>{error}</p>
                 <button
-                  onClick={activeTab === 'blog' ? fetchPosts : fetchArtProjects}
-                  className={styles.retryButton}
+                  onClick={() => {
+                    setActiveTab('blog');
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    border: 'none',
+                    borderBottom:
+                      activeTab === 'blog'
+                        ? '2px solid #007bff'
+                        : '2px solid transparent',
+                    background: 'transparent',
+                    color: activeTab === 'blog' ? '#007bff' : '#666',
+                    cursor: 'pointer',
+                    fontWeight: activeTab === 'blog' ? 'bold' : 'normal',
+                  }}
                 >
-                  <FiRefreshCw />
-                  Try Again
+                  Blog Posts
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('art');
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    border: 'none',
+                    borderBottom:
+                      activeTab === 'art'
+                        ? '2px solid #007bff'
+                        : '2px solid transparent',
+                    background: 'transparent',
+                    color: activeTab === 'art' ? '#007bff' : '#666',
+                    cursor: 'pointer',
+                    fontWeight: activeTab === 'art' ? 'bold' : 'normal',
+                  }}
+                >
+                  Art Projects
                 </button>
               </div>
-            )}
 
-            {/* Stats Grid */}
-            <div className={styles.statsGrid}>
-              {activeTab === 'blog' ? (
-                <>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineDocumentText />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Total Posts</h3>
-                      <p>{stats.total}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineCheckCircle />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Published</h3>
-                      <p>{stats.published}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineDocument />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Drafts</h3>
-                      <p>{stats.drafts}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineArchive />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Archived</h3>
-                      <p>{stats.archived}</p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineDocumentText />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Total Projects</h3>
-                      <p>{artStats.total}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineCheckCircle />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Completed</h3>
-                      <p>{artStats.completed}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineDocument />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>In Progress</h3>
-                      <p>{artStats.in_progress}</p>
-                    </div>
-                  </div>
-                  <div className={styles.statCard}>
-                    <div className={styles.statIcon}>
-                      <HiOutlineArchive />
-                    </div>
-                    <div className={styles.statContent}>
-                      <h3>Planning</h3>
-                      <p>{artStats.planning}</p>
-                    </div>
-                  </div>
-                </>
+              {error && (
+                <div className={styles.error}>
+                  <h3>
+                    Error Loading {activeTab === 'blog' ? 'Posts' : 'Projects'}
+                  </h3>
+                  <p>{error}</p>
+                  <button
+                    onClick={
+                      activeTab === 'blog' ? fetchPosts : fetchArtProjects
+                    }
+                    className={styles.retryButton}
+                  >
+                    <FiRefreshCw />
+                    Try Again
+                  </button>
+                </div>
               )}
-            </div>
 
-            {/* Content Table */}
-            <div className={styles.tableContainer}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    {activeTab === 'blog' ? (
-                      <>
-                        <th>Post</th>
-                        <th>Status</th>
-                        <th>Images</th>
-                        <th>Views</th>
-                        <th>Created</th>
-                        <th>Updated</th>
-                        <th>Actions</th>
-                      </>
-                    ) : (
-                      <>
-                        <th>Project</th>
-                        <th>Status</th>
-                        <th>Progress</th>
-                        <th>Images</th>
-                        <th>Created</th>
-                        <th>Updated</th>
-                        <th>Actions</th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {activeTab === 'blog'
-                    ? posts.map(post => (
-                        <tr key={post.id}>
-                          <td>
-                            <div className={styles.postInfo}>
-                              <h4 className={styles.postTitle}>{post.title}</h4>
-                              {post.excerpt && (
-                                <p className={styles.postExcerpt}>
-                                  {post.excerpt.substring(0, 100)}...
-                                </p>
-                              )}
-                              {post.tags && post.tags.length > 0 && (
-                                <div className={styles.postTags}>
-                                  {post.tags.slice(0, 3).map(tag => (
-                                    <span key={tag} className={styles.postTag}>
-                                      {tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </td>
-                          <td>
-                            <button
-                              onClick={() => handleStatusToggle(post)}
-                              className={`${styles.statusBadge} ${
-                                styles[post.status]
-                              }`}
-                            >
-                              {post.status}
-                            </button>
-                          </td>
-                          <td>
-                            <span className={styles.imageCount}>
-                              {post.images?.length || 0}
-                            </span>
-                          </td>
-                          <td>
-                            <span className={styles.viewCount}>
-                              {post.view_count || 0}
-                            </span>
-                          </td>
-                          <td>{formatDate(post.created_at)}</td>
-                          <td>{formatDate(post.updated_at)}</td>
-                          <td>
-                            <div className={styles.actionButtons}>
-                              <Link
-                                href={`/blog/${post.slug}`}
-                                className={styles.viewButton}
-                                target='_blank'
-                                title='View post'
-                              >
-                                <FiEye />
-                              </Link>
-                              <button
-                                onClick={() => handleEdit(post)}
-                                className={styles.editButton}
-                                title='Edit post'
-                              >
-                                <FiEdit3 />
-                              </button>
-                              <button
-                                onClick={() => handleDelete(post.id)}
-                                className={styles.deleteButton}
-                                title='Delete post'
-                              >
-                                <FiTrash2 />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    : artProjects.map(project => (
-                        <tr key={project.id}>
-                          <td>
-                            <div className={styles.postInfo}>
-                              <h4 className={styles.postTitle}>
-                                {project.title}
-                              </h4>
-                              {project.description && (
-                                <p className={styles.postExcerpt}>
-                                  {project.description.substring(0, 100)}...
-                                </p>
-                              )}
-                            </div>
-                          </td>
-                          <td>
-                            <span
-                              className={`${styles.statusBadge} ${styles[project.status.replace('_', '')]}`}
-                            >
-                              {project.status.replace('_', ' ')}
-                            </span>
-                          </td>
-                          <td>
-                            <span className={styles.percentage}>
-                              {project.completion}%
-                            </span>
-                          </td>
-                          <td>
-                            <span className={styles.imageCount}>
-                              {project.images?.length || 0}
-                            </span>
-                          </td>
-                          <td>{formatDate(project.created_at)}</td>
-                          <td>{formatDate(project.updated_at)}</td>
-                          <td>
-                            <div className={styles.actionButtons}>
-                              <Link
-                                href='/artistic/progress'
-                                className={styles.viewButton}
-                                target='_blank'
-                                title='View progress'
-                              >
-                                <FiEye />
-                              </Link>
-                              <button
-                                onClick={() => handleEditProject(project)}
-                                className={styles.editButton}
-                                title='Edit project'
-                              >
-                                <FiEdit3 />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteProject(project.id)}
-                                className={styles.deleteButton}
-                                title='Delete project'
-                              >
-                                <FiTrash2 />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                </tbody>
-              </table>
-            </div>
+              {/* Stats Grid */}
+              <div className={styles.statsGrid}>
+                {activeTab === 'blog' ? (
+                  <>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineDocumentText />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Total Posts</h3>
+                        <p>{stats.total}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineCheckCircle />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Published</h3>
+                        <p>{stats.published}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineDocument />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Drafts</h3>
+                        <p>{stats.drafts}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineArchive />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Archived</h3>
+                        <p>{stats.archived}</p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineDocumentText />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Total Projects</h3>
+                        <p>{artStats.total}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineCheckCircle />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Completed</h3>
+                        <p>{artStats.completed}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineDocument />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>In Progress</h3>
+                        <p>{artStats.in_progress}</p>
+                      </div>
+                    </div>
+                    <div className={styles.statCard}>
+                      <div className={styles.statIcon}>
+                        <HiOutlineArchive />
+                      </div>
+                      <div className={styles.statContent}>
+                        <h3>Planning</h3>
+                        <p>{artStats.planning}</p>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={totalCount}
-              itemsPerPage={postsPerPage}
-              onPageChange={handlePageChange}
+              {/* Content Table */}
+              <div className={styles.tableContainer}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      {activeTab === 'blog' ? (
+                        <>
+                          <th>Post</th>
+                          <th>Status</th>
+                          <th>Images</th>
+                          <th>Views</th>
+                          <th>Created</th>
+                          <th>Updated</th>
+                          <th>Actions</th>
+                        </>
+                      ) : (
+                        <>
+                          <th>Project</th>
+                          <th>Status</th>
+                          <th>Progress</th>
+                          <th>Images</th>
+                          <th>Created</th>
+                          <th>Updated</th>
+                          <th>Actions</th>
+                        </>
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activeTab === 'blog'
+                      ? posts.map(post => (
+                          <tr key={post.id}>
+                            <td>
+                              <div className={styles.postInfo}>
+                                <h4 className={styles.postTitle}>
+                                  {post.title}
+                                </h4>
+                                {post.excerpt && (
+                                  <p className={styles.postExcerpt}>
+                                    {post.excerpt.substring(0, 100)}...
+                                  </p>
+                                )}
+                                {post.tags && post.tags.length > 0 && (
+                                  <div className={styles.postTags}>
+                                    {post.tags.slice(0, 3).map(tag => (
+                                      <span
+                                        key={tag}
+                                        className={styles.postTag}
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <button
+                                onClick={() => handleStatusToggle(post)}
+                                className={`${styles.statusBadge} ${
+                                  styles[post.status]
+                                }`}
+                              >
+                                {post.status}
+                              </button>
+                            </td>
+                            <td>
+                              <span className={styles.imageCount}>
+                                {post.images?.length || 0}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={styles.viewCount}>
+                                {post.view_count || 0}
+                              </span>
+                            </td>
+                            <td>{formatDate(post.created_at)}</td>
+                            <td>{formatDate(post.updated_at)}</td>
+                            <td>
+                              <div className={styles.actionButtons}>
+                                <Link
+                                  href={`/blog/${post.slug}`}
+                                  className={styles.viewButton}
+                                  target='_blank'
+                                  title='View post'
+                                >
+                                  <FiEye />
+                                </Link>
+                                <button
+                                  onClick={() => handleEdit(post)}
+                                  className={styles.editButton}
+                                  title='Edit post'
+                                >
+                                  <FiEdit3 />
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(post.id)}
+                                  className={styles.deleteButton}
+                                  title='Delete post'
+                                >
+                                  <FiTrash2 />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      : artProjects.map(project => (
+                          <tr key={project.id}>
+                            <td>
+                              <div className={styles.postInfo}>
+                                <h4 className={styles.postTitle}>
+                                  {project.title}
+                                </h4>
+                                {project.description && (
+                                  <p className={styles.postExcerpt}>
+                                    {project.description.substring(0, 100)}...
+                                  </p>
+                                )}
+                              </div>
+                            </td>
+                            <td>
+                              <span
+                                className={`${styles.statusBadge} ${styles[project.status.replace('_', '')]}`}
+                              >
+                                {project.status.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={styles.percentage}>
+                                {project.completion}%
+                              </span>
+                            </td>
+                            <td>
+                              <span className={styles.imageCount}>
+                                {project.images?.length || 0}
+                              </span>
+                            </td>
+                            <td>{formatDate(project.created_at)}</td>
+                            <td>{formatDate(project.updated_at)}</td>
+                            <td>
+                              <div className={styles.actionButtons}>
+                                <Link
+                                  href='/artistic/progress'
+                                  className={styles.viewButton}
+                                  target='_blank'
+                                  title='View progress'
+                                >
+                                  <FiEye />
+                                </Link>
+                                <button
+                                  onClick={() => handleEditProject(project)}
+                                  className={styles.editButton}
+                                  title='Edit project'
+                                >
+                                  <FiEdit3 />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteProject(project.id)
+                                  }
+                                  className={styles.deleteButton}
+                                  title='Delete project'
+                                >
+                                  <FiTrash2 />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalCount}
+                itemsPerPage={postsPerPage}
+                onPageChange={handlePageChange}
+              />
+            </>
+          ) : activeTab === 'blog' ? (
+            <BlogPostForm
+              post={editingPost}
+              onSave={handleSave}
+              onCancel={handleCancel}
             />
-          </>
-        ) : activeTab === 'blog' ? (
-          <BlogPostForm
-            post={editingPost}
-            onSave={handleSave}
-            onCancel={handleCancel}
-          />
-        ) : (
-          <ArtProjectForm
-            project={editingProject}
-            onSave={handleSaveProject}
-            onCancel={handleCancel}
-          />
-        )}
+          ) : (
+            <ArtProjectForm
+              project={editingProject}
+              onSave={handleSaveProject}
+              onCancel={handleCancel}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </AccountLayout>
   );
 }
