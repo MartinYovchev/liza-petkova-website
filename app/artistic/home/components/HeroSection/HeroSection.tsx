@@ -60,7 +60,7 @@ export default function HeroSection({
           <FadeIn delay={0.6} direction='up'>
             <div className={styles.heroDescription}>
               {description.map((paragraph, index) => (
-                <Text as='p' key={index} className='mb-4 text-gray-700'>
+                <Text as='p' key={index} className={styles.heroDescription}>
                   {paragraph}
                 </Text>
               ))}

@@ -54,12 +54,6 @@ export default function OfferingSection({
                     </li>
                   ))}
                 </ul>
-                <div className={styles.servicePrice}>
-                  <div className={styles.price}>{offering.price}</div>
-                  <Link href={offering.link} className={styles.serviceLink}>
-                    Learn More
-                  </Link>
-                </div>
               </div>
             </FadeIn>
           ))}

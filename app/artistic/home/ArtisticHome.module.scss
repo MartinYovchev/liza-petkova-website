@@ -64,15 +64,19 @@
 
 .heroSubtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
   color: #6b4c93;
   line-height: 1.6;
   margin-bottom: 2rem;
+  font-family: cursive;
   max-width: 500px;
 }
 
 .heroDescription {
+  font-weight: 600;
   margin-bottom: 2rem;
   color: #4a154b;
+  font-family: monospace;
   line-height: 1.6;
 }
 

@@ -105,9 +105,6 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
                 personalized quote.
               </Text>
               <div className={styles.ctaButtons}>
-                <Link href='/contact' className={styles.primaryButton}>
-                  Get Information
-                </Link>
                 <Link href='/contact' className={styles.secondaryButton}>
                   Contact Us
                 </Link>

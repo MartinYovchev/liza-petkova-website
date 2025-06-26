@@ -40,23 +40,6 @@ export const Sidebar = ({
           ))}
         </div>
       </div>
-
-      <div className={styles.sidebarSection}>
-        <Title level='h3' className={styles.sidebarTitle}>
-          Need Help?
-        </Title>
-        <div className={styles.helpCard}>
-          <div className={styles.helpIcon}>💬</div>
-          <Title level='h4'>Free Consultation</Title>
-          <Text as='p'>
-            Not sure which service you need? Get expert advice from our team.
-          </Text>
-          <Link href='/contact' className={styles.helpButton}>
-            Contact Us
-          </Link>
-        </div>
-      </div>
-
       <div className={styles.sidebarSection}>
         <Title level='h3' className={styles.sidebarTitle}>
           Quick Quote
@@ -69,6 +52,21 @@ export const Sidebar = ({
           </Text>
           <Link href='/contact' className={styles.quoteButton}>
             Request Info
+          </Link>
+        </div>
+      </div>
+      <div className={styles.sidebarSection}>
+        <Title level='h3' className={styles.sidebarTitle}>
+          Need Help?
+        </Title>
+        <div className={styles.helpCard}>
+          <div className={styles.helpIcon}>💬</div>
+          <Title level='h4'>Free Consultation</Title>
+          <Text as='p'>
+            Not sure which service you need? Get expert advice from our team.
+          </Text>
+          <Link href='/contact' className={styles.helpButton}>
+            Contact Us
           </Link>
         </div>
       </div>

@@ -15,11 +15,8 @@ export const CTA = () => {
           artist within you
         </Text>
         <div className={styles.ctaActions}>
-          <Link href='/artistic/contact' className={styles.ctaButton}>
+          <Link href='/contact' className={styles.ctaButton}>
             Book a Discovery Call
-          </Link>
-          <Link href='mailto:natalia@example.com' className={styles.ctaEmail}>
-            ✉️ Send me a message
           </Link>
         </div>
       </div>

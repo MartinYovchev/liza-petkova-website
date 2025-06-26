@@ -26,9 +26,9 @@ export default function TestimonialsSection({
       <div className={styles.testimonials}>
         <div className={styles.testimonialsContent}>
           <RevealText className={styles.sectionHeader} direction='up'>
-            <GradientText className={styles.sectionTitle}>
+            <Title level='h2' className={styles.sectionTitle}>
               Transformation Stories
-            </GradientText>
+            </Title>
           </RevealText>
 
           <div className={styles.testimonialsGrid}>
