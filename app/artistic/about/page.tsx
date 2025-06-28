@@ -1,6 +1,5 @@
 'use client';
-// import { useLanguage } from "../../components/language-context"
-import Link from 'next/link';
+
 import styles from './About.module.scss';
 import { Hero } from './components/Hero';
 import { Values } from './components/Values';
@@ -12,8 +11,6 @@ import { CTA } from './components/CTA';
 import { Layout } from '@/components/Layout/Layout';
 
 export default function ArtisticAbout() {
-  // const { t } = useLanguage()
-
   return (
     <Layout>
       <div className={styles.container}>

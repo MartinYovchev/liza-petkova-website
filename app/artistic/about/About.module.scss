@@ -233,7 +233,9 @@
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
 }
-
+.content {
+  margin: 0 auto;
+}
 .journeyItem:hover {
   transform: translateX(10px);
 }

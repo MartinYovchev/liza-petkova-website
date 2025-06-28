@@ -232,6 +232,7 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   min-height: 23.125rem;
+  max-height: 23.125rem;
 }
 
 .serviceCard:hover {
@@ -481,7 +482,6 @@
 
 .testimonialCard {
   background: rgba(255, 255, 255, 0.95);
-  min-height: 15.625rem;
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);

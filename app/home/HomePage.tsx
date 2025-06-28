@@ -7,8 +7,10 @@ import Image from '@/components/Image/Image';
 import Text from '@/components/Typography/Text';
 import { Button } from '@/components/Button/Button';
 import { useTheme } from '../context/ThemeContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const { setTheme } = useTheme();
 
   return (
@@ -18,9 +20,11 @@ export default function HomePage() {
           <Link href='/professional' className={styles.link}>
             <div className={styles.overlay}>
               <FadeIn delay={0.4} className={styles.content}>
-                <Scale className={styles.title}>Professional website</Scale>
+                <Scale className={styles.title}>
+                  {t('homePageProfessionalTitle')}
+                </Scale>
                 <Text as='p' className={styles.subtitle}>
-                  Find the world of a professional life
+                  {t('homePageProfessionalSubtitle')}
                 </Text>
                 <Button
                   className={styles.cta}
@@ -29,7 +33,7 @@ export default function HomePage() {
                     setTheme('professional');
                   }}
                 >
-                  Go to professional page
+                  {t('homePageProfessionalButton')}
                 </Button>
               </FadeIn>
             </div>
@@ -49,10 +53,12 @@ export default function HomePage() {
           <Link href='/artistic' className={styles.link}>
             <div className={styles.overlay}>
               <FadeIn delay={0.6} className={styles.content}>
-                <Scale className={styles.title}>Artistic website</Scale>
+                <Scale className={styles.title}>
+                  {t('homePageArtisticTitle')}
+                </Scale>
 
                 <Text as='p' className={styles.subtitle}>
-                  Find the world of a artistic life
+                  {t('homePageArtisticSubtitle')}
                 </Text>
                 <Button
                   className={styles.cta}
@@ -61,7 +67,7 @@ export default function HomePage() {
                     setTheme('artistic');
                   }}
                 >
-                  Go to artistic page
+                  {t('homePageArtisticButton')}
                 </Button>
               </FadeIn>
             </div>

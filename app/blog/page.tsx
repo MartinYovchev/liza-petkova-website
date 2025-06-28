@@ -7,8 +7,10 @@ import BlogCard from '../../components/BlogCard/BlogCard';
 import Pagination from '../../components/Pagination/Pagination';
 import styles from './BlogPage.module.scss';
 import { Layout } from '@/components/Layout/Layout';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function BlogPage() {
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,17 +82,15 @@ export default function BlogPage() {
         <div className={styles.container}>
           <header className={styles.header}>
             <div className={styles.headerContent}>
-              <h1 className={styles.title}>Our Blog</h1>
-              <p className={styles.subtitle}>
-                Discover insights, tutorials, and stories from our team
-              </p>
+              <h1 className={styles.title}>{t('blogPageTitle')}</h1>
+              <p className={styles.subtitle}>{t('blogPageSubtitle')}</p>
             </div>
 
             <form onSubmit={handleSearch} className={styles.searchForm}>
               <div className={styles.searchContainer}>
                 <input
                   type='text'
-                  placeholder='Search articles...'
+                  placeholder={t('blogSearchPlaceholder')}
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className={styles.searchInput}
@@ -120,7 +120,7 @@ export default function BlogPage() {
           {/* Featured Posts Section */}
           {!searchQuery && featuredPosts.length > 0 && (
             <section className={styles.featuredSection}>
-              <h2 className={styles.sectionTitle}>Featured Articles</h2>
+              <h2 className={styles.sectionTitle}>{t('blogFeaturedTitle')}</h2>
               <div className={styles.featuredGrid}>
                 {featuredPosts.map(post => (
                   <div key={post.id} className={styles.featuredCard}>
@@ -135,9 +135,14 @@ export default function BlogPage() {
           <section className={styles.mainSection}>
             {searchQuery && (
               <div className={styles.searchResults}>
-                <h2>Search Results for "{searchQuery}"</h2>
+                <h2>
+                  {t('blogSearchResults')} "{searchQuery}"
+                </h2>
                 <p>
-                  {totalCount} article{totalCount !== 1 ? 's' : ''} found
+                  {totalCount}{' '}
+                  {totalCount !== 1
+                    ? t('blogArticlesFound')
+                    : t('blogArticleFound')}
                 </p>
               </div>
             )}
@@ -145,16 +150,16 @@ export default function BlogPage() {
             {loading && (
               <div className={styles.loading}>
                 <div className={styles.spinner} />
-                <p>Loading articles...</p>
+                <p>{t('blogLoadingArticles')}</p>
               </div>
             )}
 
             {error && (
               <div className={styles.error}>
-                <h3>Oops! Something went wrong</h3>
+                <h3>{t('blogErrorTitle')}</h3>
                 <p>{error}</p>
                 <button onClick={fetchPosts} className={styles.retryButton}>
-                  Try Again
+                  {t('blogTryAgain')}
                 </button>
               </div>
             )}
@@ -164,18 +169,18 @@ export default function BlogPage() {
                 {posts.length === 0 ? (
                   <div className={styles.noPosts}>
                     <div className={styles.noPostsIcon}>📝</div>
-                    <h3>No articles found</h3>
+                    <h3>{t('blogNoArticlesTitle')}</h3>
                     <p>
                       {searchQuery
-                        ? `No articles match your search for "${searchQuery}"`
-                        : 'No articles have been published yet.'}
+                        ? `${t('blogNoArticlesSearch')} "${searchQuery}"`
+                        : t('blogNoArticlesDefault')}
                     </p>
                     {searchQuery && (
                       <button
                         onClick={clearSearch}
                         className={styles.clearSearchButton}
                       >
-                        View All Articles
+                        {t('blogViewAllArticles')}
                       </button>
                     )}
                   </div>

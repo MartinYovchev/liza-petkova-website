@@ -4,6 +4,7 @@ import Text from '@/components/Typography/Text';
 import styles from '../../ArtisticHome.module.scss';
 import Title from '@/components/Typography/Title';
 import Link from 'next/link';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export type Offering = {
   title: string;
@@ -18,18 +19,19 @@ export default function OfferingSection({
 }: {
   offeringsData: Offering[];
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.services}>
       <div className={styles.servicesContent}>
         <FadeIn direction='up' className={styles.sectionHeader}>
           <RevealText delay={0.2}>
             <Title level='h2' className={styles.sectionTitle}>
-              Creative Offerings
+              {t('offeringSectionTitle')}
             </Title>
           </RevealText>
           <Text as='p' className={styles.sectionSubtitle}>
-            Transformative experiences tailored to different stages of your
-            creative journey
+            {t('offeringSectionSubtitle')}
           </Text>
         </FadeIn>
 

@@ -8,8 +8,10 @@ import { Button } from '@/components/Button/Button';
 import Image from 'next/image';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { artProjectService, ArtProject } from '@/lib/artService';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function Progress() {
+  const { t } = useTranslation();
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const [projects, setProjects] = useState<ArtProject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,10 +40,10 @@ export default function Progress() {
       <div className={styles.container}>
         <div className={styles.header}>
           <Title level='h1' className={styles.title}>
-            Creative Progress
+            {t('progressPageTitle')}
           </Title>
           <Text as='p' className={styles.subtitle}>
-            Loading projects...
+            {t('progressPageLoading')}
           </Text>
         </div>
       </div>
@@ -52,10 +54,10 @@ export default function Progress() {
     <div className={styles.container}>
       <div className={styles.header}>
         <Title level='h1' className={styles.title}>
-          Creative Progress
+          {t('progressPageTitle')}
         </Title>
         <Text as='p' className={styles.subtitle}>
-          Journey through ongoing artistic endeavors and completed works
+          {t('progressPageSubtitle')}
         </Text>
       </div>
 
@@ -95,7 +97,7 @@ export default function Progress() {
                   ></div>
                 </div>
                 <Text as='span' className={styles.percentage}>
-                  {project.completion}% Complete
+                  {project.completion}% {t('progressComplete')}
                 </Text>
               </div>
 
@@ -107,7 +109,7 @@ export default function Progress() {
                     }`}
                     onClick={() => toggleProject(index)}
                     aria-expanded={expandedProject === index}
-                    aria-label={`${expandedProject === index ? 'Hide' : 'Show'} project images`}
+                    aria-label={`${expandedProject === index ? t('progressHideImages') : t('progressShowImages')}`}
                   >
                     <span className={styles.arrow}>
                       {expandedProject === index ? (
@@ -119,8 +121,11 @@ export default function Progress() {
                   </Button>
 
                   <Text as='p' className={styles.imageCount}>
-                    {images.length} image{images.length !== 1 ? 's' : ''}{' '}
-                    available
+                    {images.length}{' '}
+                    {images.length !== 1
+                      ? t('progressImagePlural')
+                      : t('progressImageSingle')}{' '}
+                    {t('progressAvailable')}
                   </Text>
 
                   {expandedProject === index && (

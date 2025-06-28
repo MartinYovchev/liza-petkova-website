@@ -12,8 +12,10 @@ import styles from './BlogPost.module.scss';
 import { Layout } from '@/components/Layout/Layout';
 import { Loader } from '@/components/Loader/Loader';
 import { FaChevronLeft } from 'react-icons/fa';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function BlogPostPage() {
+  const { t } = useTranslation();
   const params = useParams();
   const slug = params.slug as string;
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -105,10 +107,10 @@ export default function BlogPostPage() {
   if (error) {
     return (
       <div className={styles.error}>
-        <h2>Article Not Found</h2>
+        <h2>{t('blogPostNotFound')}</h2>
         <p>{error}</p>
         <Link href='/blog' className={styles.backLink}>
-          Back to Blog
+          {t('blogBackToBlog')}
         </Link>
       </div>
     );
@@ -117,11 +119,11 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <div className={styles.error}>
-        <h2>Article Not Found</h2>
-        <p>The article you're looking for doesn't exist.</p>
+        <h2>{t('blogPostNotFound')}</h2>
+        <p>{t('blogPostNotFoundMessage')}</p>
         <Link href='/blog' className={styles.backLink}>
           <FaChevronLeft className={styles.backIcon} size={16} />
-          Back to Blog
+          {t('blogBackToBlog')}
         </Link>
       </div>
     );
@@ -137,7 +139,7 @@ export default function BlogPostPage() {
           <nav className={styles.breadcrumb}>
             <Link href='/blog' className={styles.breadcrumbLink}>
               <FaChevronLeft className={styles.backIcon} size={16} />
-              Back to Blog
+              {t('blogBackToBlog')}
             </Link>
           </nav>
 
@@ -147,7 +149,9 @@ export default function BlogPostPage() {
                 {formatDate(post.published_at || post.created_at)}
               </time>
               {post.view_count > 0 && (
-                <span className={styles.views}>{post.view_count} views</span>
+                <span className={styles.views}>
+                  {post.view_count} {t('blogViews')}
+                </span>
               )}
             </div>
 
@@ -171,7 +175,9 @@ export default function BlogPostPage() {
 
             {post.author_name && (
               <div className={styles.author}>
-                <span>By {post.author_name}</span>
+                <span>
+                  {t('blogBy')} {post.author_name}
+                </span>
               </div>
             )}
           </header>
@@ -222,7 +228,7 @@ export default function BlogPostPage() {
 
           {relatedPosts.length > 0 && (
             <section className={styles.relatedSection}>
-              <h2 className={styles.relatedTitle}>Related Articles</h2>
+              <h2 className={styles.relatedTitle}>{t('blogRelatedTitle')}</h2>
               <div className={styles.relatedGrid}>
                 {relatedPosts.map(relatedPost => (
                   <BlogCard key={relatedPost.id} post={relatedPost} />

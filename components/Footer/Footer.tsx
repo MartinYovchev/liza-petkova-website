@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import styles from './Footer.module.scss';
 import Title from '../Typography/Title';
 import Text from '../Typography/Text';
 import { useTheme } from '@/app/context/ThemeContext';
+import { useTranslation } from '@/contexts/TranslationContext';
 import {
   FaFacebook,
   FaTwitter,
@@ -72,10 +74,11 @@ const defaultSocialLinks = [
 
 export const Footer = ({
   sections,
-  copyright = `© ${new Date().getFullYear()} Liza's website. All rights reserved. Powered by Martin Yovchev`,
+  copyright,
   socialLinks = defaultSocialLinks,
 }: FooterProps) => {
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
   const toggleSection = (sectionTitle: string) => {
@@ -113,6 +116,45 @@ export const Footer = ({
     setTheme(newTheme);
   };
 
+  // Helper function to replace placeholders in translations
+  const formatTranslation = (
+    template: string,
+    values: Record<string, string | number>
+  ): string => {
+    return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+      return values[key]?.toString() || match;
+    });
+  };
+
+  const currentYear = new Date().getFullYear();
+
+  // Generate translated copyright text
+  const getTranslatedCopyright = () => {
+    if (copyright) {
+      return copyright;
+    }
+
+    const copyrightText = formatTranslation(t('footerCopyright'), {
+      year: currentYear,
+    });
+    const poweredByText = t('poweredBy');
+    const martinYovchevText = t('martinYovchev');
+
+    return (
+      <>
+        {copyrightText} {poweredByText}{' '}
+        <a
+          href='https://www.linkedin.com/in/martin-yovchev-43643928a/'
+          target='_blank'
+          rel='noopener noreferrer'
+          className={styles.martinLink}
+        >
+          {martinYovchevText}
+        </a>
+      </>
+    );
+  };
+
   return (
     <div className={`${styles.footer} ${getThemeClass()}`} role='contentinfo'>
       <div className={styles.container}>
@@ -138,9 +180,7 @@ export const Footer = ({
               </button>
               <div
                 id={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
-                className={`${styles.linkListContainer} ${
-                  openSections[section.title] ? styles.open : ''
-                }`}
+                className={`${styles.linkListContainer} ${openSections[section.title] ? styles.open : ''}`}
               >
                 <ul className={styles.linkList}>
                   {section.links.map(link => (
@@ -177,7 +217,7 @@ export const Footer = ({
 
         <div className={styles.bottom}>
           <Text as='p' className={styles.copyright}>
-            {copyright}
+            {getTranslatedCopyright()}
           </Text>
         </div>
       </div>

@@ -48,6 +48,7 @@
     "react-resizable-panels": "2.1.7",
     "react-syntax-highlighter": "15.6.1",
     "recharts": "2.15.0",
+    "resend": "^4.6.0",
     "sass": "1.89.1",
     "sonner": "1.7.1",
     "tailwind-merge": "2.5.5",

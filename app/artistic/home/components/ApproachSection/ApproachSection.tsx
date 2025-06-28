@@ -3,22 +3,24 @@ import RevealText from '@/components/Animations/RevealText/RevealText';
 import Text from '@/components/Typography/Text';
 import styles from '../../ArtisticHome.module.scss';
 import Title from '@/components/Typography/Title';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export default function ApproachSection({
   approachItems,
 }: {
   approachItems: any[];
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.services}>
       <div className={styles.servicesContent}>
         <FadeIn direction='up' className={styles.sectionHeader}>
           <RevealText delay={0.2} className={styles.sectionTitle}>
-            <Title level='h2'>My Creative Approach</Title>
+            <Title level='h2'>{t('approachSectionTitle')}</Title>
           </RevealText>
           <Text as='p' className={styles.sectionSubtitle}>
-            A holistic methodology that nurtures your creative spirit while
-            developing your technical skills
+            {t('approachSectionSubtitle')}
           </Text>
         </FadeIn>
 

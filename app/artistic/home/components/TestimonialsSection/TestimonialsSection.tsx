@@ -6,6 +6,7 @@ import { GradientText } from '@/components/Animations/GradientText/GradientText'
 import RevealText from '@/components/Animations/RevealText/RevealText';
 import ParallaxSection from '@/components/Animations/ParallaxSection/ParallaxSection';
 import styles from './TestimonialsSection.module.scss';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface Testimonial {
   quote: string;
@@ -21,13 +22,15 @@ interface TestimonialsSectionProps {
 export default function TestimonialsSection({
   testimonials,
 }: TestimonialsSectionProps) {
+  const { t } = useTranslation();
+
   return (
     <ParallaxSection speed={0.15}>
       <div className={styles.testimonials}>
         <div className={styles.testimonialsContent}>
           <RevealText className={styles.sectionHeader} direction='up'>
             <Title level='h2' className={styles.sectionTitle}>
-              Transformation Stories
+              {t('testimonialsSectionTitle')}
             </Title>
           </RevealText>
 

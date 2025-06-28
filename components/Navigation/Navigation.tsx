@@ -8,9 +8,9 @@ import { useTheme } from '@/app/context/ThemeContext';
 import { IoMdContacts } from 'react-icons/io';
 import { FaBriefcase, FaBars, FaTimes, FaBook } from 'react-icons/fa';
 import { TbPencilExclamation } from 'react-icons/tb';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 type NavigationProps = {
-  logo?: React.ReactNode;
   style?: 'artistic' | 'professional' | 'default';
   navItems?: {
     label: string;
@@ -19,11 +19,11 @@ type NavigationProps = {
   }[];
 };
 
-export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
+export const Navigation = ({ style = 'default' }: NavigationProps) => {
   const { theme, setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -67,7 +67,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           label: (
             <div className={styles.professionalLabel}>
               <FaBriefcase />
-              Professional
+              {t('professionalPageNavigation')}
             </div>
           ),
           href: '/professional',
@@ -77,7 +77,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           label: (
             <div className={styles.artisticLabel}>
               <TbPencilExclamation />
-              Artistic
+              {t('artisticPageNavigation')}
             </div>
           ),
           href: '/artistic',
@@ -87,7 +87,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           label: (
             <div className={styles.blogLabel}>
               <FaBook />
-              Blog
+              {t('blogPageNavigation')}
             </div>
           ),
           href: '/blog',
@@ -97,7 +97,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
           label: (
             <div className={styles.contactLabel}>
               <IoMdContacts />
-              Contact
+              {t('contactPageNavigation')}
             </div>
           ),
           href: '/contact',
@@ -106,23 +106,55 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
       ];
     } else if (style === 'artistic') {
       return [
-        { label: 'Home', href: '/artistic', style: 'artistic' },
-        { label: 'Progress', href: '/artistic/progress', style: 'artistic' },
-        { label: 'About', href: '/artistic/about', style: 'artistic' },
-        { label: 'Blog', href: '/blog', style: 'artistic' },
-        { label: 'Contact', href: '/contact', style: 'artistic' },
+        {
+          label: t('firstPageNavigation'),
+          href: '/artistic',
+          style: 'artistic',
+        },
+        {
+          label: t('processPageNavigation'),
+          href: '/artistic/progress',
+          style: 'artistic',
+        },
+        {
+          label: t('aboutPageNavigation'),
+          href: '/artistic/about',
+          style: 'artistic',
+        },
+        { label: t('blogPageNavigation'), href: '/blog', style: 'artistic' },
+        {
+          label: t('contactPageNavigation'),
+          href: '/contact',
+          style: 'artistic',
+        },
       ];
     } else if (style === 'professional') {
       return [
-        { label: 'Home', href: '/professional', style: 'professional' },
         {
-          label: 'Services',
+          label: t('firstPageNavigation'),
+          href: '/professional',
+          style: 'professional',
+        },
+        {
+          label: t('servicesPageNavigation'),
           href: '/professional/services',
           style: 'professional',
         },
-        { label: 'About', href: '/professional/about', style: 'professional' },
-        { label: 'Blog', href: '/blog', style: 'professional' },
-        { label: 'Contact', href: '/contact', style: 'professional' },
+        {
+          label: t('aboutPageNavigation'),
+          href: '/professional/about',
+          style: 'professional',
+        },
+        {
+          label: t('blogPageNavigation'),
+          href: '/blog',
+          style: 'professional',
+        },
+        {
+          label: t('contactPageNavigation'),
+          href: '/contact',
+          style: 'professional',
+        },
       ];
     }
   })();
@@ -163,7 +195,7 @@ export const Navigation = ({ logo, style = 'default' }: NavigationProps) => {
             onClick={handleLogoClick}
             className={`${styles.logo} ${getTextStyle()}`}
           >
-            Liza's Website
+            {t('homePageNavigation')}
           </Link>
 
           {/* Desktop Navigation */}

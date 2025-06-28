@@ -2,39 +2,26 @@ import Title from '@/components/Typography/Title';
 import styles from '../About.module.scss';
 import Text from '@/components/Typography/Text';
 import Image from 'next/image';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 export const Philosophy = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.philosophy}>
       <div className={styles.philosophyContent}>
         <div className={styles.philosophyLeft}>
           <Title level='h2' className={styles.sectionTitle}>
-            My Creative Philosophy
+            {t('aboutPhilosophyTitle')}
           </Title>
           <div className={styles.philosophyText}>
-            <Text as='p'>
-              I believe that creativity is not a luxury or a talent reserved for
-              the few—it's a fundamental human capacity that we all possess. My
-              role is not to teach you how to be creative, but to help you
-              remember and reconnect with the creative being you already are.
-            </Text>
-            <Text as='p'>
-              Through my work, I've discovered that the most profound
-              transformations happen when we approach creativity with curiosity
-              rather than judgment, with play rather than pressure. When we
-              create from a place of authenticity and joy, magic happens.
-            </Text>
-            <Text as='p'>
-              Every person I work with teaches me something new about the
-              infinite ways creativity can manifest. This reciprocal learning is
-              what makes this work so deeply fulfilling for me.
-            </Text>
+            <Text as='p'>{t('aboutPhilosophyDesc1')}</Text>
+            <Text as='p'>{t('aboutPhilosophyDesc2')}</Text>
+            <Text as='p'>{t('aboutPhilosophyDesc3')}</Text>
           </div>
           <blockquote className={styles.quote}>
-            "The creative process is a spiritual path. This adventure is about
-            us, about the deep self, the composer in all of us, waiting to be
-            released."
-            <cite>- Julia Cameron</cite>
+            {t('aboutPhilosophyQuote')}
+            <cite>{t('aboutPhilosophyQuoteAuthor')}</cite>
           </blockquote>
         </div>
         <div className={styles.philosophyRight}>

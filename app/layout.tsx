@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from './context/ThemeContext';
 import { LoadingProvider } from '@/contexts/LoadingContext';
+import { TranslationProvider } from '@/contexts/TranslationContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,7 +27,11 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider>
-          <LoadingProvider>{children}</LoadingProvider>
+          <LoadingProvider>
+            <TranslationProvider defaultLanguage='bg'>
+              {children}
+            </TranslationProvider>
+          </LoadingProvider>
         </ThemeProvider>
       </body>
     </html>

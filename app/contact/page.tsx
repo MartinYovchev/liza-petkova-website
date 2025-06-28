@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import { useState } from 'react';
 import styles from './Contact.module.scss';
 import Title from '@/components/Typography/Title';
@@ -15,6 +16,7 @@ import {
 } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { Layout } from '@/components/Layout/Layout';
+import { useTranslation } from '@/contexts/TranslationContext';
 
 interface FormData {
   name: string;
@@ -31,6 +33,8 @@ interface FormErrors {
 }
 
 export default function ContactPage() {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -45,25 +49,25 @@ export default function ContactPage() {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = t('contactFormNameRequired');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('contactFormEmailRequired');
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
     ) {
-      newErrors.email = 'Invalid email address';
+      newErrors.email = t('contactFormEmailInvalid');
     }
 
     if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
+      newErrors.subject = t('contactFormSubjectRequired');
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
+      newErrors.message = t('contactFormMessageRequired');
     } else if (formData.message.length < 10) {
-      newErrors.message = 'Message must be at least 10 characters';
+      newErrors.message = t('contactFormMessageTooShort');
     }
 
     setErrors(newErrors);
@@ -97,19 +101,38 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Submitting form data:', formData);
 
-      console.log('Form submitted:', formData);
-
-      toast.success('Message sent successfully!');
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+
+      console.log('Response status:', response.status);
+
+      const result = await response.json();
+      console.log('Response data:', result);
+
+      if (response.ok) {
+        toast.success(t('contactFormSuccessMessage'));
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        console.error('Server error:', result);
+        throw new Error(result.error || 'Failed to send message');
+      }
     } catch (error) {
-      toast.error('Failed to send message. Please try again.');
+      console.error('Contact form error:', error);
+      toast.error(
+        `${t('contactFormErrorMessage')} ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -121,14 +144,10 @@ export default function ContactPage() {
         <div className={styles.contentWrapper}>
           <div className={styles.headerSection}>
             <Title level='h1' className={styles.title}>
-              Get in Touch
+              {t('contactPageTitle')}
             </Title>
             <div className={styles.description}>
-              <Text as='p'>
-                Have a question or want to work together? We'd love to hear from
-                you. Fill out the form below and we'll get back to you as soon
-                as possible.
-              </Text>
+              <Text as='p'>{t('contactPageDescription')}</Text>
             </div>
           </div>
 
@@ -136,24 +155,29 @@ export default function ContactPage() {
             <div className={styles.contactInfo}>
               <div className={styles.infoCard}>
                 <FiMapPin className={styles.infoIcon} />
-                <Title level='h3'>Our Location</Title>
+                <Title level='h3'>{t('contactLocationTitle')}</Title>
                 <Text as='p'>
-                  123 Business Street, Suite 100
-                  <br />
-                  New York, NY 10001
+                  {t('contactLocationAddress')
+                    .split('\n')
+                    .map((line, index) => (
+                      <span key={index}>
+                        {line}
+                        {index === 0 && <br />}
+                      </span>
+                    ))}
                 </Text>
               </div>
 
               <div className={styles.infoCard}>
                 <FiPhone className={styles.infoIcon} />
-                <Title level='h3'>Phone Number</Title>
-                <Text as='p'>+1 (555) 123-4567</Text>
+                <Title level='h3'>{t('contactPhoneTitle')}</Title>
+                <Text as='p'>{t('contactPhoneNumber')}</Text>
               </div>
 
               <div className={styles.infoCard}>
                 <FiMail className={styles.infoIcon} />
-                <Title level='h3'>Email Address</Title>
-                <Text as='p'>contact@yourcompany.com</Text>
+                <Title level='h3'>{t('contactEmailTitle')}</Title>
+                <Text as='p'>{t('contactEmailAddress')}</Text>
               </div>
             </div>
 
@@ -165,12 +189,10 @@ export default function ContactPage() {
                     type='text'
                     id='name'
                     name='name'
-                    className={`${styles.input} ${
-                      errors.name ? styles.inputError : ''
-                    }`}
+                    className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder='Your Name'
+                    placeholder={t('contactFormNamePlaceholder')}
                   />
                 </div>
                 {errors.name && (
@@ -185,12 +207,10 @@ export default function ContactPage() {
                     type='email'
                     id='email'
                     name='email'
-                    className={`${styles.input} ${
-                      errors.email ? styles.inputError : ''
-                    }`}
+                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder='Your Email'
+                    placeholder={t('contactFormEmailPlaceholder')}
                   />
                 </div>
                 {errors.email && (
@@ -205,12 +225,10 @@ export default function ContactPage() {
                     type='text'
                     id='subject'
                     name='subject'
-                    className={`${styles.input} ${
-                      errors.subject ? styles.inputError : ''
-                    }`}
+                    className={`${styles.input} ${errors.subject ? styles.inputError : ''}`}
                     value={formData.subject}
                     onChange={handleChange}
-                    placeholder='Subject'
+                    placeholder={t('contactFormSubjectPlaceholder')}
                   />
                 </div>
                 {errors.subject && (
@@ -226,12 +244,10 @@ export default function ContactPage() {
                   <textarea
                     id='message'
                     name='message'
-                    className={`${styles.textarea} ${
-                      errors.message ? styles.inputError : ''
-                    }`}
+                    className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder='Your Message'
+                    placeholder={t('contactFormMessagePlaceholder')}
                   />
                 </div>
                 {errors.message && (
@@ -248,12 +264,12 @@ export default function ContactPage() {
               >
                 {isSubmitting ? (
                   <Text as='p' className={styles.loadingSpinner}>
-                    Sending...
+                    {t('contactFormSending')}
                   </Text>
                 ) : (
                   <>
                     <FiSend className={styles.buttonIcon} />
-                    Send Message
+                    {t('contactFormSendButton')}
                   </>
                 )}
               </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useTranslation } from '@/contexts/TranslationContext';
 import styles from './LanguageSwitcher.module.scss';
 
 interface Language {
@@ -12,37 +12,30 @@ const languages: Language[] = [
   { code: 'en', name: 'EN', flag: '🇺🇸' },
 ];
 
-interface LanguageSwitcherProps {
+type LanguageSwitcherProps = {
   currentLanguage?: 'bg' | 'en';
   onLanguageChange?: (language: 'bg' | 'en') => void;
   className?: string;
-}
+};
 
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
-  currentLanguage = 'en',
-  onLanguageChange,
   className = '',
 }) => {
-  const [selectedLang, setSelectedLang] = useState<'bg' | 'en'>(
-    currentLanguage
-  );
+  const { language, setLanguage } = useTranslation();
 
   const handleLanguageChange = (langCode: 'bg' | 'en') => {
-    setSelectedLang(langCode);
-    onLanguageChange?.(langCode);
+    setLanguage(langCode);
   };
 
   return (
     <div className={`${styles.languageSwitcher} ${className}`}>
       <div
-        className={`${styles.slider} ${selectedLang === 'bg' ? styles.sliderBg : styles.sliderEn}`}
+        className={`${styles.slider} ${language === 'bg' ? styles.sliderBg : styles.sliderEn}`}
       />
       {languages.map(lang => (
         <button
           key={lang.code}
-          className={`${styles.langOption} ${
-            selectedLang === lang.code ? styles.active : ''
-          }`}
+          className={`${styles.langOption} ${language === lang.code ? styles.active : ''}`}
           onClick={() => handleLanguageChange(lang.code)}
           aria-label={`Switch to ${lang.name}`}
         >
