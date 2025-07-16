@@ -23,6 +23,13 @@ import {
 } from '@/lib/artService';
 import ArtProjectForm from '@/components/ArtProjectForm/ArtProjectForm';
 import { AccountLayout } from '@/components/Account/AccountLayout';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
+import { Button } from '@/components/Button/Button';
+import { Loader } from '@/components/Loader/Loader';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 
 export default function AdminDashboard() {
   // Existing blog state
@@ -227,12 +234,7 @@ export default function AdminDashboard() {
   };
 
   if (loading && posts.length === 0 && artProjects.length === 0) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.spinner} />
-        <p>Loading dashboard...</p>
-      </div>
-    );
+    return <Loader isLoading={loading} />;
   }
 
   return (
@@ -241,388 +243,474 @@ export default function AdminDashboard() {
         <div className={styles.container}>
           {!showForm && !showProjectForm ? (
             <>
-              <header className={styles.header}>
-                <div className={styles.headerContent}>
-                  <h1 className={styles.title}>
-                    {activeTab === 'blog'
-                      ? 'Blog Administration'
-                      : 'Art Project Administration'}
-                  </h1>
-                  <p className={styles.subtitle}>
-                    {activeTab === 'blog'
-                      ? 'Manage your blog posts and content'
-                      : 'Manage your art projects and creative works'}
-                  </p>
-                </div>
-                <div className={styles.headerActions}>
-                  <button
-                    onClick={() =>
-                      activeTab === 'blog'
-                        ? setShowForm(true)
-                        : setShowProjectForm(true)
-                    }
-                    className={styles.createButton}
-                  >
-                    <FiPlus />
-                    {activeTab === 'blog'
-                      ? 'Create New Post'
-                      : 'Create New Project'}
-                  </button>
-                  <Link
-                    href={activeTab === 'blog' ? '/blog' : '/progress'}
-                    className={styles.viewBlogButton}
-                  >
-                    <FiEye />
-                    {activeTab === 'blog' ? 'View Blog' : 'View Progress'}
-                  </Link>
-                </div>
-              </header>
+              <FadeIn delay={0.2}>
+                <header className={styles.header}>
+                  <div className={styles.headerContent}>
+                    <Title level='h1' className={styles.title}>
+                      {activeTab === 'blog'
+                        ? 'Blog Administration'
+                        : 'Art Project Administration'}
+                    </Title>
+                    <Text className={styles.subtitle}>
+                      {activeTab === 'blog'
+                        ? 'Manage your blog posts and content'
+                        : 'Manage your art projects and creative works'}
+                    </Text>
+                  </div>
+                  <div className={styles.headerActions}>
+                    <HoverScale scale={1.05}>
+                      <Button
+                        onClick={() =>
+                          activeTab === 'blog'
+                            ? setShowForm(true)
+                            : setShowProjectForm(true)
+                        }
+                        variant='primary'
+                        className={styles.createButton}
+                      >
+                        <FiPlus />
+                        {activeTab === 'blog'
+                          ? 'Create New Post'
+                          : 'Create New Project'}
+                      </Button>
+                    </HoverScale>
+                    <HoverScale scale={1.05}>
+                      <Button
+                        href={activeTab === 'blog' ? '/blog' : '/progress'}
+                        variant='secondary'
+                        className={styles.viewBlogButton}
+                      >
+                        <FiEye />
+                        {activeTab === 'blog' ? 'View Blog' : 'View Progress'}
+                      </Button>
+                    </HoverScale>
+                  </div>
+                </header>
+              </FadeIn>
 
               {/* Tab Navigation */}
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '10px',
-                  marginBottom: '20px',
-                  borderBottom: '1px solid #ccc',
-                }}
-              >
-                <button
-                  onClick={() => {
-                    setActiveTab('blog');
-                    setCurrentPage(1);
-                  }}
+              <FadeIn delay={0.3}>
+                <div
                   style={{
-                    padding: '10px 20px',
-                    border: 'none',
-                    borderBottom:
-                      activeTab === 'blog'
-                        ? '2px solid #007bff'
-                        : '2px solid transparent',
-                    background: 'transparent',
-                    color: activeTab === 'blog' ? '#007bff' : '#666',
-                    cursor: 'pointer',
-                    fontWeight: activeTab === 'blog' ? 'bold' : 'normal',
+                    display: 'flex',
+                    gap: '10px',
+                    marginBottom: '20px',
+                    borderBottom: '1px solid #ccc',
                   }}
                 >
-                  Blog Posts
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveTab('art');
-                    setCurrentPage(1);
-                  }}
-                  style={{
-                    padding: '10px 20px',
-                    border: 'none',
-                    borderBottom:
-                      activeTab === 'art'
-                        ? '2px solid #007bff'
-                        : '2px solid transparent',
-                    background: 'transparent',
-                    color: activeTab === 'art' ? '#007bff' : '#666',
-                    cursor: 'pointer',
-                    fontWeight: activeTab === 'art' ? 'bold' : 'normal',
-                  }}
-                >
-                  Art Projects
-                </button>
-              </div>
+                  <HoverScale scale={1.02}>
+                    <Button
+                      onClick={() => {
+                        setActiveTab('blog');
+                        setCurrentPage(1);
+                      }}
+                      variant='outline'
+                      style={{
+                        padding: '10px 20px',
+                        border: 'none',
+                        borderBottom:
+                          activeTab === 'blog'
+                            ? '2px solid #007bff'
+                            : '2px solid transparent',
+                        background: 'transparent',
+                        color: activeTab === 'blog' ? '#007bff' : '#666',
+                        fontWeight: activeTab === 'blog' ? 'bold' : 'normal',
+                      }}
+                    >
+                      Blog Posts
+                    </Button>
+                  </HoverScale>
+                  <HoverScale scale={1.02}>
+                    <Button
+                      onClick={() => {
+                        setActiveTab('art');
+                        setCurrentPage(1);
+                      }}
+                      variant='outline'
+                      style={{
+                        padding: '10px 20px',
+                        border: 'none',
+                        borderBottom:
+                          activeTab === 'art'
+                            ? '2px solid #007bff'
+                            : '2px solid transparent',
+                        background: 'transparent',
+                        color: activeTab === 'art' ? '#007bff' : '#666',
+                        fontWeight: activeTab === 'art' ? 'bold' : 'normal',
+                      }}
+                    >
+                      Art Projects
+                    </Button>
+                  </HoverScale>
+                </div>
+              </FadeIn>
 
               {error && (
-                <div className={styles.error}>
-                  <h3>
-                    Error Loading {activeTab === 'blog' ? 'Posts' : 'Projects'}
-                  </h3>
-                  <p>{error}</p>
-                  <button
-                    onClick={
-                      activeTab === 'blog' ? fetchPosts : fetchArtProjects
-                    }
-                    className={styles.retryButton}
-                  >
-                    <FiRefreshCw />
-                    Try Again
-                  </button>
-                </div>
+                <FadeIn delay={0.4}>
+                  <div className={styles.error}>
+                    <Title level='h2'>
+                      Error Loading{' '}
+                      {activeTab === 'blog' ? 'Posts' : 'Projects'}
+                    </Title>
+                    <Text>{error}</Text>
+                    <Button
+                      onClick={
+                        activeTab === 'blog' ? fetchPosts : fetchArtProjects
+                      }
+                      variant='primary'
+                      className={styles.retryButton}
+                    >
+                      <FiRefreshCw />
+                      Try Again
+                    </Button>
+                  </div>
+                </FadeIn>
               )}
 
               {/* Stats Grid */}
-              <div className={styles.statsGrid}>
-                {activeTab === 'blog' ? (
-                  <>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineDocumentText />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Total Posts</h3>
-                        <p>{stats.total}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineCheckCircle />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Published</h3>
-                        <p>{stats.published}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineDocument />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Drafts</h3>
-                        <p>{stats.drafts}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineArchive />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Archived</h3>
-                        <p>{stats.archived}</p>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineDocumentText />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Total Projects</h3>
-                        <p>{artStats.total}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineCheckCircle />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Completed</h3>
-                        <p>{artStats.completed}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineDocument />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>In Progress</h3>
-                        <p>{artStats.in_progress}</p>
-                      </div>
-                    </div>
-                    <div className={styles.statCard}>
-                      <div className={styles.statIcon}>
-                        <HiOutlineArchive />
-                      </div>
-                      <div className={styles.statContent}>
-                        <h3>Planning</h3>
-                        <p>{artStats.planning}</p>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
+              <FadeIn delay={0.5}>
+                <StaggerChildren staggerDelay={0.1}>
+                  <div className={styles.statsGrid}>
+                    {activeTab === 'blog' ? (
+                      <>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineDocumentText />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Total Posts</Title>
+                              <Text>{stats.total}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineCheckCircle />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Published</Title>
+                              <Text>{stats.published}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineDocument />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Drafts</Title>
+                              <Text>{stats.drafts}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineArchive />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Archived</Title>
+                              <Text>{stats.archived}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                      </>
+                    ) : (
+                      <>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineDocumentText />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Total Projects</Title>
+                              <Text>{artStats.total}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineCheckCircle />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Completed</Title>
+                              <Text>{artStats.completed}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineDocument />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>In Progress</Title>
+                              <Text>{artStats.in_progress}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                        <HoverScale scale={1.03}>
+                          <div className={styles.statCard}>
+                            <div className={styles.statIcon}>
+                              <HiOutlineArchive />
+                            </div>
+                            <div className={styles.statContent}>
+                              <Title level='h3'>Planning</Title>
+                              <Text>{artStats.planning}</Text>
+                            </div>
+                          </div>
+                        </HoverScale>
+                      </>
+                    )}
+                  </div>
+                </StaggerChildren>
+              </FadeIn>
 
               {/* Content Table */}
-              <div className={styles.tableContainer}>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      {activeTab === 'blog' ? (
-                        <>
-                          <th>Post</th>
-                          <th>Status</th>
-                          <th>Images</th>
-                          <th>Views</th>
-                          <th>Created</th>
-                          <th>Updated</th>
-                          <th>Actions</th>
-                        </>
-                      ) : (
-                        <>
-                          <th>Project</th>
-                          <th>Status</th>
-                          <th>Progress</th>
-                          <th>Images</th>
-                          <th>Created</th>
-                          <th>Updated</th>
-                          <th>Actions</th>
-                        </>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activeTab === 'blog'
-                      ? posts.map(post => (
-                          <tr key={post.id}>
-                            <td>
-                              <div className={styles.postInfo}>
-                                <h4 className={styles.postTitle}>
-                                  {post.title}
-                                </h4>
-                                {post.excerpt && (
-                                  <p className={styles.postExcerpt}>
-                                    {post.excerpt.substring(0, 100)}...
-                                  </p>
-                                )}
-                                {post.tags && post.tags.length > 0 && (
-                                  <div className={styles.postTags}>
-                                    {post.tags.slice(0, 3).map(tag => (
-                                      <span
-                                        key={tag}
-                                        className={styles.postTag}
-                                      >
-                                        {tag}
-                                      </span>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                onClick={() => handleStatusToggle(post)}
-                                className={`${styles.statusBadge} ${
-                                  styles[post.status]
-                                }`}
-                              >
-                                {post.status}
-                              </button>
-                            </td>
-                            <td>
-                              <span className={styles.imageCount}>
-                                {post.images?.length || 0}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={styles.viewCount}>
-                                {post.view_count || 0}
-                              </span>
-                            </td>
-                            <td>{formatDate(post.created_at)}</td>
-                            <td>{formatDate(post.updated_at)}</td>
-                            <td>
-                              <div className={styles.actionButtons}>
-                                <Link
-                                  href={`/blog/${post.slug}`}
-                                  className={styles.viewButton}
-                                  target='_blank'
-                                  title='View post'
+              <FadeIn delay={0.6}>
+                <div className={styles.tableContainer}>
+                  <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        {activeTab === 'blog' ? (
+                          <>
+                            <th>Post</th>
+                            <th>Status</th>
+                            <th>Images</th>
+                            <th>Views</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                          </>
+                        ) : (
+                          <>
+                            <th>Project</th>
+                            <th>Status</th>
+                            <th>Progress</th>
+                            <th>Images</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                          </>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {activeTab === 'blog'
+                        ? posts.map(post => (
+                            <tr key={post.id}>
+                              <td>
+                                <div className={styles.postInfo}>
+                                  <Title
+                                    level='h4'
+                                    className={styles.postTitle}
+                                  >
+                                    {post.title}
+                                  </Title>
+                                  {post.excerpt && (
+                                    <Text className={styles.postExcerpt}>
+                                      {post.excerpt.substring(0, 100)}...
+                                    </Text>
+                                  )}
+                                  {post.tags && post.tags.length > 0 && (
+                                    <div className={styles.postTags}>
+                                      {post.tags.slice(0, 3).map(tag => (
+                                        <span
+                                          key={tag}
+                                          className={styles.postTag}
+                                        >
+                                          {tag}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td>
+                                <HoverScale scale={1.05}>
+                                  <Button
+                                    onClick={() => handleStatusToggle(post)}
+                                    variant='outline'
+                                    size='small'
+                                    className={`${styles.statusBadge} ${
+                                      styles[post.status]
+                                    }`}
+                                  >
+                                    {post.status}
+                                  </Button>
+                                </HoverScale>
+                              </td>
+                              <td>
+                                <Text className={styles.imageCount}>
+                                  {post.images?.length || 0}
+                                </Text>
+                              </td>
+                              <td>
+                                <Text className={styles.viewCount}>
+                                  {post.view_count || 0}
+                                </Text>
+                              </td>
+                              <td>
+                                <Text>{formatDate(post.created_at)}</Text>
+                              </td>
+                              <td>
+                                <Text>{formatDate(post.updated_at)}</Text>
+                              </td>
+                              <td>
+                                <div className={styles.actionButtons}>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      href={`/blog/${post.slug}`}
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.viewButton}
+                                      target='_blank'
+                                    >
+                                      <FiEye />
+                                    </Button>
+                                  </HoverScale>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      onClick={() => handleEdit(post)}
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.editButton}
+                                      title='Edit post'
+                                    >
+                                      <FiEdit3 />
+                                    </Button>
+                                  </HoverScale>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      onClick={() => handleDelete(post.id)}
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.deleteButton}
+                                      title='Delete post'
+                                    >
+                                      <FiTrash2 />
+                                    </Button>
+                                  </HoverScale>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        : artProjects.map(project => (
+                            <tr key={project.id}>
+                              <td>
+                                <div className={styles.postInfo}>
+                                  <Title
+                                    level='h4'
+                                    className={styles.postTitle}
+                                  >
+                                    {project.title}
+                                  </Title>
+                                  {project.description && (
+                                    <Text className={styles.postExcerpt}>
+                                      {project.description.substring(0, 100)}...
+                                    </Text>
+                                  )}
+                                </div>
+                              </td>
+                              <td>
+                                <Text
+                                  className={`${styles.statusBadge} ${styles[project.status.replace('_', '')]}`}
                                 >
-                                  <FiEye />
-                                </Link>
-                                <button
-                                  onClick={() => handleEdit(post)}
-                                  className={styles.editButton}
-                                  title='Edit post'
-                                >
-                                  <FiEdit3 />
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(post.id)}
-                                  className={styles.deleteButton}
-                                  title='Delete post'
-                                >
-                                  <FiTrash2 />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      : artProjects.map(project => (
-                          <tr key={project.id}>
-                            <td>
-                              <div className={styles.postInfo}>
-                                <h4 className={styles.postTitle}>
-                                  {project.title}
-                                </h4>
-                                {project.description && (
-                                  <p className={styles.postExcerpt}>
-                                    {project.description.substring(0, 100)}...
-                                  </p>
-                                )}
-                              </div>
-                            </td>
-                            <td>
-                              <span
-                                className={`${styles.statusBadge} ${styles[project.status.replace('_', '')]}`}
-                              >
-                                {project.status.replace('_', ' ')}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={styles.percentage}>
-                                {project.completion}%
-                              </span>
-                            </td>
-                            <td>
-                              <span className={styles.imageCount}>
-                                {project.images?.length || 0}
-                              </span>
-                            </td>
-                            <td>{formatDate(project.created_at)}</td>
-                            <td>{formatDate(project.updated_at)}</td>
-                            <td>
-                              <div className={styles.actionButtons}>
-                                <Link
-                                  href='/artistic/progress'
-                                  className={styles.viewButton}
-                                  target='_blank'
-                                  title='View progress'
-                                >
-                                  <FiEye />
-                                </Link>
-                                <button
-                                  onClick={() => handleEditProject(project)}
-                                  className={styles.editButton}
-                                  title='Edit project'
-                                >
-                                  <FiEdit3 />
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleDeleteProject(project.id)
-                                  }
-                                  className={styles.deleteButton}
-                                  title='Delete project'
-                                >
-                                  <FiTrash2 />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                  </tbody>
-                </table>
-              </div>
+                                  {project.status.replace('_', ' ')}
+                                </Text>
+                              </td>
+                              <td>
+                                <Text className={styles.percentage}>
+                                  {project.completion}%
+                                </Text>
+                              </td>
+                              <td>
+                                <Text className={styles.imageCount}>
+                                  {project.images?.length || 0}
+                                </Text>
+                              </td>
+                              <td>
+                                <Text>{formatDate(project.created_at)}</Text>
+                              </td>
+                              <td>
+                                <Text>{formatDate(project.updated_at)}</Text>
+                              </td>
+                              <td>
+                                <div className={styles.actionButtons}>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      href='/artistic/progress'
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.viewButton}
+                                      target='_blank'
+                                    >
+                                      <FiEye />
+                                    </Button>
+                                  </HoverScale>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      onClick={() => handleEditProject(project)}
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.editButton}
+                                      title='Edit project'
+                                    >
+                                      <FiEdit3 />
+                                    </Button>
+                                  </HoverScale>
+                                  <HoverScale scale={1.1}>
+                                    <Button
+                                      onClick={() =>
+                                        handleDeleteProject(project.id)
+                                      }
+                                      variant='outline'
+                                      size='small'
+                                      className={styles.deleteButton}
+                                      title='Delete project'
+                                    >
+                                      <FiTrash2 />
+                                    </Button>
+                                  </HoverScale>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                    </tbody>
+                  </table>
+                </div>
+              </FadeIn>
 
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalItems={totalCount}
-                itemsPerPage={postsPerPage}
-                onPageChange={handlePageChange}
-              />
+              <FadeIn delay={0.7}>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalCount}
+                  itemsPerPage={postsPerPage}
+                  onPageChange={handlePageChange}
+                />
+              </FadeIn>
             </>
           ) : activeTab === 'blog' ? (
-            <BlogPostForm
-              post={editingPost}
-              onSave={handleSave}
-              onCancel={handleCancel}
-            />
+            <FadeIn>
+              <BlogPostForm
+                post={editingPost}
+                onSave={handleSave}
+                onCancel={handleCancel}
+              />
+            </FadeIn>
           ) : (
-            <ArtProjectForm
-              project={editingProject}
-              onSave={handleSaveProject}
-              onCancel={handleCancel}
-            />
+            <FadeIn>
+              <ArtProjectForm
+                project={editingProject}
+                onSave={handleSaveProject}
+                onCancel={handleCancel}
+              />
+            </FadeIn>
           )}
         </div>
       </div>

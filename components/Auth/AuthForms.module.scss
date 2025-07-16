@@ -1,0 +1,250 @@
+@use '../../styles/theme-constants.scss' as theme;
+
+.container {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.card {
+  background: theme.$white;
+  border-radius: theme.$radius-lg;
+  box-shadow: theme.$shadow-base;
+  border: 1px solid theme.$gray-200;
+}
+
+.header {
+  padding: theme.$spacing-2xl theme.$spacing-2xl 0 theme.$spacing-2xl;
+  text-align: center;
+}
+
+.title {
+  font-size: theme.$text-2xl;
+  font-weight: theme.$font-bold;
+  color: theme.$gray-900;
+  margin-bottom: theme.$spacing-sm;
+}
+
+.description {
+  color: theme.$text-muted;
+  font-size: theme.$text-sm;
+}
+
+.content {
+  padding: theme.$spacing-2xl;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: theme.$spacing-lg;
+}
+
+// Accessibility improvements
+.fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: theme.$spacing-lg;
+
+  &:disabled {
+    opacity: 0.7;
+  }
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: theme.$spacing-sm;
+}
+
+.label {
+  font-size: theme.$text-sm;
+  font-weight: theme.$font-medium;
+  color: theme.$gray-700;
+}
+
+.input {
+  width: 100%;
+  padding: theme.$input-padding;
+  border: theme.$input-border;
+  border-radius: theme.$radius-md;
+  font-size: theme.$text-sm;
+  transition:
+    theme.$transition-colors,
+    box-shadow theme.$duration-fast theme.$ease-in-out;
+
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &:disabled {
+    background-color: theme.$gray-50;
+    color: theme.$text-muted;
+    cursor: not-allowed;
+  }
+}
+
+.passwordContainer {
+  position: relative;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: theme.$spacing-sm;
+  top: 50%;
+  transform: translateY(-50%);
+  @include theme.button-reset;
+  padding: theme.$spacing-xs;
+  color: theme.$text-muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: theme.$radius-sm;
+
+  &:hover:not(:disabled) {
+    color: theme.$gray-700;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  @include theme.focus-ring;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.submitButton {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: theme.$white;
+  border: none;
+  padding: theme.$spacing-md theme.$spacing-lg;
+  border-radius: theme.$radius-md;
+  font-size: theme.$text-sm;
+  font-weight: theme.$font-medium;
+  cursor: pointer;
+  transition: theme.$transition-colors;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: theme.$spacing-sm;
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-color-hover);
+  }
+
+  @include theme.focus-ring(var(--primary-color));
+
+  &:disabled {
+    background-color: theme.$gray-400;
+    cursor: not-allowed;
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: theme.$spacing-lg;
+}
+
+.toggleButton {
+  @include theme.button-reset;
+  color: var(--primary-color);
+  font-size: theme.$text-sm;
+  text-decoration: underline;
+  padding: theme.$spacing-sm;
+  border-radius: theme.$radius-sm;
+
+  &:hover:not(:disabled) {
+    color: var(--primary-color-hover);
+    background-color: rgba(59, 130, 246, 0.05);
+  }
+
+  @include theme.focus-ring(var(--primary-color));
+
+  &:disabled {
+    color: theme.$gray-400;
+    cursor: not-allowed;
+  }
+}
+
+.alert {
+  padding: theme.$spacing-md;
+  border-radius: theme.$radius-md;
+  font-size: theme.$text-sm;
+  margin-bottom: theme.$spacing-lg;
+}
+
+.alertError {
+  background-color: theme.$error-light;
+  border: 1px solid #fecaca;
+  color: theme.$error;
+}
+
+.alertInfo {
+  background-color: theme.$info-light;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+}
+
+.alertWarning {
+  background-color: theme.$warning-light;
+  border: 1px solid #fed7aa;
+  color: theme.$warning;
+}
+
+.attemptsRemaining {
+  margin-top: theme.$spacing-sm;
+  margin-bottom: 0;
+  font-size: theme.$text-xs;
+  opacity: 0.8;
+}
+
+.spinner {
+  width: theme.$spacing-lg;
+  height: theme.$spacing-lg;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: theme.$radius-full;
+  animation: spin 1s linear infinite;
+}
+
+.icon {
+  width: theme.$spacing-lg;
+  height: theme.$spacing-lg;
+}
+
+// Screen reader only content
+.sr-only {
+  @include theme.sr-only;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .input:focus {
+    border-color: theme.$black;
+    box-shadow: 0 0 0 2px theme.$black;
+  }
+
+  .submitButton:focus {
+    box-shadow: 0 0 0 2px theme.$black;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

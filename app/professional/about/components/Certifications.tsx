@@ -13,7 +13,9 @@ export default function Certifications() {
         <div className={styles.certificationsGrid}>
           {CERTIFICATIONS.map((cert, index) => (
             <div key={index} className={styles.certCard}>
-              <div className={styles.certIcon}>{cert.icon}</div>
+              <Text as='div' className={styles.certIcon}>
+                {cert.icon}
+              </Text>
               <Title level='h4' className={styles.certName}>
                 {cert.name}
               </Title>

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getImageUrl } from '../../lib/supabase';
 import { BlogPost } from '../../lib/types';
+import Title from '../Typography/Title';
+import Text from '../Typography/Text';
 import styles from './BlogCard.module.scss';
 
 interface BlogCardProps {
@@ -36,20 +38,20 @@ export default function BlogCard({ post }: BlogCardProps) {
       )}
 
       <div className={styles.content}>
-        <h2 className={styles.title}>
+        <Title level='h2' className={styles.title}>
           <Link href={`/blog/${post.slug}`} className={styles.titleLink}>
             {post.title}
           </Link>
-        </h2>
+        </Title>
 
-        {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
+        {post.excerpt && <Text className={styles.excerpt}>{post.excerpt}</Text>}
 
         {post.tags && post.tags.length > 0 && (
           <div className={styles.tags}>
             {post.tags.slice(0, 3).map(tag => (
-              <span key={tag} className={styles.tag}>
+              <Text key={tag} as='span' className={styles.tag}>
                 {tag}
-              </span>
+              </Text>
             ))}
           </div>
         )}
@@ -71,7 +73,9 @@ export default function BlogCard({ post }: BlogCardProps) {
           </Link>
 
           {post.author_name && (
-            <span className={styles.author}>by {post.author_name}</span>
+            <Text as='span' className={styles.author}>
+              by {post.author_name}
+            </Text>
           )}
         </div>
       </div>

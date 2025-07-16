@@ -24,6 +24,7 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t } = useTranslation();
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -183,7 +184,7 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
 
   return (
     <>
-      <div
+      <header
         className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''} ${
           isMobileMenuOpen ? styles.mobileMenuOpen : ''
         } ${getThemeClass()}`}
@@ -194,21 +195,24 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
             href='/'
             onClick={handleLogoClick}
             className={`${styles.logo} ${getTextStyle()}`}
+            aria-label='Go to homepage'
           >
             {t('homePageNavigation')}
           </Link>
 
           {/* Desktop Navigation */}
-          <div
+          <nav
             className={`${styles.nav} ${styles.desktopNav}`}
             role='navigation'
             aria-label='Main navigation'
           >
-            <ul className={styles.navList}>
+            <ul className={styles.navList} role='menubar'>
               {navItems?.map((item, index) => (
                 <li
                   key={item.href}
+                  className={styles.navItem}
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  role='none'
                 >
                   <Link
                     href={item.href}
@@ -218,20 +222,25 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
                         item.style as 'professional' | 'artistic' | 'default'
                       )
                     }
+                    role='menuitem'
+                    aria-label={`Navigate to ${typeof item.label === 'string' ? item.label : item.href}`}
                   >
                     {item.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Desktop Language Switcher */}
-          <LanguageSwitcher
+          <div
             className={`${styles.languageSwitcher} ${styles.desktopLanguageSwitcher}`}
-            currentLanguage='en'
-            onLanguageChange={() => {}}
-          />
+          >
+            <LanguageSwitcher
+              currentLanguage='en'
+              onLanguageChange={() => {}}
+            />
+          </div>
 
           {/* Burger Menu Button */}
           <button
@@ -239,6 +248,8 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
             onClick={toggleMobileMenu}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
+            aria-controls='mobile-navigation'
+            type='button'
           >
             {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -246,12 +257,17 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
-          <div className={styles.mobileMenuOverlay} onClick={closeMobileMenu}>
+          <div
+            className={styles.mobileMenuOverlay}
+            onClick={closeMobileMenu}
+            aria-hidden='true'
+          >
             {/* Close button on overlay */}
             <button
               className={styles.overlayCloseButton}
               onClick={closeMobileMenu}
               aria-label='Close menu'
+              type='button'
             >
               <FaTimes />
             </button>
@@ -259,19 +275,22 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
         )}
 
         {/* Mobile Navigation */}
-        <div
+        <nav
+          id='mobile-navigation'
           className={`${styles.mobileNav} ${
             isMobileMenuOpen ? styles.mobileNavOpen : ''
           } ${getTextStyle()}`}
           role='navigation'
           aria-label='Mobile navigation'
+          aria-hidden={!isMobileMenuOpen}
         >
-          <ul className={styles.mobileNavList}>
+          <ul className={styles.mobileNavList} role='menu'>
             {navItems?.map((item, index) => (
               <li
                 key={item.href}
                 className={styles.mobileNavItem}
                 style={{ animationDelay: `${index * 0.1}s` }}
+                role='none'
               >
                 <Link
                   href={item.href}
@@ -282,6 +301,9 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
                     );
                     closeMobileMenu();
                   }}
+                  role='menuitem'
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                  aria-label={`Navigate to ${typeof item.label === 'string' ? item.label : item.href}`}
                 >
                   {item.label}
                 </Link>
@@ -296,8 +318,8 @@ export const Navigation = ({ style = 'default' }: NavigationProps) => {
               onLanguageChange={() => {}}
             />
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
     </>
   );
 };

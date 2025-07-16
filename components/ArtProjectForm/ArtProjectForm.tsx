@@ -2,6 +2,9 @@
 
 import { useState, useRef } from 'react';
 import { ArtProject, artProjectService } from '@/lib/artService';
+import Title from '../Typography/Title';
+import Text from '../Typography/Text';
+import { Button } from '../Button/Button';
 import styles from './ArtProjectForm.module.scss';
 
 interface ArtProjectFormProps {
@@ -75,14 +78,16 @@ export default function ArtProjectForm({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>{project ? 'Edit Project' : 'Create New Project'}</h2>
+        <Title level='h2'>
+          {project ? 'Edit Project' : 'Create New Project'}
+        </Title>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
-          <label htmlFor='title' className={styles.label}>
+          <Text as='label' htmlFor='title' className={styles.label}>
             Title
-          </label>
+          </Text>
           <input
             id='title'
             type='text'
@@ -94,9 +99,9 @@ export default function ArtProjectForm({
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor='description' className={styles.label}>
+          <Text as='label' htmlFor='description' className={styles.label}>
             Description
-          </label>
+          </Text>
           <textarea
             id='description'
             value={formData.description}
@@ -109,9 +114,9 @@ export default function ArtProjectForm({
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor='status' className={styles.label}>
+          <Text as='label' htmlFor='status' className={styles.label}>
             Status
-          </label>
+          </Text>
           <select
             id='status'
             value={formData.status}
@@ -128,9 +133,9 @@ export default function ArtProjectForm({
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor='completion' className={styles.label}>
+          <Text as='label' htmlFor='completion' className={styles.label}>
             Completion (%)
-          </label>
+          </Text>
           <input
             id='completion'
             type='number'
@@ -149,7 +154,7 @@ export default function ArtProjectForm({
 
         {project && (
           <div className={styles.imageUploadSection}>
-            <label className={styles.label}>Upload Images</label>
+            <Text className={styles.label}>Upload Images</Text>
             <input
               ref={fileInputRef}
               type='file'
@@ -160,16 +165,18 @@ export default function ArtProjectForm({
               className={styles.fileInput}
             />
             {uploadingImages && (
-              <p className={styles.uploadingText}>
+              <Text as='p' className={styles.uploadingText}>
                 <span className={styles.spinner}></span>
                 Uploading images...
-              </p>
+              </Text>
             )}
 
             {/* Show existing images */}
             {project.images && project.images.length > 0 && (
               <div className={styles.currentImagesSection}>
-                <p className={styles.currentImagesTitle}>Current Images:</p>
+                <Text as='p' className={styles.currentImagesTitle}>
+                  Current Images:
+                </Text>
                 <div className={styles.imagesGrid}>
                   {project.images.map(image => (
                     <div key={image.id} className={styles.imageItem}>
@@ -178,8 +185,10 @@ export default function ArtProjectForm({
                         alt={image.description}
                         className={styles.imagePreview}
                       />
-                      <button
+                      <Button
                         type='button'
+                        variant='outline'
+                        size='small'
                         onClick={async () => {
                           if (confirm('Delete this image?')) {
                             await artProjectService.deleteProjectImage(
@@ -193,7 +202,7 @@ export default function ArtProjectForm({
                         className={styles.deleteImageButton}
                       >
                         ×
-                      </button>
+                      </Button>
                     </div>
                   ))}
                 </div>
@@ -204,23 +213,25 @@ export default function ArtProjectForm({
       </form>
 
       <div className={styles.actions}>
-        <button
+        <Button
           type='button'
+          variant='secondary'
+          size='medium'
           onClick={onCancel}
           disabled={loading}
-          className={`${styles.button} ${styles.secondaryButton}`}
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type='submit'
+          variant='primary'
+          size='medium'
           disabled={loading}
-          className={`${styles.button} ${styles.primaryButton}`}
           onClick={handleSubmit}
         >
           {loading && <span className={styles.spinner}></span>}
           {loading ? 'Saving...' : 'Save Project'}
-        </button>
+        </Button>
       </div>
     </div>
   );

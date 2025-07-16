@@ -3,8 +3,8 @@
 import { services } from '../constants';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
+import { Button } from '@/components/Button/Button';
 import Image from '@/components/Image/Image';
-import Link from 'next/link';
 import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
 import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 import styles from './ServiceDetails.module.scss';
@@ -24,9 +24,13 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
           <FadeIn direction='up'>
             <Title level='h2'>Service Not Found</Title>
             <Text as='p'>The requested service could not be found.</Text>
-            <Link href='/professional/services' className={styles.backButton}>
+            <Button
+              href='/professional/services'
+              variant='outline'
+              className={styles.backButton}
+            >
               ← Back to Services
-            </Link>
+            </Button>
           </FadeIn>
         </div>
       </div>
@@ -38,11 +42,19 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
       <div className={styles.container}>
         {/* Breadcrumb */}
         <div className={styles.breadcrumb}>
-          <Link href='/professional/services' className={styles.breadcrumbLink}>
+          <Button
+            href='/professional/services'
+            variant='outline'
+            className={styles.breadcrumbLink}
+          >
             ← Services
-          </Link>
-          <span className={styles.breadcrumbSeparator}>/</span>
-          <span className={styles.breadcrumbCurrent}>{service.title}</span>
+          </Button>
+          <Text as='span' className={styles.breadcrumbSeparator}>
+            /
+          </Text>
+          <Text as='span' className={styles.breadcrumbCurrent}>
+            {service.title}
+          </Text>
         </div>
 
         {/* Hero Section */}
@@ -59,9 +71,9 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
                 {service.description}
               </Text>
               <div className={styles.serviceMeta}>
-                <span className={styles.duration}>
+                <Text as='span' className={styles.duration}>
                   Duration: {service.duration}
-                </span>
+                </Text>
               </div>
             </div>
             <div className={styles.heroImage}>
@@ -87,8 +99,10 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
             <div className={styles.featuresGrid}>
               {service.features.map((feature, index) => (
                 <div key={index} className={styles.featureItem}>
-                  <span className={styles.checkIcon}>✓</span>
-                  <span>{feature}</span>
+                  <Text as='span' className={styles.checkIcon}>
+                    ✓
+                  </Text>
+                  <Text as='span'>{feature}</Text>
                 </div>
               ))}
             </div>
@@ -105,9 +119,13 @@ export default function ServiceDetails({ id }: ServiceDetailsProps) {
                 personalized quote.
               </Text>
               <div className={styles.ctaButtons}>
-                <Link href='/contact' className={styles.secondaryButton}>
+                <Button
+                  href='/contact'
+                  variant='primary'
+                  className={styles.secondaryButton}
+                >
                   Contact Us
-                </Link>
+                </Button>
               </div>
             </div>
           </FadeIn>

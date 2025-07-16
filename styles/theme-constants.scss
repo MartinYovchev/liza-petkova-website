@@ -1,0 +1,358 @@
+// =============================================
+// THEME CONSTANTS & DESIGN SYSTEM
+// =============================================
+// This file contains all color, spacing, typography, and design constants
+// used throughout the component system to maintain consistency and support
+// the dual theme system (artistic/professional/default)
+
+// =============================================
+// 1. COLOR PALETTE
+// =============================================
+
+// Primary Theme Colors
+$primary-default: #007bff;
+$primary-default-hover: #0056b3;
+$primary-default-light: #e3f2fd;
+
+$primary-artistic: #e91e63;
+$primary-artistic-hover: #ad1457;
+$primary-artistic-light: rgba(233, 30, 99, 0.08);
+$primary-artistic-secondary: #ff6b6b;
+$primary-artistic-gradient: linear-gradient(135deg, #ff006e, #9c27b0);
+
+$primary-professional: #1e40af;
+$primary-professional-hover: #1d4ed8;
+$primary-professional-light: rgba(30, 64, 175, 0.08);
+$primary-professional-secondary: #3b82f6;
+$primary-professional-gradient: linear-gradient(135deg, #1e40af, #3b82f6);
+
+// Neutral Colors
+$white: #ffffff;
+$black: #000000;
+$gray-50: #f9fafb;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6c757d;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #2c3e50;
+$gray-900: #111827;
+
+// Text Colors
+$text-primary: #1a202c;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$text-light: #adb5bd;
+
+// Status Colors
+$success: #28a745;
+$success-light: #d4edda;
+$error: #dc3545;
+$error-light: #f8d7da;
+$warning: #d97706;
+$warning-light: #fff3cd;
+$info: #17a2b8;
+$info-light: #d1ecf1;
+
+// Background Colors
+$bg-overlay: rgba(255, 255, 255, 0.95);
+$bg-overlay-dark: rgba(0, 0, 0, 0.5);
+$bg-backdrop: rgba(255, 255, 255, 0.15);
+
+// =============================================
+// 2. THEME GRADIENTS
+// =============================================
+
+// Artistic Theme Gradients
+$gradient-artistic-bg: linear-gradient(
+  135deg,
+  #fce7f3 0%,
+  #f3e8ff 50%,
+  #e0e7ff 100%
+);
+$gradient-artistic-nav: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.95) 0%,
+  rgba(255, 182, 193, 0.3) 50%,
+  rgba(255, 20, 147, 0.15) 100%
+);
+$gradient-artistic-nav-scrolled: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.98) 0%,
+  rgba(255, 182, 193, 0.4) 50%,
+  rgba(255, 20, 147, 0.2) 100%
+);
+$gradient-artistic-button: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+
+// Professional Theme Gradients
+$gradient-professional-bg: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+$gradient-professional-nav: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.95) 0%,
+  rgba(219, 234, 254, 0.6) 50%,
+  rgba(59, 130, 246, 0.2) 100%
+);
+$gradient-professional-nav-scrolled: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.98) 0%,
+  rgba(219, 234, 254, 0.7) 50%,
+  rgba(59, 130, 246, 0.25) 100%
+);
+$gradient-professional-button: linear-gradient(135deg, #1e40af, #3b82f6);
+
+// Utility Gradients
+$gradient-hero: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+$gradient-glass: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.1),
+  rgba(255, 255, 255, 0.05)
+);
+
+// =============================================
+// 3. SPACING SYSTEM
+// =============================================
+
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 0.75rem; // 12px
+$spacing-lg: 1rem; // 16px
+$spacing-xl: 1.25rem; // 20px
+$spacing-2xl: 1.5rem; // 24px
+$spacing-3xl: 2rem; // 32px
+$spacing-4xl: 2.5rem; // 40px
+$spacing-5xl: 3rem; // 48px
+$spacing-6xl: 4rem; // 64px
+
+// =============================================
+// 4. BORDER RADIUS
+// =============================================
+
+$radius-xs: 0.125rem; // 2px
+$radius-sm: 0.25rem; // 4px
+$radius-md: 0.375rem; // 6px
+$radius-lg: 0.5rem; // 8px
+$radius-xl: 0.75rem; // 12px
+$radius-2xl: 1rem; // 16px
+$radius-3xl: 1.5rem; // 24px
+$radius-full: 50%;
+$radius-pill: 50px;
+
+// =============================================
+// 5. TYPOGRAPHY SCALE
+// =============================================
+
+// Font Sizes
+$text-xs: 0.75rem; // 12px
+$text-sm: 0.875rem; // 14px
+$text-base: 1rem; // 16px
+$text-lg: 1.125rem; // 18px
+$text-xl: 1.25rem; // 20px
+$text-2xl: 1.5rem; // 24px
+$text-3xl: 1.875rem; // 30px
+$text-4xl: 2.25rem; // 36px
+$text-5xl: 3rem; // 48px
+$text-6xl: 3.75rem; // 60px
+
+// Font Weights
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+// Line Heights
+$leading-tight: 1.2;
+$leading-snug: 1.3;
+$leading-normal: 1.4;
+$leading-relaxed: 1.5;
+$leading-loose: 1.6;
+
+// Letter Spacing
+$tracking-tight: -0.02em;
+$tracking-normal: 0;
+$tracking-wide: 0.025em;
+$tracking-wider: 0.5px;
+
+// =============================================
+// 6. SHADOWS & ELEVATIONS
+// =============================================
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-base:
+  0 1px 3px 0 rgba(0, 0, 0, 0.1),
+  0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-md:
+  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg:
+  0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl:
+  0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// Custom Shadows
+$shadow-button: 0 4px 12px rgba(0, 123, 255, 0.3);
+$shadow-button-artistic: 0 4px 12px rgba(233, 30, 99, 0.3);
+$shadow-button-professional: 0 4px 12px rgba(30, 64, 175, 0.3);
+$shadow-nav: 0 2px 20px rgba(0, 0, 0, 0.08);
+$shadow-card-hover: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+// =============================================
+// 7. ANIMATION & TRANSITIONS
+// =============================================
+
+// Transition Durations
+$duration-fast: 0.15s;
+$duration-normal: 0.2s;
+$duration-medium: 0.3s;
+$duration-slow: 0.4s;
+$duration-slower: 0.5s;
+
+// Easing Functions
+$ease-out: ease-out;
+$ease-in-out: ease-in-out;
+$ease-bounce: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+// Common Transitions
+$transition-colors:
+  color $duration-medium $ease-in-out,
+  background-color $duration-medium $ease-in-out,
+  border-color $duration-medium $ease-in-out;
+$transition-transform: transform $duration-normal $ease-in-out;
+$transition-all: all $duration-medium $ease-in-out;
+$transition-opacity: opacity $duration-normal $ease-out;
+
+// Transform Scales
+$scale-hover: 1.02;
+$scale-hover-md: 1.05;
+$scale-hover-lg: 1.1;
+$scale-press: 0.98;
+
+// =============================================
+// 8. RESPONSIVE BREAKPOINTS
+// =============================================
+
+$screen-xs: 480px;
+$screen-sm: 640px;
+$screen-md: 768px;
+$screen-lg: 1024px;
+$screen-xl: 1280px;
+$screen-2xl: 1536px;
+
+// =============================================
+// 9. Z-INDEX SCALE
+// =============================================
+
+$z-dropdown: 10;
+$z-modal: 100;
+$z-popover: 200;
+$z-tooltip: 300;
+$z-toast: 400;
+$z-navigation: 1000;
+$z-overlay: 9999;
+
+// =============================================
+// 10. COMPONENT SPECIFIC CONSTANTS
+// =============================================
+
+// Button Constants
+$button-height-sm: 32px;
+$button-height-md: 40px;
+$button-height-lg: 48px;
+$button-padding-sm: 8px 16px;
+$button-padding-md: 12px 24px;
+$button-padding-lg: 16px 32px;
+
+// Form Constants
+$input-height: 44px;
+$input-padding: 0.75rem 1rem;
+$input-border: 2px solid $gray-200;
+$input-border-focus: 2px solid $primary-default;
+
+// Navigation Constants
+$nav-height: 70px;
+$nav-padding: 1rem 2rem;
+$nav-blur: blur(10px);
+
+// Container Constants
+$container-max-width: 1200px;
+$container-padding: 0 1rem;
+$container-padding-lg: 0 2rem;
+
+// =============================================
+// 11. UTILITY MIXINS
+// =============================================
+
+// Glass Effect
+@mixin glass-effect($opacity: 0.95) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+// Button Reset
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+// Hover Transform
+@mixin hover-lift($scale: $scale-hover) {
+  transition: $transition-transform;
+
+  &:hover {
+    transform: translateY(-2px) scale($scale);
+  }
+}
+
+// Focus Ring
+@mixin focus-ring($color: $primary-default) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+  }
+}
+
+// Truncate Text
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Line Clamp
+@mixin line-clamp($lines: 3) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Absolute Center
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Screen Reader Only
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

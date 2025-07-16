@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import styles from '../ProfessionalAbout.module.scss';
 import Text from '@/components/Typography/Text';
 import Title from '@/components/Typography/Title';
+import Image from '@/components/Image/Image';
 
 export default function Hero() {
   return (

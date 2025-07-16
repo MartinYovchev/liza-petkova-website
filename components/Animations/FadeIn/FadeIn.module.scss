@@ -1,8 +1,10 @@
+@use '../../../styles/theme-constants.scss' as theme;
+
 .fadeIn {
   opacity: 0;
   transition:
-    opacity var(--duration, 0.5s) ease-out,
-    transform var(--duration, 0.5s) ease-out;
+    opacity var(--duration, theme.$duration-slower) theme.$ease-out,
+    transform var(--duration, theme.$duration-slower) theme.$ease-out;
   transition-delay: var(--delay, 0s);
   will-change: opacity, transform;
 }

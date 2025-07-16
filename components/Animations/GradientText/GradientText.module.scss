@@ -5,7 +5,18 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  animation: gradient 10s linear infinite;
+  animation: gradient var(--animation-duration, 10s) linear infinite;
+  animation-play-state: var(--animation-play-state, running);
+  will-change: background-position;
+}
+
+.noAnimation {
+  animation: none;
+  will-change: auto;
+  // Fallback color for when animation is disabled
+  -webkit-text-fill-color: currentColor;
+  background: none;
+  color: inherit;
 }
 
 @keyframes gradient {
@@ -17,5 +28,16 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+// Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .gradientText {
+    animation: none;
+    will-change: auto;
+    -webkit-text-fill-color: currentColor;
+    background: none;
+    color: inherit;
   }
 }

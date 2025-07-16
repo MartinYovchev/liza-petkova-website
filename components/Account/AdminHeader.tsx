@@ -4,6 +4,9 @@ import { useRouter } from 'next/navigation';
 import { logoutAction } from '../../app/actions/auth';
 import { useAuth } from '../../hooks/useAuth';
 import type { User } from '../../lib/types';
+import Title from '../Typography/Title';
+import Text from '../Typography/Text';
+import { Button } from '../Button/Button';
 import styles from './AdminHeader.module.scss';
 
 interface AdminHeaderProps {
@@ -28,8 +31,12 @@ export function AdminHeader({ user }: AdminHeaderProps) {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.leftSection}>
-            <h1 className={styles.title}>Admin Panel</h1>
-            <span className={styles.roleBadge}>{user.role}</span>
+            <Title level='h1' className={styles.title}>
+              Admin Panel
+            </Title>
+            <Text as='span' className={styles.roleBadge}>
+              {user.role}
+            </Text>
           </div>
 
           <div className={styles.rightSection}>
@@ -45,11 +52,17 @@ export function AdminHeader({ user }: AdminHeaderProps) {
                   clipRule='evenodd'
                 />
               </svg>
-              <span>{user.name}</span>
-              <span className={styles.userEmail}>({user.email})</span>
+              <Text as='span'>{user.name}</Text>
+              <Text as='span' className={styles.userEmail}>
+                ({user.email})
+              </Text>
             </div>
 
-            <button onClick={handleLogout} className={styles.logoutButton}>
+            <Button
+              onClick={handleLogout}
+              variant='outline'
+              className={styles.logoutButton}
+            >
               <svg
                 className={styles.icon}
                 fill='none'
@@ -64,7 +77,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
                 />
               </svg>
               Logout
-            </button>
+            </Button>
           </div>
         </div>
       </div>

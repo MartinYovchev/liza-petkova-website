@@ -22,6 +22,7 @@ import {
 type FooterLink = {
   label: string;
   href: string;
+  icon?: React.ReactNode;
 };
 
 type FooterSection = {
@@ -37,6 +38,21 @@ type FooterProps = {
     url: string;
     icon: React.ReactNode;
   }[];
+  // SEO enhancements
+  organizationInfo?: {
+    name: string;
+    description: string;
+    email: string;
+    phone: string;
+    address?: {
+      streetAddress: string;
+      addressLocality: string;
+      addressCountry: string;
+      postalCode: string;
+    };
+    foundingDate?: string;
+    website?: string;
+  };
 };
 
 const defaultSocialLinks = [
@@ -76,6 +92,7 @@ export const Footer = ({
   sections,
   copyright,
   socialLinks = defaultSocialLinks,
+  organizationInfo,
 }: FooterProps) => {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
@@ -156,71 +173,93 @@ export const Footer = ({
   };
 
   return (
-    <div className={`${styles.footer} ${getThemeClass()}`} role='contentinfo'>
-      <div className={styles.container}>
-        <div className={styles.sections}>
-          {sections.map(section => (
-            <div key={section.title} className={styles.section}>
-              <button
-                className={styles.sectionHeader}
-                onClick={() => toggleSection(section.title)}
-                aria-expanded={openSections[section.title] || false}
-                aria-controls={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
-              >
-                <Title level='h3' className={styles.sectionTitle}>
-                  {section.title}
-                </Title>
-                <span className={styles.toggleIcon}>
-                  {openSections[section.title] ? (
-                    <FaChevronUp />
-                  ) : (
-                    <FaChevronDown />
-                  )}
-                </span>
-              </button>
-              <div
-                id={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
-                className={`${styles.linkListContainer} ${openSections[section.title] ? styles.open : ''}`}
-              >
-                <ul className={styles.linkList}>
-                  {section.links.map(link => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className={styles.link}
-                        onClick={() => handleLinkClick(link.href)}
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+    <>
+      <footer
+        className={`${styles.footer} ${getThemeClass()}`}
+        role='contentinfo'
+      >
+        <div className={styles.container}>
+          <nav className={styles.sections} aria-label='Footer navigation'>
+            {sections.map(section => (
+              <div key={section.title} className={styles.section}>
+                <button
+                  className={styles.sectionHeader}
+                  onClick={() => toggleSection(section.title)}
+                  aria-expanded={openSections[section.title] || false}
+                  aria-controls={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
+                  type='button'
+                >
+                  <Title level='h3' className={styles.sectionTitle}>
+                    {section.title}
+                  </Title>
+                  <span className={styles.toggleIcon} aria-hidden='true'>
+                    {openSections[section.title] ? (
+                      <FaChevronUp />
+                    ) : (
+                      <FaChevronDown />
+                    )}
+                  </span>
+                </button>
+                <div
+                  id={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
+                  className={`${styles.linkListContainer} ${openSections[section.title] ? styles.open : ''}`}
+                >
+                  <ul className={styles.linkList} role='list'>
+                    {section.links.map(link => (
+                      <li key={link.href} role='listitem'>
+                        <Link
+                          href={link.href}
+                          className={styles.link}
+                          onClick={() => handleLinkClick(link.href)}
+                          {...(link.href.startsWith('http') && {
+                            target: '_blank',
+                            rel: 'noopener noreferrer',
+                          })}
+                        >
+                          {link.icon && (
+                            <span
+                              className={styles.linkIcon}
+                              aria-hidden='true'
+                            >
+                              {link.icon}
+                            </span>
+                          )}
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </nav>
 
-        <div className={styles.social}>
-          {socialLinks.map(social => (
-            <Link
-              key={social.platform}
-              href={social.url}
-              target='_blank'
-              rel='noopener noreferrer'
-              className={styles.socialLink}
-              aria-label={`Follow us on ${social.platform}`}
-            >
-              {social.icon}
-            </Link>
-          ))}
-        </div>
+          <div
+            className={styles.social}
+            role='complementary'
+            aria-label='Social media links'
+          >
+            {socialLinks.map(social => (
+              <Link
+                key={social.platform}
+                href={social.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={styles.socialLink}
+                aria-label={`Follow us on ${social.platform}`}
+              >
+                <span aria-hidden='true'>{social.icon}</span>
+              </Link>
+            ))}
+          </div>
 
-        <div className={styles.bottom}>
-          <Text as='p' className={styles.copyright}>
-            {getTranslatedCopyright()}
-          </Text>
+          <div className={styles.bottom}>
+            <Text as='p' className={styles.copyright}>
+              {getTranslatedCopyright()}
+            </Text>
+          </div>
         </div>
-      </div>
-    </div>
+      </footer>
+    </>
   );
 };

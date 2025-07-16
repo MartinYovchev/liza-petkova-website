@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =============================================
+   CSS CUSTOM PROPERTIES FOR THEME SYSTEM
+   ============================================= */
+
+:root {
+  /* Primary Colors */
+  --primary-color: #007bff;
+  --primary-color-hover: #0056b3;
+  --primary-text-color: #ffffff;
+
+  /* Secondary Colors */
+  --secondary-color: #6c757d;
+  --secondary-color-hover: #4b5563;
+  --secondary-text-color: #ffffff;
+
+  /* Text Colors */
+  --text-color: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+
+  /* Background Colors */
+  --background-color: #ffffff;
+  --background-secondary: #f9fafb;
+  --hover-color: #f8f9fa;
+
+  /* Border Colors */
+  --border-color: #e9ecef;
+  --border-focus: #007bff;
+
+  /* Status Colors */
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #d97706;
+  --info-color: #17a2b8;
+}
+
+/* Artistic Theme Override */
+.artistic {
+  --primary-color: #e91e63;
+  --primary-color-hover: #ad1457;
+  --border-focus: #e91e63;
+}
+
+/* Professional Theme Override */
+.professional {
+  --primary-color: #1e40af;
+  --primary-color-hover: #1d4ed8;
+  --border-focus: #1e40af;
+}
+
 /* Ensure smooth transitions for all theme changes */
 * {
   transition:

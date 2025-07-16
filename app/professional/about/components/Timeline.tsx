@@ -13,7 +13,9 @@ export default function Timeline() {
         <div className={styles.timelineItems}>
           {TIMELINE.map((item, index) => (
             <div key={index} className={styles.timelineItem}>
-              <div className={styles.timelineYear}>{item.year}</div>
+              <Text as='div' className={styles.timelineYear}>
+                {item.year}
+              </Text>
               <div className={styles.timelineDetails}>
                 <Title level='h4' className={styles.timelineTitle}>
                   {item.title}

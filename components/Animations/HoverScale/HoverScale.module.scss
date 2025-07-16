@@ -1,10 +1,13 @@
+@use '../../../styles/theme-constants.scss' as theme;
+
 .hoverScale {
   display: inline-block;
-  transition: transform var(--duration) ease-in-out;
+  transition: transform var(--duration, theme.$duration-normal)
+    theme.$ease-in-out;
   transform-origin: center;
   will-change: transform;
 
   &:hover {
-    transform: scale(var(--scale));
+    transform: scale(var(--scale, theme.$scale-hover-md));
   }
 }

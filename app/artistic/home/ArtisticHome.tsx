@@ -118,14 +118,21 @@ export default function ArtisticHome() {
         <FadeIn delay={0.2}>
           <HeroSection {...heroData} />
         </FadeIn>
+        <FadeIn delay={0.2}>
+          <ApproachSection approachItems={approachItems} />
+        </FadeIn>
 
-        <ApproachSection approachItems={approachItems} />
+        <FadeIn delay={0.2}>
+          <TestimonialsSection testimonials={testimonialsData} />
+        </FadeIn>
 
-        <TestimonialsSection testimonials={testimonialsData} />
+        <FadeIn delay={0.2}>
+          <OfferingSection offeringsData={offeringsData} />
+        </FadeIn>
 
-        <OfferingSection offeringsData={offeringsData} />
-
-        <CTASection />
+        <FadeIn delay={0.2}>
+          <CTASection />
+        </FadeIn>
       </div>
     </Layout>
   );

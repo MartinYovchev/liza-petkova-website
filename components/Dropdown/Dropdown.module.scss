@@ -1,14 +1,29 @@
+@use '../../styles/theme-constants.scss' as theme;
+
 .dropdown {
   position: relative;
   display: inline-block;
   right: 0;
 }
+
 .select {
-  padding: 8px 12px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  padding: theme.$spacing-sm theme.$spacing-md;
+  border-radius: theme.$radius-sm;
+  border: theme.$input-border;
   appearance: none;
-  background: #fff;
-  font-size: 16px;
-  color: black;
+  background: theme.$white;
+  font-size: theme.$text-base;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: theme.$transition-colors;
+
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &:hover {
+    border-color: var(--primary-color);
+  }
 }

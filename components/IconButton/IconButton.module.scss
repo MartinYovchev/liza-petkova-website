@@ -1,12 +1,14 @@
+@use '../../styles/theme-constants.scss' as theme;
+
 .iconButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: theme.$radius-full;
   border: none;
   outline: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: theme.$transition-all;
   background: transparent;
 
   &:disabled {
@@ -14,10 +16,7 @@
     cursor: not-allowed;
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-  }
+  @include theme.focus-ring;
 }
 
 .primary {
@@ -48,19 +47,19 @@
 }
 
 .small {
-  width: 32px;
-  height: 32px;
-  font-size: 16px;
+  width: theme.$button-height-sm;
+  height: theme.$button-height-sm;
+  font-size: theme.$text-base;
 }
 
 .medium {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  width: theme.$button-height-md;
+  height: theme.$button-height-md;
+  font-size: theme.$text-xl;
 }
 
 .large {
-  width: 48px;
-  height: 48px;
-  font-size: 24px;
+  width: theme.$button-height-lg;
+  height: theme.$button-height-lg;
+  font-size: theme.$text-2xl;
 }

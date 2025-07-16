@@ -6,6 +6,10 @@ import styles from './Contact.module.scss';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
 import { Button } from '@/components/Button/Button';
+import { Loader } from '@/components/Loader/Loader';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 import {
   FiUser,
   FiMail,
@@ -142,141 +146,198 @@ export default function ContactPage() {
     <Layout>
       <div className={styles.contactContainer}>
         <div className={styles.contentWrapper}>
-          <div className={styles.headerSection}>
-            <Title level='h1' className={styles.title}>
+          <FadeIn delay={0.2} direction='up' className={styles.headerSection}>
+            <Title level='h1' className={styles.title} pageTitle>
               {t('contactPageTitle')}
             </Title>
             <div className={styles.description}>
               <Text as='p'>{t('contactPageDescription')}</Text>
             </div>
-          </div>
+          </FadeIn>
 
           <div className={styles.contactGrid}>
-            <div className={styles.contactInfo}>
-              <div className={styles.infoCard}>
-                <FiMapPin className={styles.infoIcon} />
-                <Title level='h3'>{t('contactLocationTitle')}</Title>
-                <Text as='p'>
-                  {t('contactLocationAddress')
-                    .split('\n')
-                    .map((line, index) => (
-                      <span key={index}>
-                        {line}
-                        {index === 0 && <br />}
-                      </span>
-                    ))}
-                </Text>
-              </div>
+            <StaggerChildren className={styles.contactInfo}>
+              <HoverScale scale={1.03}>
+                <FadeIn delay={0.4} direction='up'>
+                  <div className={styles.infoCard}>
+                    <FiMapPin className={styles.infoIcon} />
+                    <Title level='h3'>{t('contactLocationTitle')}</Title>
+                    <Text as='p'>
+                      {t('contactLocationAddress')
+                        .split('\n')
+                        .map((line, index) => (
+                          <span key={index}>
+                            {line}
+                            {index === 0 && <br />}
+                          </span>
+                        ))}
+                    </Text>
+                  </div>
+                </FadeIn>
+              </HoverScale>
 
-              <div className={styles.infoCard}>
-                <FiPhone className={styles.infoIcon} />
-                <Title level='h3'>{t('contactPhoneTitle')}</Title>
-                <Text as='p'>{t('contactPhoneNumber')}</Text>
-              </div>
+              <HoverScale scale={1.03}>
+                <FadeIn delay={0.5} direction='up'>
+                  <div className={styles.infoCard}>
+                    <FiPhone className={styles.infoIcon} />
+                    <Title level='h3'>{t('contactPhoneTitle')}</Title>
+                    <Text as='p'>{t('contactPhoneNumber')}</Text>
+                  </div>
+                </FadeIn>
+              </HoverScale>
 
-              <div className={styles.infoCard}>
-                <FiMail className={styles.infoIcon} />
-                <Title level='h3'>{t('contactEmailTitle')}</Title>
-                <Text as='p'>{t('contactEmailAddress')}</Text>
-              </div>
-            </div>
+              <HoverScale scale={1.03}>
+                <FadeIn delay={0.6} direction='up'>
+                  <div className={styles.infoCard}>
+                    <FiMail className={styles.infoIcon} />
+                    <Title level='h3'>{t('contactEmailTitle')}</Title>
+                    <Text as='p'>{t('contactEmailAddress')}</Text>
+                  </div>
+                </FadeIn>
+              </HoverScale>
+            </StaggerChildren>
 
-            <form className={styles.contactForm} onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <div className={styles.inputWrapper}>
-                  <FiUser className={styles.inputIcon} />
-                  <input
-                    type='text'
-                    id='name'
-                    name='name'
-                    className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder={t('contactFormNamePlaceholder')}
-                  />
-                </div>
-                {errors.name && (
-                  <span className={styles.errorMessage}>{errors.name}</span>
-                )}
-              </div>
+            <HoverScale scale={1.01}>
+              <FadeIn delay={0.7} direction='up'>
+                <form className={styles.contactForm} onSubmit={handleSubmit}>
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <FiUser className={styles.inputIcon} />
+                      <input
+                        type='text'
+                        id='name'
+                        name='name'
+                        className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder={t('contactFormNamePlaceholder')}
+                        aria-describedby={
+                          errors.name ? 'name-error' : undefined
+                        }
+                      />
+                    </div>
+                    {errors.name && (
+                      <Text
+                        as='span'
+                        id='name-error'
+                        className={styles.errorMessage}
+                      >
+                        {errors.name}
+                      </Text>
+                    )}
+                  </div>
 
-              <div className={styles.formGroup}>
-                <div className={styles.inputWrapper}>
-                  <FiMail className={styles.inputIcon} />
-                  <input
-                    type='email'
-                    id='email'
-                    name='email'
-                    className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={t('contactFormEmailPlaceholder')}
-                  />
-                </div>
-                {errors.email && (
-                  <span className={styles.errorMessage}>{errors.email}</span>
-                )}
-              </div>
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <FiMail className={styles.inputIcon} />
+                      <input
+                        type='email'
+                        id='email'
+                        name='email'
+                        className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder={t('contactFormEmailPlaceholder')}
+                        aria-describedby={
+                          errors.email ? 'email-error' : undefined
+                        }
+                      />
+                    </div>
+                    {errors.email && (
+                      <Text
+                        as='span'
+                        id='email-error'
+                        className={styles.errorMessage}
+                      >
+                        {errors.email}
+                      </Text>
+                    )}
+                  </div>
 
-              <div className={styles.formGroup}>
-                <div className={styles.inputWrapper}>
-                  <FiMessageSquare className={styles.inputIcon} />
-                  <input
-                    type='text'
-                    id='subject'
-                    name='subject'
-                    className={`${styles.input} ${errors.subject ? styles.inputError : ''}`}
-                    value={formData.subject}
-                    onChange={handleChange}
-                    placeholder={t('contactFormSubjectPlaceholder')}
-                  />
-                </div>
-                {errors.subject && (
-                  <Text as='p' className={styles.errorMessage}>
-                    {errors.subject}
-                  </Text>
-                )}
-              </div>
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <FiMessageSquare className={styles.inputIcon} />
+                      <input
+                        type='text'
+                        id='subject'
+                        name='subject'
+                        className={`${styles.input} ${errors.subject ? styles.inputError : ''}`}
+                        value={formData.subject}
+                        onChange={handleChange}
+                        placeholder={t('contactFormSubjectPlaceholder')}
+                        aria-describedby={
+                          errors.subject ? 'subject-error' : undefined
+                        }
+                      />
+                    </div>
+                    {errors.subject && (
+                      <Text
+                        as='span'
+                        id='subject-error'
+                        className={styles.errorMessage}
+                      >
+                        {errors.subject}
+                      </Text>
+                    )}
+                  </div>
 
-              <div className={styles.formGroup}>
-                <div className={styles.inputWrapper}>
-                  <FiMessageSquare className={styles.inputIcon} />
-                  <textarea
-                    id='message'
-                    name='message'
-                    className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder={t('contactFormMessagePlaceholder')}
-                  />
-                </div>
-                {errors.message && (
-                  <Text as='p' className={styles.errorMessage}>
-                    {errors.message}
-                  </Text>
-                )}
-              </div>
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <FiMessageSquare className={styles.inputIcon} />
+                      <textarea
+                        id='message'
+                        name='message'
+                        className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
+                        value={formData.message}
+                        onChange={handleChange}
+                        placeholder={t('contactFormMessagePlaceholder')}
+                        aria-describedby={
+                          errors.message ? 'message-error' : undefined
+                        }
+                      />
+                    </div>
+                    {errors.message && (
+                      <Text
+                        as='span'
+                        id='message-error'
+                        className={styles.errorMessage}
+                      >
+                        {errors.message}
+                      </Text>
+                    )}
+                  </div>
 
-              <Button
-                type='submit'
-                className={styles.submitButton}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <Text as='p' className={styles.loadingSpinner}>
-                    {t('contactFormSending')}
-                  </Text>
-                ) : (
-                  <>
-                    <FiSend className={styles.buttonIcon} />
-                    {t('contactFormSendButton')}
-                  </>
-                )}
-              </Button>
-            </form>
+                  <Button
+                    type='submit'
+                    variant='primary'
+                    size='large'
+                    fullWidth
+                    className={styles.submitButton}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader
+                          isLoading={true}
+                          variant='inline'
+                          size='small'
+                          message=''
+                        />
+                        <Text as='span'>{t('contactFormSending')}</Text>
+                      </>
+                    ) : (
+                      <>
+                        <FiSend className={styles.buttonIcon} />
+                        <Text as='span'>{t('contactFormSendButton')}</Text>
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </FadeIn>
+            </HoverScale>
           </div>
 
-          <div className={styles.mapSection}>
+          <FadeIn delay={0.9} direction='up' className={styles.mapSection}>
             <iframe
               src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.11976397304903!3d40.69766374874431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1645564750981!5m2!1sen!2s'
               width='100%'
@@ -285,8 +346,9 @@ export default function ContactPage() {
               allowFullScreen
               loading='lazy'
               referrerPolicy='no-referrer-when-downgrade'
+              title='Contact Location Map'
             />
-          </div>
+          </FadeIn>
         </div>
       </div>
     </Layout>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { blogService } from '../../../lib/blogService';
 import { getImageUrl } from '../../../lib/supabase';
 import { BlogPost } from '../../../lib/types';
@@ -13,6 +12,13 @@ import { Layout } from '@/components/Layout/Layout';
 import { Loader } from '@/components/Loader/Loader';
 import { FaChevronLeft } from 'react-icons/fa';
 import { useTranslation } from '@/contexts/TranslationContext';
+import Title from '@/components/Typography/Title';
+import Text from '@/components/Typography/Text';
+import { Button } from '@/components/Button/Button';
+import Image from '@/components/Image/Image';
+import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
+import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
+import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 
 export default function BlogPostPage() {
   const { t } = useTranslation();
@@ -68,16 +74,16 @@ export default function BlogPostPage() {
         // Handle headings
         if (paragraph.startsWith('## ')) {
           return (
-            <h2 key={index} className={styles.contentHeading}>
+            <Title key={index} level='h2' className={styles.contentHeading}>
               {paragraph.slice(3)}
-            </h2>
+            </Title>
           );
         }
         if (paragraph.startsWith('### ')) {
           return (
-            <h3 key={index} className={styles.contentSubheading}>
+            <Title key={index} level='h3' className={styles.contentSubheading}>
               {paragraph.slice(4)}
-            </h3>
+            </Title>
           );
         }
 
@@ -92,9 +98,9 @@ export default function BlogPostPage() {
 
         // Handle regular paragraphs
         return (
-          <p key={index} className={styles.contentParagraph}>
+          <Text key={index} className={styles.contentParagraph}>
             {paragraph}
-          </p>
+          </Text>
         );
       })
       .filter(Boolean);
@@ -106,26 +112,30 @@ export default function BlogPostPage() {
 
   if (error) {
     return (
-      <div className={styles.error}>
-        <h2>{t('blogPostNotFound')}</h2>
-        <p>{error}</p>
-        <Link href='/blog' className={styles.backLink}>
-          {t('blogBackToBlog')}
-        </Link>
-      </div>
+      <Layout>
+        <div className={styles.error}>
+          <Title level='h2'>{t('blogPostNotFound')}</Title>
+          <Text>{error}</Text>
+          <Button href='/blog' variant='secondary' className={styles.backLink}>
+            {t('blogBackToBlog')}
+          </Button>
+        </div>
+      </Layout>
     );
   }
 
   if (!post) {
     return (
-      <div className={styles.error}>
-        <h2>{t('blogPostNotFound')}</h2>
-        <p>{t('blogPostNotFoundMessage')}</p>
-        <Link href='/blog' className={styles.backLink}>
-          <FaChevronLeft className={styles.backIcon} size={16} />
-          {t('blogBackToBlog')}
-        </Link>
-      </div>
+      <Layout>
+        <div className={styles.error}>
+          <Title level='h2'>{t('blogPostNotFound')}</Title>
+          <Text>{t('blogPostNotFoundMessage')}</Text>
+          <Button href='/blog' variant='secondary' className={styles.backLink}>
+            <FaChevronLeft className={styles.backIcon} size={16} />
+            {t('blogBackToBlog')}
+          </Button>
+        </div>
+      </Layout>
     );
   }
 
@@ -136,51 +146,63 @@ export default function BlogPostPage() {
     <Layout>
       <article className={styles.article}>
         <div className={styles.container}>
-          <nav className={styles.breadcrumb}>
-            <Link href='/blog' className={styles.breadcrumbLink}>
-              <FaChevronLeft className={styles.backIcon} size={16} />
-              {t('blogBackToBlog')}
-            </Link>
-          </nav>
+          <FadeIn delay={0.2}>
+            <nav className={styles.breadcrumb}>
+              <Button
+                href='/blog'
+                variant='secondary'
+                className={styles.breadcrumbLink}
+              >
+                <FaChevronLeft className={styles.backIcon} size={16} />
+                {t('blogBackToBlog')}
+              </Button>
+            </nav>
+          </FadeIn>
 
-          <header className={styles.header}>
-            <div className={styles.meta}>
-              <time className={styles.date}>
-                {formatDate(post.published_at || post.created_at)}
-              </time>
-              {post.view_count > 0 && (
-                <span className={styles.views}>
-                  {post.view_count} {t('blogViews')}
-                </span>
+          <FadeIn delay={0.3}>
+            <header className={styles.header}>
+              <div className={styles.meta}>
+                <Text className={styles.date}>
+                  {formatDate(post.published_at || post.created_at)}
+                </Text>
+                {post.view_count > 0 && (
+                  <Text className={styles.views}>
+                    {post.view_count} {t('blogViews')}
+                  </Text>
+                )}
+              </div>
+
+              <Title level='h1' className={styles.title}>
+                {post.title}
+              </Title>
+
+              {post.excerpt && (
+                <Text className={styles.excerpt}>{post.excerpt}</Text>
               )}
-            </div>
 
-            <h1 className={styles.title}>{post.title}</h1>
+              {post.tags && post.tags.length > 0 && (
+                <div className={styles.tags}>
+                  {post.tags.map(tag => (
+                    <Link
+                      key={tag}
+                      href={`/blog?tag=${encodeURIComponent(tag)}`}
+                      className={styles.tag}
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
-            {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
-
-            {post.tags && post.tags.length > 0 && (
-              <div className={styles.tags}>
-                {post.tags.map(tag => (
-                  <Link
-                    key={tag}
-                    href={`/blog?tag=${encodeURIComponent(tag)}`}
-                    className={styles.tag}
-                  >
-                    #{tag}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {post.author_name && (
-              <div className={styles.author}>
-                <span>
-                  {t('blogBy')} {post.author_name}
-                </span>
-              </div>
-            )}
-          </header>
+              {post.author_name && (
+                <div className={styles.author}>
+                  <Text>
+                    {t('blogBy')} {post.author_name}
+                  </Text>
+                </div>
+              )}
+            </header>
+          </FadeIn>
 
           {hasImages && (
             <div className={styles.imageSection}>
@@ -194,47 +216,60 @@ export default function BlogPostPage() {
                   fill
                   className={styles.image}
                   sizes='(max-width: 768px) 100vw, 800px'
-                  priority
                 />
               </div>
 
               {images.length > 1 && (
-                <div className={styles.thumbnails}>
-                  {images.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`${styles.thumbnail} ${
-                        index === selectedImageIndex
-                          ? styles.activeThumbnail
-                          : ''
-                      }`}
-                    >
-                      <Image
-                        src={getImageUrl(image) || '/placeholder.svg'}
-                        alt={`Thumbnail ${index + 1}`}
-                        fill
-                        className={styles.thumbnailImage}
-                        sizes='80px'
-                      />
-                    </button>
-                  ))}
-                </div>
+                <StaggerChildren staggerDelay={0.1}>
+                  <div className={styles.thumbnails}>
+                    {images.map((image, index) => (
+                      <HoverScale key={index} scale={1.1}>
+                        <button
+                          onClick={() => setSelectedImageIndex(index)}
+                          className={`${styles.thumbnail} ${
+                            index === selectedImageIndex
+                              ? styles.activeThumbnail
+                              : ''
+                          }`}
+                          aria-label={`View image ${index + 1}`}
+                        >
+                          <Image
+                            src={getImageUrl(image) || '/placeholder.svg'}
+                            alt={`Thumbnail ${index + 1}`}
+                            fill
+                            className={styles.thumbnailImage}
+                            sizes='80px'
+                          />
+                        </button>
+                      </HoverScale>
+                    ))}
+                  </div>
+                </StaggerChildren>
               )}
             </div>
           )}
 
-          <div className={styles.content}>{formatContent(post.content)}</div>
+          <FadeIn delay={0.5}>
+            <div className={styles.content}>{formatContent(post.content)}</div>
+          </FadeIn>
 
           {relatedPosts.length > 0 && (
-            <section className={styles.relatedSection}>
-              <h2 className={styles.relatedTitle}>{t('blogRelatedTitle')}</h2>
-              <div className={styles.relatedGrid}>
-                {relatedPosts.map(relatedPost => (
-                  <BlogCard key={relatedPost.id} post={relatedPost} />
-                ))}
-              </div>
-            </section>
+            <FadeIn delay={0.6}>
+              <section className={styles.relatedSection}>
+                <Title level='h2' className={styles.relatedTitle}>
+                  {t('blogRelatedTitle')}
+                </Title>
+                <StaggerChildren staggerDelay={0.1}>
+                  <div className={styles.relatedGrid}>
+                    {relatedPosts.map(relatedPost => (
+                      <HoverScale key={relatedPost.id} scale={1.03}>
+                        <BlogCard post={relatedPost} />
+                      </HoverScale>
+                    ))}
+                  </div>
+                </StaggerChildren>
+              </section>
+            </FadeIn>
           )}
         </div>
       </article>

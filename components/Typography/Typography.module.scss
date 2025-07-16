@@ -1,46 +1,88 @@
+@use '../../styles/theme-constants.scss' as theme;
+
 // Title styles
 .title1 {
-  font-size: 3.5rem;
-  line-height: 1.2;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
+  font-size: theme.$text-6xl;
+  line-height: theme.$leading-tight;
+  font-weight: theme.$font-bold;
+  margin-bottom: theme.$spacing-2xl;
+  letter-spacing: theme.$tracking-tight;
+  position: relative;
 }
 
 .title2 {
-  font-size: 2.5rem;
-  line-height: 1.3;
-  font-weight: 700;
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.01em;
+  font-size: theme.$text-4xl;
+  line-height: theme.$leading-snug;
+  font-weight: theme.$font-bold;
+  margin-bottom: theme.$spacing-xl;
+  letter-spacing: theme.$tracking-tight;
+  position: relative;
 }
 
 .title3 {
-  font-size: 2rem;
-  line-height: 1.4;
-  font-weight: 600;
-  margin-bottom: 1rem;
+  font-size: theme.$text-3xl;
+  line-height: theme.$leading-normal;
+  font-weight: theme.$font-semibold;
+  margin-bottom: theme.$spacing-lg;
+  position: relative;
 }
 
 .title4 {
-  font-size: 1.5rem;
-  line-height: 1.4;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  font-size: theme.$text-2xl;
+  line-height: theme.$leading-normal;
+  font-weight: theme.$font-semibold;
+  margin-bottom: theme.$spacing-md;
+  position: relative;
 }
 
 .title5 {
-  font-size: 1.25rem;
-  line-height: 1.4;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: theme.$text-xl;
+  line-height: theme.$leading-normal;
+  font-weight: theme.$font-semibold;
+  margin-bottom: theme.$spacing-sm;
+  position: relative;
 }
 
 .title6 {
-  font-size: 1rem;
-  line-height: 1.4;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: theme.$text-base;
+  line-height: theme.$leading-normal;
+  font-weight: theme.$font-semibold;
+  margin-bottom: theme.$spacing-sm;
+  position: relative;
+}
+
+// Anchor link styles for SEO and navigation
+.anchorLink {
+  position: absolute;
+  left: calc(-1 * theme.$spacing-2xl);
+  top: 50%;
+  transform: translateY(-50%);
+  color: theme.$text-muted;
+  text-decoration: none;
+  font-weight: theme.$font-normal;
+  font-size: 0.8em;
+  opacity: 0;
+  transition: theme.$transition-opacity;
+  padding: theme.$spacing-xs;
+  border-radius: theme.$radius-sm;
+
+  &:hover {
+    color: var(--primary-color);
+    background-color: var(--primary-color);
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+
+  @include theme.focus-ring;
+}
+
+// Show anchor link on heading hover
+.title1:hover .anchorLink,
+.title2:hover .anchorLink,
+.title3:hover .anchorLink,
+.title4:hover .anchorLink,
+.title5:hover .anchorLink,
+.title6:hover .anchorLink {
+  opacity: 1;
 }
 
 // Text styles
@@ -50,78 +92,83 @@
 }
 
 .textxs {
-  font-size: 0.75rem;
-  line-height: 1.5;
+  font-size: theme.$text-xs;
+  line-height: theme.$leading-relaxed;
 }
 
 .textsm {
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: theme.$text-sm;
+  line-height: theme.$leading-relaxed;
 }
 
 .textmd {
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: theme.$text-base;
+  line-height: theme.$leading-loose;
 }
 
 .textlg {
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: theme.$text-lg;
+  line-height: theme.$leading-loose;
 }
 
 .textxl {
-  font-size: 1.25rem;
-  line-height: 1.6;
+  font-size: theme.$text-xl;
+  line-height: theme.$leading-loose;
 }
 
 // Font weights
 .weightnormal {
-  font-weight: 400;
+  font-weight: theme.$font-normal;
 }
 
 .weightmedium {
-  font-weight: 500;
+  font-weight: theme.$font-medium;
 }
 
 .weightsemibold {
-  font-weight: 600;
+  font-weight: theme.$font-semibold;
 }
 
 .weightbold {
-  font-weight: 700;
+  font-weight: theme.$font-bold;
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
+@media (max-width: theme.$screen-md) {
   .title1 {
-    font-size: 2.5rem;
+    font-size: theme.$text-4xl;
   }
 
   .title2 {
-    font-size: 2rem;
+    font-size: theme.$text-3xl;
   }
 
   .title3 {
-    font-size: 1.75rem;
+    font-size: theme.$text-2xl;
   }
 
   .title4 {
-    font-size: 1.25rem;
+    font-size: theme.$text-xl;
   }
 
   .title5 {
-    font-size: 1.125rem;
+    font-size: theme.$text-lg;
   }
 
   .title6 {
-    font-size: 1rem;
+    font-size: theme.$text-base;
   }
 
   .textxl {
-    font-size: 1.125rem;
+    font-size: theme.$text-lg;
   }
 
   .textlg {
-    font-size: 1rem;
+    font-size: theme.$text-base;
+  }
+
+  // Hide anchor links on mobile for cleaner design
+  .anchorLink {
+    display: none;
   }
 }

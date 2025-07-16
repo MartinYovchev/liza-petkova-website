@@ -278,4 +278,26 @@ export const bg = {
   contactFormSuccessMessage:
     'Съобщението е изпратено успешно! Ще се свържем с теб скоро.',
   contactFormErrorMessage: 'Неуспешно изпращане на съобщение:',
+
+  // Hooks
+  fieldRequired: 'Това поле е задължително',
+  invalidEmail: 'Невалиден имейл адрес',
+  passwordTooShort: 'Паролата трябва да бъде поне 8 символа',
+  passwordsDoNotMatch: 'Паролите не съвпадат',
+  loading: 'Зареждане...',
+  error: 'Възникна грешка',
+  success: 'Успешно',
+  cancel: 'Отказ',
+  save: 'Запази',
+  delete: 'Изтрий',
+  edit: 'Редактирай',
+  yes: 'Да',
+  no: 'Не',
+  close: 'Затвори',
+  open: 'Отвори',
+  savedSuccessfully: 'Успешно запазено',
+  deletedSuccessfully: 'Успешно изтрито',
+  errorOccurred: 'Възникна грешка',
+  pleaseWait: 'Моля, изчакайте...',
+  processing: 'Обработка...',
 } as const;

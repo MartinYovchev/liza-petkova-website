@@ -279,4 +279,26 @@ export const en = {
   contactFormSuccessMessage:
     "Message sent successfully! We'll get back to you soon.",
   contactFormErrorMessage: 'Failed to send message:',
+
+  // Hooks
+  fieldRequired: 'This field is required',
+  invalidEmail: 'Invalid email address',
+  passwordTooShort: 'Password must be at least 8 characters',
+  passwordsDoNotMatch: 'Passwords do not match',
+  loading: 'Loading...',
+  error: 'An error occurred',
+  success: 'Success',
+  cancel: 'Cancel',
+  save: 'Save',
+  delete: 'Delete',
+  edit: 'Edit',
+  yes: 'Yes',
+  no: 'No',
+  close: 'Close',
+  open: 'Open',
+  savedSuccessfully: 'Successfully saved',
+  deletedSuccessfully: 'Successfully deleted',
+  errorOccurred: 'An error occurred',
+  pleaseWait: 'Please wait...',
+  processing: 'Processing...',
 } as const;

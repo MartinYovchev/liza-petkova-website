@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
 import { Button } from '@/components/Button/Button';
@@ -50,9 +49,13 @@ export const Sidebar = ({
           <Text as='p'>
             Provide project details and receive information about our services.
           </Text>
-          <Link href='/contact' className={styles.quoteButton}>
+          <Button
+            href='/contact'
+            variant='primary'
+            className={styles.quoteButton}
+          >
             Request Info
-          </Link>
+          </Button>
         </div>
       </div>
       <div className={styles.sidebarSection}>
@@ -65,9 +68,13 @@ export const Sidebar = ({
           <Text as='p'>
             Not sure which service you need? Get expert advice from our team.
           </Text>
-          <Link href='/contact' className={styles.helpButton}>
+          <Button
+            href='/contact'
+            variant='secondary'
+            className={styles.helpButton}
+          >
             Contact Us
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

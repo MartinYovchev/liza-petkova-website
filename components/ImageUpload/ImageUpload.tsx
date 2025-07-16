@@ -2,6 +2,9 @@ import { useState, useRef, ChangeEvent, DragEvent } from 'react';
 import Image from 'next/image';
 import { getImageUrl } from '../../lib/supabase';
 import { ImageUploadProps } from '../../lib/types';
+import Title from '../Typography/Title';
+import Text from '../Typography/Text';
+import { Button } from '../Button/Button';
 import styles from './ImageUpload.module.scss';
 
 export default function ImageUpload({
@@ -114,23 +117,23 @@ export default function ImageUpload({
               <line x1='12' y1='3' x2='12' y2='15' />
             </svg>
           </div>
-          <h3>Upload Images</h3>
-          <p>Click to browse or drag and drop images here</p>
-          <span className={styles.hint}>
+          <Title level='h3'>Upload Images</Title>
+          <Text>Click to browse or drag and drop images here</Text>
+          <Text as='span' className={styles.hint}>
             Maximum {maxImages} images • 5MB each • JPG, PNG, GIF, WebP
-          </span>
+          </Text>
         </div>
       </div>
 
       {totalImages > 0 && (
         <div className={styles.previewSection}>
           <div className={styles.previewHeader}>
-            <h4>
+            <Title level='h4'>
               Images ({totalImages}/{maxImages})
-            </h4>
-            <span className={styles.coverNote}>
+            </Title>
+            <Text as='span' className={styles.coverNote}>
               First image will be the cover
-            </span>
+            </Text>
           </div>
 
           <div className={styles.previewGrid}>
@@ -151,8 +154,10 @@ export default function ImageUpload({
                 </div>
 
                 <div className={styles.imageControls}>
-                  <button
+                  <Button
                     type='button'
+                    variant='outline'
+                    size='small'
                     onClick={() => removeImage(index, true)}
                     className={styles.removeBtn}
                     title='Remove image'
@@ -161,12 +166,14 @@ export default function ImageUpload({
                       <line x1='18' y1='6' x2='6' y2='18' />
                       <line x1='6' y1='6' x2='18' y2='18' />
                     </svg>
-                  </button>
+                  </Button>
 
                   <div className={styles.moveControls}>
                     {index > 0 && (
-                      <button
+                      <Button
                         type='button'
+                        variant='outline'
+                        size='small'
                         onClick={() => moveImage(index, index - 1, true)}
                         className={styles.moveBtn}
                         title='Move left'
@@ -178,11 +185,13 @@ export default function ImageUpload({
                         >
                           <polyline points='15,18 9,12 15,6' />
                         </svg>
-                      </button>
+                      </Button>
                     )}
                     {index < existingImages.length - 1 && (
-                      <button
+                      <Button
                         type='button'
+                        variant='outline'
+                        size='small'
                         onClick={() => moveImage(index, index + 1, true)}
                         className={styles.moveBtn}
                         title='Move right'
@@ -194,7 +203,7 @@ export default function ImageUpload({
                         >
                           <polyline points='9,18 15,12 9,6' />
                         </svg>
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -219,8 +228,10 @@ export default function ImageUpload({
                 </div>
 
                 <div className={styles.imageControls}>
-                  <button
+                  <Button
                     type='button'
+                    variant='outline'
+                    size='small'
                     onClick={() => removeImage(index, false)}
                     className={styles.removeBtn}
                     title='Remove image'
@@ -229,12 +240,14 @@ export default function ImageUpload({
                       <line x1='18' y1='6' x2='6' y2='18' />
                       <line x1='6' y1='6' x2='18' y2='18' />
                     </svg>
-                  </button>
+                  </Button>
 
                   <div className={styles.moveControls}>
                     {index > 0 && (
-                      <button
+                      <Button
                         type='button'
+                        variant='outline'
+                        size='small'
                         onClick={() => moveImage(index, index - 1, false)}
                         className={styles.moveBtn}
                         title='Move left'
@@ -246,11 +259,13 @@ export default function ImageUpload({
                         >
                           <polyline points='15,18 9,12 15,6' />
                         </svg>
-                      </button>
+                      </Button>
                     )}
                     {index < images.length - 1 && (
-                      <button
+                      <Button
                         type='button'
+                        variant='outline'
+                        size='small'
                         onClick={() => moveImage(index, index + 1, false)}
                         className={styles.moveBtn}
                         title='Move right'
@@ -262,7 +277,7 @@ export default function ImageUpload({
                         >
                           <polyline points='9,18 15,12 9,6' />
                         </svg>
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>

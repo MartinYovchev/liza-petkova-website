@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthLayout } from '../Auth/AuthLayout';
 import { AdminHeader } from './AdminHeader';
+import { Loader } from '../Loader/Loader';
 import styles from './AccountLayout.module.scss';
 
 type AccountLayoutProps = {
@@ -16,26 +17,12 @@ export function AccountLayout({ children }: AccountLayoutProps) {
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-          }}
-        >
-          <div
-            className='spinner'
-            style={{
-              width: '2rem',
-              height: '2rem',
-              border: '2px solid #e5e7eb',
-              borderTop: '2px solid #3b82f6',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-            }}
-          ></div>
-        </div>
+        <Loader
+          isLoading={true}
+          variant='overlay'
+          size='large'
+          message='Loading...'
+        />
       </div>
     );
   }

@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
 import RevealText from '@/components/Animations/RevealText/RevealText';
 import { GradientText } from '@/components/Animations/GradientText/GradientText';
@@ -7,6 +6,7 @@ import styles from './HeroSection.module.scss';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
 import Image from '@/components/Image/Image';
+import { Button } from '@/components/Button/Button';
 
 type HeroSectionProps = {
   title: string;
@@ -82,15 +82,20 @@ export default function HeroSection({
 
             <FadeIn delay={0.8} direction='up'>
               <div className={styles.ctaContainer}>
-                <Link href={primaryCTA.href} className={styles.primaryButton}>
+                <Button
+                  href={primaryCTA.href}
+                  variant='secondary'
+                  className={styles.primaryButton}
+                >
                   {primaryCTA.text}
-                </Link>
-                <Link
+                </Button>
+                <Button
                   href={secondaryCTA.href}
+                  variant='secondary'
                   className={styles.secondaryButton}
                 >
                   {secondaryCTA.text}
-                </Link>
+                </Button>
               </div>
             </FadeIn>
           </div>

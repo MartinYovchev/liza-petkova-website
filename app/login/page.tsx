@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../hooks/useAuth';
 import { AuthLayout } from '../../components/Auth/AuthLayout';
+import { Loader } from '../../components/Loader/Loader';
 
 export default function LoginPage() {
   const { user, isLoading } = useAuth();
@@ -17,25 +18,12 @@ export default function LoginPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <div
-          style={{
-            width: '2rem',
-            height: '2rem',
-            border: '2px solid #e5e7eb',
-            borderTop: '2px solid #3b82f6',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-          }}
-        ></div>
-      </div>
+      <Loader
+        isLoading={true}
+        variant='overlay'
+        size='large'
+        message='Loading...'
+      />
     );
   }
 

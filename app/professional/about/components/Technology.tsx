@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { EQUIPMENT } from '../constants';
 import styles from '../ProfessionalAbout.module.scss';
 import Text from '@/components/Typography/Text';
 import Title from '@/components/Typography/Title';
+import Image from '@/components/Image/Image';
 
 export default function Technology() {
   return (
@@ -15,7 +15,9 @@ export default function Technology() {
           <div className={styles.equipmentList}>
             {EQUIPMENT.map((item, index) => (
               <div key={index} className={styles.equipmentItem}>
-                <div className={styles.equipmentIcon}>{item.icon}</div>
+                <Text as='div' className={styles.equipmentIcon}>
+                  {item.icon}
+                </Text>
                 <div className={styles.equipmentDetails}>
                   <Title level='h4'>{item.title}</Title>
                   <Text as='p'>{item.description}</Text>

@@ -1,4 +1,6 @@
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Button } from '../Button/Button';
+import Text from '../Typography/Text';
 import styles from './LanguageSwitcher.module.scss';
 
 interface Language {
@@ -33,21 +35,25 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         className={`${styles.slider} ${language === 'bg' ? styles.sliderBg : styles.sliderEn}`}
       />
       {languages.map(lang => (
-        <button
+        <Button
           key={lang.code}
+          variant='outline'
+          size='small'
           className={`${styles.langOption} ${language === lang.code ? styles.active : ''}`}
           onClick={() => handleLanguageChange(lang.code)}
           aria-label={`Switch to ${lang.name}`}
         >
-          <span
+          <Text
+            as='span'
             className={styles.flag}
-            role='img'
             aria-label={`${lang.name} flag`}
           >
             {lang.flag}
-          </span>
-          <span className={styles.langText}>{lang.name}</span>
-        </button>
+          </Text>
+          <Text as='span' className={styles.langText}>
+            {lang.name}
+          </Text>
+        </Button>
       ))}
     </div>
   );

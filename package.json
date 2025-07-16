@@ -1,16 +1,22 @@
 {
-  "name": "my-v0-project",
+  "name": "Liza Petkova's Website",
   "version": "0.1.0",
   "private": true,
+  "author": "Liza Petkova",
+  "homepage": "https://lizapetkova.com",
+  "repository": {
+    "type": "git"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm run ts && next build",
     "start": "next start",
     "lint": "next lint",
     "vercel-build": "next build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "ts": "tsc --noEmit --incremental --preserveWatchOutput --pretty"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -48,7 +54,7 @@
     "react-resizable-panels": "2.1.7",
     "react-syntax-highlighter": "15.6.1",
     "recharts": "2.15.0",
-    "resend": "^4.6.0",
+    "resend": "4.6.0",
     "sass": "1.89.1",
     "sonner": "1.7.1",
     "tailwind-merge": "2.5.5",
@@ -64,10 +70,10 @@
     "@types/react": "19",
     "@types/react-dom": "19",
     "@types/react-syntax-highlighter": "15.5.13",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
+    "husky": "9.1.7",
+    "lint-staged": "16.1.2",
     "postcss": "8",
-    "prettier": "^3.5.3",
+    "prettier": "3.5.3",
     "prisma": "6.10.1",
     "tailwindcss": "3.4.17",
     "tsx": "4.20.3",

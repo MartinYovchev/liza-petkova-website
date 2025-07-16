@@ -1,11 +1,12 @@
 import ServiceDetails from './ServiceDetails';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function ServiceDetailsPage({ params }: PageProps) {
-  return <ServiceDetails id={params.id} />;
+export default async function ServiceDetailsPage({ params }: PageProps) {
+  const { id } = await params;
+  return <ServiceDetails id={id} />;
 }

@@ -8,6 +8,9 @@ import {
 import { blogService } from '../../lib/blogService';
 import { BlogPost, BlogPostFormData } from '../../lib/types';
 import ImageUpload from '../ImageUpload/ImageUpload';
+import Title from '../Typography/Title';
+import Text from '../Typography/Text';
+import { Button } from '../Button/Button';
 import styles from './BlogPostForm.module.scss';
 
 interface BlogPostFormProps {
@@ -120,15 +123,20 @@ export default function BlogPostForm({
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.header}>
-          <h2>{post ? 'Edit Post' : 'Create New Post'}</h2>
-          {error && <div className={styles.error}>{error}</div>}
+          <Title level='h2'>{post ? 'Edit Post' : 'Create New Post'}</Title>
+          {error && (
+            <div className={styles.error}>
+              <Text>{error}</Text>
+            </div>
+          )}
         </div>
 
         <div className={styles.tabs}>
           {tabs.map(tab => (
-            <button
+            <Button
               key={tab.id}
               type='button'
+              variant='outline'
               onClick={() => setActiveTab(tab.id)}
               className={`${styles.tab} ${
                 activeTab === tab.id ? styles.activeTab : ''
@@ -138,7 +146,7 @@ export default function BlogPostForm({
                 <tab.icon />
               </span>
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -146,9 +154,9 @@ export default function BlogPostForm({
           {activeTab === 'content' && (
             <div className={styles.tabPanel}>
               <div className={styles.formGroup}>
-                <label htmlFor='title' className={styles.label}>
+                <Text as='label' htmlFor='title' className={styles.label}>
                   Title *
-                </label>
+                </Text>
                 <input
                   type='text'
                   id='title'
@@ -162,9 +170,9 @@ export default function BlogPostForm({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor='slug' className={styles.label}>
+                <Text as='label' htmlFor='slug' className={styles.label}>
                   Slug *
-                </label>
+                </Text>
                 <input
                   type='text'
                   id='slug'
@@ -178,9 +186,9 @@ export default function BlogPostForm({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor='excerpt' className={styles.label}>
+                <Text as='label' htmlFor='excerpt' className={styles.label}>
                   Excerpt
-                </label>
+                </Text>
                 <textarea
                   id='excerpt'
                   name='excerpt'
@@ -193,9 +201,9 @@ export default function BlogPostForm({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor='content' className={styles.label}>
+                <Text as='label' htmlFor='content' className={styles.label}>
                   Content *
-                </label>
+                </Text>
                 <textarea
                   id='content'
                   name='content'
@@ -209,9 +217,9 @@ export default function BlogPostForm({
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor='tags' className={styles.label}>
+                <Text as='label' htmlFor='tags' className={styles.label}>
                   Tags
-                </label>
+                </Text>
                 <input
                   type='text'
                   id='tags'
@@ -239,9 +247,9 @@ export default function BlogPostForm({
           {activeTab === 'seo' && (
             <div className={styles.tabPanel}>
               <div className={styles.formGroup}>
-                <label htmlFor='meta_title' className={styles.label}>
+                <Text as='label' htmlFor='meta_title' className={styles.label}>
                   Meta Title
-                </label>
+                </Text>
                 <input
                   type='text'
                   id='meta_title'
@@ -251,15 +259,19 @@ export default function BlogPostForm({
                   className={styles.input}
                   placeholder='SEO title for search engines'
                 />
-                <span className={styles.hint}>
+                <Text as='span' className={styles.hint}>
                   {formData.meta_title?.length}/60 characters
-                </span>
+                </Text>
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor='meta_description' className={styles.label}>
+                <Text
+                  as='label'
+                  htmlFor='meta_description'
+                  className={styles.label}
+                >
                   Meta Description
-                </label>
+                </Text>
                 <textarea
                   id='meta_description'
                   name='meta_description'
@@ -269,9 +281,9 @@ export default function BlogPostForm({
                   className={styles.textarea}
                   placeholder='SEO description for search engines'
                 />
-                <span className={styles.hint}>
+                <Text as='span' className={styles.hint}>
                   {formData.meta_description?.length}/160 characters
-                </span>
+                </Text>
               </div>
             </div>
           )}
@@ -280,9 +292,13 @@ export default function BlogPostForm({
             <div className={styles.tabPanel}>
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor='author_name' className={styles.label}>
+                  <Text
+                    as='label'
+                    htmlFor='author_name'
+                    className={styles.label}
+                  >
                     Author Name
-                  </label>
+                  </Text>
                   <input
                     type='text'
                     id='author_name'
@@ -295,9 +311,13 @@ export default function BlogPostForm({
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor='author_email' className={styles.label}>
+                  <Text
+                    as='label'
+                    htmlFor='author_email'
+                    className={styles.label}
+                  >
                     Author Email
-                  </label>
+                  </Text>
                   <input
                     type='email'
                     id='author_email'
@@ -312,9 +332,9 @@ export default function BlogPostForm({
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label htmlFor='status' className={styles.label}>
+                  <Text as='label' htmlFor='status' className={styles.label}>
                     Status
-                  </label>
+                  </Text>
                   <select
                     id='status'
                     name='status'
@@ -333,31 +353,33 @@ export default function BlogPostForm({
         </div>
 
         <div className={styles.actions}>
-          <button
+          <Button
             type='submit'
+            variant='primary'
+            size='large'
             disabled={loading}
-            className={`${styles.button} ${styles.primaryButton}`}
           >
             {loading ? (
               <>
                 <div className={styles.spinner} />
-                Saving...
+                <Text as='span'>Saving...</Text>
               </>
             ) : post ? (
               'Update Post'
             ) : (
               'Create Post'
             )}
-          </button>
+          </Button>
 
           {onCancel && (
-            <button
+            <Button
               type='button'
+              variant='secondary'
+              size='large'
               onClick={onCancel}
-              className={`${styles.button} ${styles.secondaryButton}`}
             >
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </form>

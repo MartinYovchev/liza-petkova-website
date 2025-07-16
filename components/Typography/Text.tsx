@@ -13,8 +13,9 @@ type TextProps = {
   weight?: TextWeight;
   className?: string;
   animate?: boolean;
-  as?: 'p' | 'span' | 'label';
+  as?: 'p' | 'span' | 'label' | 'div';
   id?: string;
+  htmlFor?: string; // For when used as a label
   style?: React.CSSProperties;
   motionProps?: HTMLMotionProps<'div'>;
   noStyles?: boolean;
@@ -28,6 +29,7 @@ const Text = ({
   animate = false,
   as: Component = 'p',
   id,
+  htmlFor,
   style,
   motionProps,
   noStyles = false,
@@ -35,6 +37,7 @@ const Text = ({
   const textContent = (
     <Component
       id={id}
+      htmlFor={htmlFor}
       className={
         noStyles
           ? className

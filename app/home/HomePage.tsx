@@ -5,6 +5,7 @@ import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
 import { Scale } from '@/components/Animations/Scale/Scale';
 import Image from '@/components/Image/Image';
 import Text from '@/components/Typography/Text';
+import Title from '@/components/Typography/Title';
 import { Button } from '@/components/Button/Button';
 import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from '@/contexts/TranslationContext';
@@ -20,8 +21,10 @@ export default function HomePage() {
           <Link href='/professional' className={styles.link}>
             <div className={styles.overlay}>
               <FadeIn delay={0.4} className={styles.content}>
-                <Scale className={styles.title}>
-                  {t('homePageProfessionalTitle')}
+                <Scale>
+                  <Title level='h1' className={styles.title}>
+                    {t('homePageProfessionalTitle')}
+                  </Title>
                 </Scale>
                 <Text as='p' className={styles.subtitle}>
                   {t('homePageProfessionalSubtitle')}
@@ -53,8 +56,10 @@ export default function HomePage() {
           <Link href='/artistic' className={styles.link}>
             <div className={styles.overlay}>
               <FadeIn delay={0.6} className={styles.content}>
-                <Scale className={styles.title}>
-                  {t('homePageArtisticTitle')}
+                <Scale>
+                  <Title level='h1' className={styles.title}>
+                    {t('homePageArtisticTitle')}
+                  </Title>
                 </Scale>
 
                 <Text as='p' className={styles.subtitle}>

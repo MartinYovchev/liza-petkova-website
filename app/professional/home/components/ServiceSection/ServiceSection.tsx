@@ -1,11 +1,11 @@
 'use client';
-import Link from 'next/link';
 import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
 import StaggerChildren from '@/components/Animations/StaggerChildren/StaggerChildren';
 import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 import styles from './ServiceSection.module.scss';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
+import { Button } from '@/components/Button/Button';
 
 type ServicesSectionProps = {
   title: string;
@@ -39,7 +39,9 @@ export default function ServicesSection({
           {services.map((service, index) => (
             <HoverScale key={index} scale={1.03}>
               <div className={styles.serviceCard}>
-                <div className='text-4xl mb-4'>{service.icon}</div>
+                <Text as='div' className='text-4xl mb-4'>
+                  {service.icon}
+                </Text>
 
                 <Title
                   level='h3'
@@ -66,18 +68,19 @@ export default function ServicesSection({
                       >
                         ✓
                       </Text>
-                      {feature}
+                      <Text as='span'>{feature}</Text>
                     </li>
                   ))}
                 </ul>
 
                 <div className={styles.serviceLink}>
-                  <Link
+                  <Button
                     href='/professional/services'
+                    variant='outline'
                     className={styles.serviceLink}
                   >
                     Learn More
-                  </Link>
+                  </Button>
                 </div>
               </div>
             </HoverScale>

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
+import { Button } from '@/components/Button/Button';
 import Image from '@/components/Image/Image';
 import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
 import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
@@ -32,8 +32,8 @@ export const ServicesGrid = ({
       </div>
 
       <div className={styles.servicesGrid}>
-        {services.map(service => (
-          <FadeIn key={service.id} direction='up'>
+        {services.map((service, index) => (
+          <FadeIn key={service.id} direction='up' delay={0.2}>
             <HoverScale scale={1.02}>
               <div className={styles.serviceCard}>
                 {service.popular && (
@@ -73,15 +73,20 @@ export const ServicesGrid = ({
                   </div>
 
                   <div className={styles.serviceActions}>
-                    <Link
+                    <Button
                       href={`/professional/services/${service.id}`}
+                      variant='primary'
                       className={styles.serviceButton}
                     >
                       View Details
-                    </Link>
-                    <Link href='/contact' className={styles.learnMoreBtn}>
+                    </Button>
+                    <Button
+                      href='/contact'
+                      variant='outline'
+                      className={styles.learnMoreBtn}
+                    >
                       Contact Us
-                    </Link>
+                    </Button>
                   </div>
                 </div>
               </div>

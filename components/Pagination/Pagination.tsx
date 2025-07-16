@@ -1,4 +1,6 @@
 import { PaginationProps } from '../../lib/types';
+import Text from '../Typography/Text';
+import { Button } from '../Button/Button';
 import styles from './Pagination.module.scss';
 
 export default function Pagination({
@@ -52,46 +54,49 @@ export default function Pagination({
   return (
     <div className={styles.container}>
       {showInfo && (
-        <div className={styles.info}>
+        <Text className={styles.info}>
           Showing {startItem}-{endItem} of {totalItems} items
-        </div>
+        </Text>
       )}
 
       <div className={styles.pagination}>
-        <button
+        <Button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
+          variant='outline'
           className={`${styles.button} ${styles.navButton}`}
         >
           <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
             <polyline points='15,18 9,12 15,6' />
           </svg>
           Previous
-        </button>
+        </Button>
 
         {getPageNumbers().map((page, index) => (
-          <button
+          <Button
             key={index}
             onClick={() => typeof page === 'number' && onPageChange(page)}
             disabled={page === '...' || page === currentPage}
+            variant={page === currentPage ? 'primary' : 'outline'}
             className={`${styles.button} ${
               page === currentPage ? styles.active : ''
             } ${page === '...' ? styles.dots : ''}`}
           >
             {page}
-          </button>
+          </Button>
         ))}
 
-        <button
+        <Button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
+          variant='outline'
           className={`${styles.button} ${styles.navButton}`}
         >
           Next
           <svg viewBox='0 0 24 24' fill='none' stroke='currentColor'>
             <polyline points='9,18 15,12 9,6' />
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
   );

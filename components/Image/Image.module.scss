@@ -1,16 +1,18 @@
+@use '../../styles/theme-constants.scss' as theme;
+
 .imageWrapper {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #f5f5f5;
+  background-color: theme.$gray-100;
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.3s ease;
+  transition: theme.$transition-opacity;
 
   &.loading {
     opacity: 0;
@@ -22,40 +24,71 @@
 }
 
 .loadingPlaceholder {
-  position: absolute;
-  top: 0;
-  left: 0;
+  @include theme.absolute-center;
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
+  background-color: theme.$gray-100;
+  gap: theme.$spacing-sm;
 }
 
 .loadingSpinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
-  border-radius: 50%;
+  border: 3px solid theme.$gray-200;
+  border-top: 3px solid var(--primary-color);
+  border-radius: theme.$radius-full;
   animation: spin 1s linear infinite;
 }
 
 .errorMessage {
-  position: absolute;
-  top: 0;
-  left: 0;
+  @include theme.absolute-center;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
-  color: #666;
-  font-size: 0.9rem;
+  background-color: theme.$gray-100;
+  color: theme.$text-muted;
+  font-size: theme.$text-sm;
   text-align: center;
-  padding: 1rem;
+  padding: theme.$spacing-lg;
+}
+
+// New semantic figure styles for SEO
+.figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.caption {
+  padding: theme.$spacing-md 0;
+  border-top: 1px solid theme.$gray-200;
+  margin-top: theme.$spacing-sm;
+  display: flex;
+  flex-direction: column;
+  gap: theme.$spacing-xs;
+}
+
+.captionText {
+  color: theme.$text-muted;
+  font-style: italic;
+  line-height: theme.$leading-relaxed;
+}
+
+.attribution {
+  color: theme.$text-light;
+  font-weight: theme.$font-medium;
+}
+
+// Screen reader only class for accessibility
+.sr-only {
+  @include theme.sr-only;
 }
 
 @keyframes spin {

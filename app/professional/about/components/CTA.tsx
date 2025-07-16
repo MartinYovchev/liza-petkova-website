@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import styles from '../ProfessionalAbout.module.scss';
 import Text from '@/components/Typography/Text';
 import Title from '@/components/Typography/Title';
+import { Button } from '@/components/Button/Button';
 
 export default function CTA() {
   return (
@@ -14,12 +14,20 @@ export default function CTA() {
           Partner with our experienced team for your next geodetic project
         </Text>
         <div className={styles.ctaActions}>
-          <Link href='/professional/contact' className={styles.ctaButton}>
+          <Button
+            href='/professional/contact'
+            variant='primary'
+            className={styles.ctaButton}
+          >
             Start Your Project
-          </Link>
-          <Link href='/professional/services' className={styles.ctaSecondary}>
+          </Button>
+          <Button
+            href='/professional/services'
+            variant='secondary'
+            className={styles.ctaSecondary}
+          >
             View Our Services
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

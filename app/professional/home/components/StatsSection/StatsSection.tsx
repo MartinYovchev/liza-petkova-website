@@ -1,6 +1,5 @@
 'use client';
 import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
-import { useRef, useEffect, useState } from 'react';
 import styles from './StatsSection.module.scss';
 import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
@@ -13,32 +12,8 @@ type StatsSectionProps = {
 };
 
 export default function StatsSection({ stats }: StatsSectionProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
-
   return (
-    <section ref={ref} className={styles.stats}>
+    <section className={styles.stats}>
       <div className={styles.statsContainer}>
         <FadeIn delay={0.2} direction='up' className={styles.sectionHeader}>
           <Title className={styles.sectionTitle}>
@@ -51,10 +26,14 @@ export default function StatsSection({ stats }: StatsSectionProps) {
 
         <div className={styles.statsGrid}>
           {stats.map((stat, index) => (
-            <FadeIn key={index} delay={0.4 + index * 0.1} direction='up'>
+            <FadeIn key={index} delay={0.4 + index * 0.15} direction='up'>
               <div className={styles.statItem}>
-                <div className={styles.statNumber}>{stat.number}</div>
-                <div className={styles.statLabel}>{stat.label}</div>
+                <Text as='div' className={styles.statNumber}>
+                  {stat.number}
+                </Text>
+                <Text as='div' className={styles.statLabel}>
+                  {stat.label}
+                </Text>
               </div>
             </FadeIn>
           ))}
