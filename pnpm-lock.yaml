@@ -114,7 +114,7 @@ importers:
         specifier: 2.15.0
         version: 2.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       resend:
-        specifier: ^4.6.0
+        specifier: 4.6.0
         version: 4.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       sass:
         specifier: 1.89.1
@@ -157,16 +157,16 @@ importers:
         specifier: 15.5.13
         version: 15.5.13
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^16.1.2
+        specifier: 16.1.2
         version: 16.1.2
       postcss:
         specifier: '8'
         version: 8.5.4
       prettier:
-        specifier: ^3.5.3
+        specifier: 3.5.3
         version: 3.5.3
       prisma:
         specifier: 6.10.1
