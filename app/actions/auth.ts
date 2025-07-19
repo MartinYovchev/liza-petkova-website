@@ -28,6 +28,7 @@ export async function loginAction(formData: FormData) {
     // Return session ID to be stored client-side
     return { success: true, sessionId, user };
   } catch (error) {
+    console.error('Login error:', error);
     return { error: 'An error occurred during login' };
   }
 }
@@ -54,6 +55,7 @@ export async function signupAction(formData: FormData) {
     // Return session ID to be stored client-side
     return { success: true, sessionId, user };
   } catch (error: any) {
+    console.error('Signup error:', error);
     return { error: error.message || 'An error occurred during signup' };
   }
 }
@@ -66,6 +68,14 @@ export async function logoutAction(sessionId: string) {
 }
 
 export async function validateSessionAction(sessionId: string) {
-  const user = await getSession(sessionId);
-  return { user };
+  try {
+    if (!sessionId) {
+      return { user: null };
+    }
+    const user = await getSession(sessionId);
+    return { user };
+  } catch (error) {
+    console.error('Session validation error:', error);
+    return { user: null };
+  }
 }

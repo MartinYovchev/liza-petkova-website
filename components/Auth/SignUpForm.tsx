@@ -51,7 +51,14 @@ export function SignupForm({ onToggleMode }: SignupFormProps) {
       setIsLoading(false);
     } else if (result?.success && result.sessionId && result.user) {
       setSession(result.sessionId, result.user);
-      router.push('/admin');
+      setIsLoading(false);
+      // Small delay to ensure session is set before redirect
+      setTimeout(() => {
+        router.push('/admin');
+      }, 100);
+    } else {
+      setError('An unexpected error occurred. Please try again.');
+      setIsLoading(false);
     }
   }
 

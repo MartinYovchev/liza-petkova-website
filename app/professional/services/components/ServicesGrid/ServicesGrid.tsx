@@ -2,8 +2,6 @@ import Title from '@/components/Typography/Title';
 import Text from '@/components/Typography/Text';
 import { Button } from '@/components/Button/Button';
 import Image from '@/components/Image/Image';
-import { FadeIn } from '@/components/Animations/FadeIn/FadeIn';
-import { HoverScale } from '@/components/Animations/HoverScale/HoverScale';
 import styles from './ServicesGrid.module.scss';
 import { Service } from '../../types';
 
@@ -33,65 +31,61 @@ export const ServicesGrid = ({
 
       <div className={styles.servicesGrid}>
         {services.map((service, index) => (
-          <FadeIn key={service.id} direction='up' delay={0.2}>
-            <HoverScale scale={1.02}>
-              <div className={styles.serviceCard}>
-                {service.popular && (
-                  <div className={styles.popularBadge}>Most Popular</div>
-                )}
+          <div className={styles.serviceCard}>
+            {service.popular && (
+              <div className={styles.popularBadge}>Most Popular</div>
+            )}
 
-                <div className={styles.serviceImage}>
-                  <Image
-                    src={service.image || '/placeholder.svg'}
-                    alt={service.title}
-                    fill
-                    sizes='(max-width: 768px) 50vw, (max-width: 480px) 100vw, 300px'
-                  />
-                </div>
+            <div className={styles.serviceImage}>
+              <Image
+                src={service.image || '/placeholder.svg'}
+                alt={service.title}
+                fill
+                sizes='(max-width: 768px) 50vw, (max-width: 480px) 100vw, 300px'
+              />
+            </div>
 
-                <div className={styles.serviceContent}>
-                  <Title level='h3' className={styles.serviceTitle}>
-                    {service.title}
-                  </Title>
-                  <Text as='p' className={styles.serviceDescription}>
-                    {service.description}
-                  </Text>
+            <div className={styles.serviceContent}>
+              <Title level='h3' className={styles.serviceTitle}>
+                {service.title}
+              </Title>
+              <Text as='p' className={styles.serviceDescription}>
+                {service.description}
+              </Text>
 
-                  <ul className={styles.serviceFeatures}>
-                    {service.features.map((feature: string, idx: number) => (
-                      <li key={idx} className={styles.serviceFeature}>
-                        <span className={styles.featureCheck}>✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+              <ul className={styles.serviceFeatures}>
+                {service.features.map((feature: string, idx: number) => (
+                  <li key={idx} className={styles.serviceFeature}>
+                    <span className={styles.featureCheck}>✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
 
-                  <div className={styles.serviceDetails}>
-                    <div className={styles.serviceDuration}>
-                      ⏱️ {service.duration}
-                    </div>
-                  </div>
-
-                  <div className={styles.serviceActions}>
-                    <Button
-                      href={`/professional/services/${service.id}`}
-                      variant='primary'
-                      className={styles.serviceButton}
-                    >
-                      View Details
-                    </Button>
-                    <Button
-                      href='/contact'
-                      variant='outline'
-                      className={styles.learnMoreBtn}
-                    >
-                      Contact Us
-                    </Button>
-                  </div>
+              <div className={styles.serviceDetails}>
+                <div className={styles.serviceDuration}>
+                  ⏱️ {service.duration}
                 </div>
               </div>
-            </HoverScale>
-          </FadeIn>
+
+              <div className={styles.serviceActions}>
+                <Button
+                  href={`/professional/services/${service.id}`}
+                  variant='primary'
+                  className={styles.serviceButton}
+                >
+                  View Details
+                </Button>
+                <Button
+                  href='/contact'
+                  variant='outline'
+                  className={styles.learnMoreBtn}
+                >
+                  Contact Us
+                </Button>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
